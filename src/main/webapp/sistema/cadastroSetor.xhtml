@@ -1,0 +1,29 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+	<h:form>
+		<p:focus context="txtNome" />
+		<h:panelGrid columns="2" cellpadding="10">
+
+			<p:outputLabel value="Id" for="txtId" rendered="#{setorController.setorModel.id != null}" />
+			<p:inputText id="txtId" value="#{setorController.setorModel.id}" style="width:50px" readonly="true"
+				rendered="#{setorController.setorModel.id != null}" />
+
+			<p:outputLabel value="Nome" for="txtNome" />
+			<p:inputText id="txtNome" style="width:150px" maxlength="20" value="#{setorController.setorModel.nome}"
+				required="true" requiredMessage="O nome é de preenchimento obrigatório" />
+
+			<p:spacer />
+
+			<p:commandButton value="Salvar" id="btnSalvar" icon="ui-icon-gear" actionListener="#{setorController.salvar}"
+				update="form" />
+
+			<p:spacer />
+			<p:messages showDetail="false" closable="true" severity="error">
+				<p:autoUpdate />
+			</p:messages>
+		</h:panelGrid>
+
+	</h:form>
+
+</ui:composition>

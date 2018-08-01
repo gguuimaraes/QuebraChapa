@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+
+<ui:composition template="/template/layoutBase.xhtml">
+
+	<ui:define name="content">
+		<p:commandButton icon="ui-icon-plus" actionListener="#{quebraController.cadastrar}" value="Cadastrar [F3]" ajax="true"
+			update="dialogCadastro" style="margin-bottom: 10px" />
+
+		<p:dialog header="Cadastro Quebra" id="dialogCadastro" widgetVar="dialogCadastro" modal="true">
+			<ui:include src="/sistema/cadastroQuebra.xhtml" />
+		</p:dialog>
+
+		<h:form id="form">
+			<p:hotkey bind="f3" actionListener="#{quebraController.cadastrar}" update="dialogCadastro" ajax="true" />
+			<p:growl id="msgs" showDetail="true" />
+			<p:dataTable id="quebras" widgetVar="quebras" var="quebra" value="#{quebraController.quebras}"
+				filteredValue="#{quebraController.quebrasFiltradas}" editable="true" emptyMessage="Nenhum registro."
+				paginator="true"
+				currentPageReportTemplate="Exibindo de {startRecord} a {endRecord} no total de {totalRecords} - Página: {currentPage}/{totalPages}"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageLabel} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="10,15,20,50,100,200" rows="#{quebraController.rowsPerPage}">
+
+
+				<p:ajax event="rowEdit" listener="#{quebraController.onRowEdit}" update=":form:msgs" />
+				<p:ajax event="rowEditCancel" listener="#{quebraController.onRowCancel}" update=":form:msgs" />
+
+				<!-- <p:remoteCommand name="updateFooter" update="txtSomaAreaTotal" /> -->
+				<p:ajax event="page" listener="#{quebraController.onPaginate}" />
+				<p:ajax event="filter" listener="#{quebraController.filter}" />
+
+
+				<!-- <p:column headerText="Id">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{quebra.id}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{quebra.id}" style="width: 100%" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column> -->
+
+				<p:column headerText="Data" style="width:6%; text-align: center">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{quebra.data}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</f:facet>
+						<f:facet name="input">
+							<p:calendar value="#{quebra.data}" required="true" requiredMessage="A Data é de preenchimento obrigatório"
+								inputStyle="width: 100%" pattern="dd/MM/yyyy" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Tipo Vidro" filterBy="#{quebra.tipoVidro.nome}" filterMatchMode="exact"
+					style="width:9.5%; text-align: center">
+					<f:facet name="filter">
+						<p:selectOneMenu onchange="PF('quebras').filter()" style="width:calc(100% - 26px)">
+							<f:selectItem itemLabel="Selecione um" itemValue="#{null}" noSelectionOption="true" />
+							<f:selectItems value="#{tipoVidroController.tiposVidro}" var="tipoVidro" itemLabel="#{tipoVidro.nome}"
+								itemValue="#{tipoVidro.nome}" />
+						</p:selectOneMenu>
+					</f:facet>
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{quebra.tipoVidro.nome}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:selectOneMenu value="#{quebra.tipoVidro}" required="true"
+								requiredMessage="O Tipo Vidro é de preenchimento obrigatório" style="width:calc(100% - 26px)"
+								converter="tipoVidroConverter">
+								<f:selectItem itemValue="" itemLabel="Selecione um" />
+								<f:selectItems value="#{tipoVidroController.tiposVidro}" var="tipoVidro" itemLabel="#{tipoVidro.nome}" />
+							</p:selectOneMenu>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Total" style="width:7%; text-align: center">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{quebra.areaTotal}">
+								<f:convertNumber pattern="#,####0.0000 m²" />
+							</h:outputText>
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{quebra.areaTotal}" style="width:100%" required="true"
+								requiredMessage="A Área Total é de preenchimento obrigatório">
+								<f:convertNumber />
+							</p:inputText>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Sobra" style="width:7%; text-align: center">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{quebra.areaAproveitada}">
+								<f:convertNumber pattern="#,####0.0000 m²" />
+							</h:outputText>
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{quebra.areaAproveitada}" style="width:100%" required="true"
+								requiredMessage="A Área Aproveitada é de preenchimento obrigatório">
+								<f:convertNumber />
+							</p:inputText>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Setor" filterBy="#{quebra.setor.nome}" filterMatchMode="exact"
+					style="width: 9%; text-align:center">
+					<f:facet name="filter">
+						<p:selectOneMenu onchange="PF('quebras').filter()" style="width:calc(100% - 26px)">
+							<f:selectItem itemLabel="Selecione um" itemValue="#{null}" noSelectionOption="true" />
+							<f:selectItems value="#{setorController.setores}" var="setor" itemLabel="#{setor.nome}" itemValue="#{setor.nome}" />
+						</p:selectOneMenu>
+					</f:facet>
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{quebra.setor.nome}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:selectOneMenu value="#{quebra.setor}" required="true" requiredMessage="O Setor é de preenchimento obrigatório"
+								converter="setorConverter" style="width:calc(100% - 26px)">
+								<f:selectItem itemValue="" itemLabel="Selecione um" />
+								<f:selectItems value="#{setorController.setores}" var="setor" itemLabel="#{setor.nome}" />
+							</p:selectOneMenu>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Funcionário" filterBy="#{quebra.funcionario.nome}" filterMatchMode="exact"
+					style="width: 7%; text-align:center">
+					<f:facet name="filter">
+						<p:selectOneMenu onchange="PF('quebras').filter()" style="width:calc(100% - 26px)">
+							<f:selectItem itemLabel="Selecione um" itemValue="#{null}" noSelectionOption="true" />
+							<f:selectItem itemValue="-" itemLabel="Nenhum" />
+							<f:selectItems value="#{funcionarioController.funcionarios}" var="funcionario" itemLabel="#{funcionario.nome}"
+								itemValue="#{funcionario.nome}" />
+						</p:selectOneMenu>
+					</f:facet>
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{quebra.funcionario.nome == null ? '-' : quebra.funcionario.nome}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:selectOneMenu value="#{quebra.funcionario}" converter="funcionarioConverter" style="width:calc(100% - 26px)">
+								<f:selectItem itemValue="" itemLabel="Nenhum" />
+								<f:selectItems value="#{funcionarioController.funcionarios}" var="funcionario" itemLabel="#{funcionario.nome}" />
+							</p:selectOneMenu>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Motivo">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{quebra.motivo}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{quebra.motivo}" style="width:100%" required="true"
+								requiredMessage="O Motivo é de preenchimento obrigatório" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column style="width:32px">
+					<p:rowEditor />
+				</p:column>
+
+				<p:column style="width:16px">
+					<p:commandLink actionListener="#{quebraController.excluir(quebra)}" update=":form">
+						<h:outputText class="ui-icon ui-icon-trash" />
+					</p:commandLink>
+				</p:column>
+				<p:columnGroup type="footer">
+					<p:row>
+						<p:column />
+						<p:column />
+						<p:column>
+							<f:facet name="footer">
+								<h:outputText id="txtSomaAreaTotal" value="#{quebraController.somaAreaTotal}">
+									<f:convertNumber pattern="#,####0.0000 m²" />
+								</h:outputText>
+							</f:facet>
+						</p:column>
+					</p:row>
+				</p:columnGroup>
+			</p:dataTable>
+
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>
+
+
+</html>

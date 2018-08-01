@@ -7,11 +7,6 @@
 </h:head>
 
 <h:body style="margin: 0">
-	<h:form id="exibeTela">
-		<iframe style="display: block; background: #000; border: none; height: 100vh; width: 100vw;"
-			src="//#{indexController.telaAtual.url}" frameborder="0" />
-		<p:poll interval="#{indexController.telaAtual.segundos}" listener="#{indexController.listener}" update="exibeTela" />
-	</h:form>
 
 </h:body>
 </html>

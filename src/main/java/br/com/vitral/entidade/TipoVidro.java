@@ -11,16 +11,13 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-@Table(name = "usuario")
+@Table(name = "tipovidro")
 @Entity
 
-@NamedQueries({
-	 
-	@NamedQuery(name = "Usuario.findUser", query = "SELECT u FROM Usuario u WHERE u.nome = :nome AND u.senha = :senha"),
-	@NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")
- 
+@NamedQueries({ @NamedQuery(name = "TipoVidro.findAll", query = "SELECT t FROM TipoVidro t ORDER BY t.nome")
+
 })
-public class Usuario implements Serializable {
+public class TipoVidro implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -31,12 +28,6 @@ public class Usuario implements Serializable {
 
 	@Column(name = "nome", unique = true)
 	private String nome;
-
-	@Column(name = "senha")
-	private String senha;
-
-	@Column(name = "tipo")
-	private TipoUsuario tipo;
 
 	public Integer getId() {
 		return id;
@@ -54,23 +45,4 @@ public class Usuario implements Serializable {
 		this.nome = nome;
 	}
 
-	public String getSenha() {
-		return senha;
-	}
-
-	public void setSenha(String senha) {
-		this.senha = senha;
-	}
-
-	public TipoUsuario getTipo() {
-		return tipo;
-	}
-
-	public void setTipo(TipoUsuario tipo) {
-		this.tipo = tipo;
-	}
-
-	public enum TipoUsuario {
-		MESTRE, CONTROLADOR;
-	}
 }

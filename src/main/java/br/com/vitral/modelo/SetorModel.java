@@ -2,16 +2,12 @@ package br.com.vitral.modelo;
 
 import java.io.Serializable;
 
-import br.com.vitral.entidade.Usuario.TipoUsuario;
-
-public class UsuarioModel implements Serializable {
+public class SetorModel implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
 	private String nome;
-	private String senha;
-	private TipoUsuario tipo;
 
 	public Integer getId() {
 		return id;
@@ -27,22 +23,6 @@ public class UsuarioModel implements Serializable {
 
 	public void setNome(String nome) {
 		this.nome = nome;
-	}
-
-	public String getSenha() {
-		return senha;
-	}
-
-	public void setSenha(String senha) {
-		this.senha = senha;
-	}
-
-	public TipoUsuario getTipo() {
-		return tipo;
-	}
-
-	public void setTipo(TipoUsuario tipo) {
-		this.tipo = tipo;
 	}
 
 	@Override
@@ -61,7 +41,7 @@ public class UsuarioModel implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		UsuarioModel other = (UsuarioModel) obj;
+		SetorModel other = (SetorModel) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

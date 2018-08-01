@@ -1,17 +1,15 @@
 package br.com.vitral.modelo;
 
 import java.io.Serializable;
+import java.util.Date;
 
-import br.com.vitral.entidade.Usuario.TipoUsuario;
-
-public class UsuarioModel implements Serializable {
+public class AreaFaturadaModel implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
-	private String nome;
-	private String senha;
-	private TipoUsuario tipo;
+	private Date data;
+	private Float area;
 
 	public Integer getId() {
 		return id;
@@ -21,28 +19,20 @@ public class UsuarioModel implements Serializable {
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
+	public Date getData() {
+		return data;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setData(Date data) {
+		this.data = data;
 	}
 
-	public String getSenha() {
-		return senha;
+	public Float getArea() {
+		return area;
 	}
 
-	public void setSenha(String senha) {
-		this.senha = senha;
-	}
-
-	public TipoUsuario getTipo() {
-		return tipo;
-	}
-
-	public void setTipo(TipoUsuario tipo) {
-		this.tipo = tipo;
+	public void setArea(Float area) {
+		this.area = area;
 	}
 
 	@Override
@@ -61,7 +51,7 @@ public class UsuarioModel implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		UsuarioModel other = (UsuarioModel) obj;
+		AreaFaturadaModel other = (AreaFaturadaModel) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -69,5 +59,6 @@ public class UsuarioModel implements Serializable {
 			return false;
 		return true;
 	}
+
 
 }
