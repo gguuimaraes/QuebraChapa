@@ -6,13 +6,16 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Produces;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.primefaces.PrimeFaces;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.RowEditEvent;
+import org.primefaces.event.data.FilterEvent;
 import org.primefaces.event.data.PageEvent;
+import org.primefaces.model.FilterMeta;
 
 import br.com.vitral.modelo.QuebraModel;
 import br.com.vitral.persistencia.QuebraDao;
@@ -35,16 +38,6 @@ public class QuebraController implements Serializable {
 
 	@Produces
 	private List<QuebraModel> quebrasFiltradas;
-
-	int rowsPerPage = 10;
-
-	public int getRowsPerPage() {
-		return rowsPerPage;
-	}
-
-	public void setRowsPerPage(int rowsPerPage) {
-		this.rowsPerPage = rowsPerPage;
-	}
 
 	@PostConstruct
 	public void init() {
@@ -99,18 +92,4 @@ public class QuebraController implements Serializable {
 		Uteis.MensagemInfo("Operação cancelada");
 	}
 
-	public Float getSomaAreaTotal() {
-		System.out.println("Linhas por página: " + rowsPerPage);
-		float soma = 0;
-		for (int l = 0; l < (rowsPerPage <= quebras.size() ? rowsPerPage : quebras.size()); l++) {
-			soma += quebras.get(l).getAreaTotal();
-		}
-		System.out.println("getSomaAreaTotal: " + soma);
-		return soma;
-	}
-
-	public void onPaginate(PageEvent event) {
-		DataTable tabela = ((org.primefaces.component.datatable.DataTable) event.getSource());
-		System.out.println("Linha: " + tabela.getRows());
-	}
 }

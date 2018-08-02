@@ -18,23 +18,19 @@
 		</p:dialog>
 
 		<h:form id="form">
+
 			<p:hotkey bind="f3" actionListener="#{quebraController.cadastrar}" update="dialogCadastro" ajax="true" />
 			<p:growl id="msgs" showDetail="true" />
 			<p:dataTable id="quebras" widgetVar="quebras" var="quebra" value="#{quebraController.quebras}"
 				filteredValue="#{quebraController.quebrasFiltradas}" editable="true" emptyMessage="Nenhum registro."
 				paginator="true"
 				currentPageReportTemplate="Exibindo de {startRecord} a {endRecord} no total de {totalRecords} - Página: {currentPage}/{totalPages}"
-				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageLabel} {RowsPerPageDropdown}"
-				rowsPerPageTemplate="10,15,20,50,100,200" rows="#{quebraController.rowsPerPage}">
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageLabel} {RowsPerPageDropdown} {Exporters}"
+				rowsPerPageTemplate="10,15,20,50,100,200" rows="10">
 
 
 				<p:ajax event="rowEdit" listener="#{quebraController.onRowEdit}" update=":form:msgs" />
 				<p:ajax event="rowEditCancel" listener="#{quebraController.onRowCancel}" update=":form:msgs" />
-
-				<!-- <p:remoteCommand name="updateFooter" update="txtSomaAreaTotal" /> -->
-				<p:ajax event="page" listener="#{quebraController.onPaginate}" />
-				<p:ajax event="filter" listener="#{quebraController.filter}" />
-
 
 				<!-- <p:column headerText="Id">
 					<p:cellEditor>
@@ -140,7 +136,7 @@
 				</p:column>
 
 				<p:column headerText="Funcionário" filterBy="#{quebra.funcionario.nome}" filterMatchMode="exact"
-					style="width: 7%; text-align:center">
+					style="width: 9%; text-align:center">
 					<f:facet name="filter">
 						<p:selectOneMenu onchange="PF('quebras').filter()" style="width:calc(100% - 26px)">
 							<f:selectItem itemLabel="Selecione um" itemValue="#{null}" noSelectionOption="true" />
@@ -174,30 +170,35 @@
 					</p:cellEditor>
 				</p:column>
 
-				<p:column style="width:32px">
+				<p:column exportable="false" style="width:32px">
 					<p:rowEditor />
 				</p:column>
 
-				<p:column style="width:16px">
+				<p:column exportable="false" style="width:16px">
 					<p:commandLink actionListener="#{quebraController.excluir(quebra)}" update=":form">
 						<h:outputText class="ui-icon ui-icon-trash" />
 					</p:commandLink>
 				</p:column>
-				<p:columnGroup type="footer">
+				<!-- <p:columnGroup type="footer">
 					<p:row>
 						<p:column />
 						<p:column />
 						<p:column>
 							<f:facet name="footer">
-								<h:outputText id="txtSomaAreaTotal" value="#{quebraController.somaAreaTotal}">
+								<h:outputText value="#{quebraController.somaAreaTotal}">
 									<f:convertNumber pattern="#,####0.0000 m²" />
 								</h:outputText>
 							</f:facet>
 						</p:column>
 					</p:row>
-				</p:columnGroup>
+				</p:columnGroup> -->
+				<f:facet name="{Exporters}">
+					<h:commandLink>
+						<p:graphicImage url="/resources/imagens/excel.png" width="24" style="float: right; margin-right: 5px" />
+						<p:dataExporter type="xls" target="quebras" fileName="quebras" />
+					</h:commandLink>
+				</f:facet>
 			</p:dataTable>
-
 		</h:form>
 
 	</ui:define>
