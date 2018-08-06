@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+
+<ui:composition template="/template/layoutBase.xhtml">
+	<ui:define name="content">
+		<h:form id="form">
+			<h:panelGrid id="panelGrid" columns="1" style="margin: auto">
+				Relatório de Quebras				
+				<p:messages />
+				<h:panelGrid columns="6">
+					<p:outputLabel for="txtDataInicio" value="Data Inicio" />
+					<p:calendar id="txtDataInicio" value="#{relatorioQuebraController.dataInicio}" required="true"
+						requiredMessage="A Data de Inicio é de preenchimento obrigatório" mask="99/99/9999" pattern="dd/MM/yyyy" />
+					<p:outputLabel for="txtSetor" value="Setor" />
+					<p:selectOneMenu id="txtSetor" value="#{relatorioQuebraController.setor}" converter="setorConverter">
+						<f:selectItem itemValue="#{null}" itemLabel="Ignorar" />
+						<f:selectItems value="#{setorController.setores}" var="setor" itemValue="#{setor}" itemLabel="#{setor.nome}" />
+					</p:selectOneMenu>
+					<p:outputLabel for="txtTipoVidro" value="Tipo Vidro" />
+					<p:selectOneMenu id="txtTipoVidro" value="#{relatorioQuebraController.tipoVidro}" converter="tipoVidroConverter">
+						<f:selectItem itemValue="#{null}" itemLabel="Ignorar" />
+						<f:selectItems value="#{tipoVidroController.tiposVidro}" var="tipoVidro" itemValue="#{tipoVidro}"
+							itemLabel="#{tipoVidro.nome}" />
+					</p:selectOneMenu>
+					<p:outputLabel for="txtDataFim" value="Data Fim" />
+					<p:calendar id="txtDataFim" value="#{relatorioQuebraController.dataFim}" required="true"
+						requiredMessage="A Data de Fim é de preenchimento obrigatório" mask="99/99/9999" pattern="dd/MM/yyyy" />
+					<p:outputLabel for="txtFuncionario" value="Funcionário" />
+					<p:selectOneMenu id="txtFuncionario" value="#{relatorioQuebraController.funcionario}"
+						converter="funcionarioConverter">
+						<f:selectItem itemValue="#{null}" itemLabel="Ignorar" />
+						<f:selectItems value="#{funcionarioController.funcionarios}" var="funcionario" itemValue="#{funcionario}"
+							itemLabel="#{funcionario.nome}" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+
+				<h:panelGrid columns="3">
+					<p:commandButton value="Executar" actionListener="#{relatorioQuebraController.executar}" update="panelGrid" />
+					<p:commandButton value="Limpar" actionListener="#{relatorioQuebraController.limpar}" update="panelGrid"
+						immediate="true" />
+					<h:commandLink>
+						<p:graphicImage url="/resources/imagens/excel.png" width="24" />
+						<p:dataExporter type="xls" target="quebras" fileName="quebras"
+							postProcessor="#{relatorioQuebraController.postProcessXLS}" />
+					</h:commandLink>
+				</h:panelGrid>
+
+				<p:dataTable id="quebras" value="#{relatorioQuebraController.quebras}" var="quebra" emptyMessage="">
+					<p:column headerText="Data" style="width:6%; text-align: center">
+						<p:outputLabel value="#{quebra.data}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</p:outputLabel>
+					</p:column>
+
+					<p:column headerText="Tipo Vidro" style="width:9.5%; text-align: center">
+						<p:outputLabel value="#{quebra.tipoVidro.nome}" />
+					</p:column>
+
+					<p:column headerText="Total" style="width:7%; text-align: center">
+						<h:outputText value="#{quebra.areaTotal}">
+							<f:convertNumber pattern="#,####0.0000 m²" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Sobra" style="width:7%; text-align: center">
+						<h:outputText value="#{quebra.areaAproveitada}">
+							<f:convertNumber pattern="#,####0.0000 m²" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Setor" style="width: 9%; text-align:center">
+						<h:outputText value="#{quebra.setor.nome}" />
+					</p:column>
+
+					<p:column headerText="Funcionário" style="width: 9%; text-align:center">
+						<h:outputText value="#{quebra.funcionario.nome == null ? 'Nenhum' : quebra.funcionario.nome}" />
+					</p:column>
+
+					<p:column headerText="Motivo">
+						<h:outputText value="#{quebra.motivo}" />
+					</p:column>
+
+					<p:columnGroup type="footer">
+						<p:column></p:column>
+						<p:column footerText="Total" />
+						<p:column>
+							<f:facet name="footer">
+								<h:outputText value="#{relatorioQuebraController.somaAreaTotal}">
+									<f:convertNumber pattern="#,####0.0000 m²" />
+								</h:outputText>
+							</f:facet>
+						</p:column>
+						<p:column>
+							<f:facet name="footer">
+								<h:outputText value="#{relatorioQuebraController.somaAreaAproveitada}">
+									<f:convertNumber pattern="#,####0.0000 m²" />
+								</h:outputText>
+							</f:facet>
+						</p:column>
+					</p:columnGroup>
+				</p:dataTable>
+			</h:panelGrid>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

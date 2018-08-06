@@ -91,6 +91,68 @@ public class QuebraDao implements Serializable {
 		return quebrasModel;
 	}
 
+	public List<QuebraModel> listarPorPeriodo(Date dataInicio, Date dataFim, Object... parametros) {
+		List<QuebraModel> quebrasModel = new ArrayList<QuebraModel>();
+		entityManager = Uteis.JpaEntityManager();
+		String queryString = "SELECT q FROM Quebra q ";
+		queryString += "WHERE ";
+		queryString += "q.data >= :dataInicio ";
+		queryString += "AND ";
+		queryString += "q.data <= :dataFim ";
+
+		for (Object p : parametros) {
+			queryString += "AND ";
+			if (p instanceof SetorModel) {
+				queryString += "q.setor.id = :setorId ";
+			} else if (p instanceof TipoVidroModel) {
+				queryString += "q.tipoVidro.id = :tipoVidroId ";
+			} else if (p instanceof FuncionarioModel) {
+				queryString += "q.funcionario.id = :funcionarioId ";
+			}
+		}
+		queryString += "ORDER BY q.data DESC";
+		System.out.println("LISTAR POR PERIODO:\nQuery: " + queryString);
+		Query query = entityManager.createQuery(queryString);
+		query.setParameter("dataInicio", dataInicio);
+		query.setParameter("dataFim", dataFim);
+		for (Object p : parametros) {
+			if (p instanceof SetorModel) {
+				query.setParameter("setorId", ((SetorModel) p).getId());
+			} else if (p instanceof TipoVidroModel) {
+				query.setParameter("tipoVidroId", ((TipoVidroModel) p).getId());
+			} else if (p instanceof FuncionarioModel) {
+				query.setParameter("funcionarioId", ((FuncionarioModel) p).getId());
+			}
+		}
+		@SuppressWarnings("unchecked")
+		Collection<Quebra> quebras = (Collection<Quebra>) query.getResultList();
+		QuebraModel quebraModel = null;
+		for (Quebra q : quebras) {
+			quebraModel = new QuebraModel();
+			quebraModel.setId(q.getId());
+			quebraModel.setData(q.getData());
+			TipoVidroModel tipoVidroModel = new TipoVidroModel();
+			tipoVidroModel.setId(q.getTipoVidro().getId());
+			tipoVidroModel.setNome(q.getTipoVidro().getNome());
+			quebraModel.setTipoVidro(tipoVidroModel);
+			quebraModel.setAreaTotal(q.getAreaTotal());
+			quebraModel.setAreaAproveitada(q.getAreaAproveitada());
+			SetorModel setorModel = new SetorModel();
+			setorModel.setId(q.getSetor().getId());
+			setorModel.setNome(q.getSetor().getNome());
+			quebraModel.setSetor(setorModel);
+			if (q.getFuncionario() != null) {
+				FuncionarioModel funcionarioModel = new FuncionarioModel();
+				funcionarioModel.setId(q.getFuncionario().getId());
+				funcionarioModel.setNome(q.getFuncionario().getNome());
+				quebraModel.setFuncionario(funcionarioModel);
+			}
+			quebraModel.setMotivo(q.getMotivo());
+			quebrasModel.add(quebraModel);
+		}
+		return quebrasModel;
+	}
+
 	public void remover(int id) {
 		entityManager = Uteis.JpaEntityManager();
 		entityManager.remove(entityManager.find(Quebra.class, id));

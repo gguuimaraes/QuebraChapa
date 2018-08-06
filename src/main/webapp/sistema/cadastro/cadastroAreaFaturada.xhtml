@@ -11,7 +11,7 @@
 
 			<p:outputLabel value="Data" for="txtData" />
 			<p:calendar id="txtData" value="#{areaFaturadaController.areaFaturadaModel.data}" required="true"
-				requiredMessage="A Data é de preenchimento obrigatório" inputStyle="width:100%" pattern="dd/MM/yyyy" />
+				requiredMessage="A Data é de preenchimento obrigatório" inputStyle="width:100%" mask="99/99/9999" pattern="dd/MM/yyyy" />
 
 			<p:outputLabel value="Área" for="txtArea" />
 			<p:inputText id="txtArea" value="#{areaFaturadaController.areaFaturadaModel.area}" style="width:100%" required="true"
@@ -21,7 +21,7 @@
 
 			<p:spacer />
 
-			<p:commandButton value="Salvar" id="btnSalvar" icon="ui-icon-gear" actionListener="#{areaFaturadaController.salvar}"
+			<p:commandButton value="Salvar" id="btnSalvar" icon="fa fa-fw fa-save" actionListener="#{areaFaturadaController.salvar}"
 				update="form" />
 
 			<p:spacer />

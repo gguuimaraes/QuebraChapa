@@ -14,7 +14,7 @@
 			ajax="true" update="dialogCadastro" style="margin-bottom: 10px" />
 
 		<p:dialog header="Cadastro Área Faturada" id="dialogCadastro" widgetVar="dialogCadastro" modal="true">
-			<ui:include src="/sistema/cadastroAreaFaturada.xhtml" />
+			<ui:include src="/sistema/cadastro/cadastroAreaFaturada.xhtml" />
 		</p:dialog>
 
 		<h:form id="form">
@@ -25,7 +25,7 @@
 				<p:ajax event="rowEdit" listener="#{areaFaturadaController.onRowEdit}" update=":form:msgs" />
 				<p:ajax event="rowEditCancel" listener="#{areaFaturadaController.onRowCancel}" update=":form:msgs" />
 
-				<p:column headerText="Id">
+				<!-- <p:column headerText="Id">
 					<p:cellEditor>
 						<f:facet name="output">
 							<h:outputText value="#{areaFaturada.id}" />
@@ -34,7 +34,7 @@
 							<p:inputText value="#{areaFaturada.id}" style="width:100%" />
 						</f:facet>
 					</p:cellEditor>
-				</p:column>
+				</p:column> -->
 
 				<p:column headerText="Data">
 					<p:cellEditor>
@@ -45,7 +45,7 @@
 						</f:facet>
 						<f:facet name="input">
 							<p:calendar value="#{areaFaturada.data}" required="true" requiredMessage="A Data é de preenchimento obrigatório"
-								inputStyle="width: 100%" pattern="dd/MM/yyyy" />
+								inputStyle="width: 100%" mask="99/99/9999" pattern="dd/MM/yyyy" />
 						</f:facet>
 					</p:cellEditor>
 				</p:column>

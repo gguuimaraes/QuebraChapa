@@ -4,14 +4,19 @@
 <h:form>
 
 	<p:menubar>
-		<p:menuitem value="Home" icon="ui-icon-home" url="home.xhtml" />
-		<p:menuitem value="Quebra" icon="ui-icon-document" url="quebra.xhtml" />
-		<p:menuitem value="Tipo Vidro" icon="ui-icon-document" url="tipoVidro.xhtml" />
-		<p:menuitem value="Funcionário" icon="ui-icon-document" url="funcionario.xhtml" />
-		<p:menuitem value="Setor" icon="ui-icon-document" url="setor.xhtml" />
-		<p:menuitem value="Área Faturada" icon="ui-icon-document" url="areaFaturada.xhtml" />
-		<p:menuitem value="Usuario" icon="ui-icon-document" url="usuario.xhtml"
+		<p:menuitem value="Home" icon="fa fa-fw fa-home" url="home.xhtml" />
+		<p:menuitem value="Quebra" icon="fa fa-fw fa-cut" url="quebra.xhtml" />
+		<p:menuitem value="Tipo Vidro" icon="fa fa-fw fa-glass" url="tipoVidro.xhtml" />
+		<p:menuitem value="Funcionário" icon="fa fa-fw fa-male" url="funcionario.xhtml" />
+		<p:menuitem value="Setor" icon="fa fa-fw fa-pencil" url="setor.xhtml" />
+		<p:menuitem value="Área Faturada" icon="fa fa-fw fa-usd" url="areaFaturada.xhtml" />
+		<p:menuitem value="Usuario" icon="fa fa-fw fa-user" url="usuario.xhtml"
 			rendered="#{loginController.usuarioAutenticado.tipo == loginController.tipos[0]}" />
+		<p:submenu label="Relatório">
+			<p:menuitem value="Quebras" url="relatorioQuebra.xhtml" />
+			<p:menuitem value="Visão TV" url="relatorioVisaoTV.xhtml" />
+		</p:submenu>
+
 
 		<f:facet name="options">
 			<p:commandButton value="Logout" icon="ui-icon-extlink" action="#{loginController.logout}" />

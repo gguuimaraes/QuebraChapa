@@ -14,7 +14,7 @@
 			update="dialogCadastro" style="margin-bottom: 10px" />
 
 		<p:dialog header="Cadastro Setor" id="dialogCadastro" widgetVar="dialogCadastro" modal="true">
-			<ui:include src="/sistema/cadastroSetor.xhtml" />
+			<ui:include src="/sistema/cadastro/cadastroSetor.xhtml" />
 		</p:dialog>
 
 		<h:form id="form">
@@ -25,7 +25,7 @@
 				<p:ajax event="rowEdit" listener="#{setorController.onRowEdit}" update=":form:msgs" />
 				<p:ajax event="rowEditCancel" listener="#{setorController.onRowCancel}" update=":form:msgs" />
 
-				<p:column headerText="Id">
+				<!-- <p:column headerText="Id">
 					<p:cellEditor>
 						<f:facet name="output">
 							<h:outputText value="#{setor.id}" />
@@ -34,7 +34,7 @@
 							<p:inputText value="#{setor.id}" style="width:100%" />
 						</f:facet>
 					</p:cellEditor>
-				</p:column>
+				</p:column> -->
 
 				<p:column headerText="Nome">
 					<p:cellEditor>

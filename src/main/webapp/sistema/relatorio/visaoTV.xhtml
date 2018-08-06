@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
+<h:head></h:head>
+<h:body>
+	<h:panelGrid columns="2" style="margin: auto">
+
+		<p:chart type="pie" model="#{visaoTVController.quebraPorSetor}" style="margin-left: 5vw; width: 40vw; height: 44vh"
+			responsive="true" />
+
+		<h:panelGrid style="text-align: right; margin: auto; font-family: Arial; font-size: 20px " columns="2">
+			<h:outputLabel value="Quebra:   " />
+			<h:outputLabel value="#{visaoTVController.areaQuebra}">
+				<f:convertNumber pattern="#,####0.00 m²" />
+			</h:outputLabel>
+			<h:outputLabel value="Faturada:   " />
+			<h:outputLabel value="#{visaoTVController.areaFaturada}">
+				<f:convertNumber pattern="#,####0.00 m²" />
+			</h:outputLabel>
+			<h:outputLabel value="% Quebra: " />
+			<h:outputLabel value="#{visaoTVController.areaQuebra / visaoTVController.areaFaturada * 100}">
+				<f:convertNumber pattern="0,00%" />
+			</h:outputLabel>
+		</h:panelGrid>
+
+		<p:chart id="quebraAnual" type="line" model="#{visaoTVController.quebraAnual}" style="width: 45vw; height: 44vh" />
+
+		<p:chart id="taxaQuebraAnual" type="line" model="#{visaoTVController.taxaQuebraAnual}"
+			style="width: 45vw; height: 44vh" />
+
+	</h:panelGrid>
+</h:body>
+</html>

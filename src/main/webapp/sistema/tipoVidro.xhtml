@@ -14,7 +14,7 @@
 			update="dialogCadastro" style="margin-bottom: 10px" />
 
 		<p:dialog header="Cadastro Tipo Vidro" id="dialogCadastro" widgetVar="dialogCadastro" modal="true">
-			<ui:include src="/sistema/cadastroTipoVidro.xhtml" />
+			<ui:include src="/sistema/cadastro/cadastroTipoVidro.xhtml" />
 		</p:dialog>
 
 		<h:form id="form">
@@ -24,7 +24,7 @@
 
 				<p:ajax event="rowEdit" listener="#{tipoVidroController.onRowEdit}" update=":form:msgs" />
 				<p:ajax event="rowEditCancel" listener="#{tipoVidroController.onRowCancel}" update=":form:msgs" />
-
+<!-- 
 				<p:column headerText="Id">
 					<p:cellEditor>
 						<f:facet name="output">
@@ -34,7 +34,7 @@
 							<p:inputText value="#{tipoVidro.id}" style="width:100%" />
 						</f:facet>
 					</p:cellEditor>
-				</p:column>
+				</p:column> -->
 
 				<p:column headerText="Descrição">
 					<p:cellEditor>

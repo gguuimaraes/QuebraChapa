@@ -11,7 +11,7 @@ public class QuebraModel implements Serializable {
 	private Date data;
 	private TipoVidroModel tipoVidro;
 	private Float areaTotal;
-	private Float areaAproveitada;
+	private Float areaAproveitada = 0f;
 	private SetorModel setor;
 	private FuncionarioModel funcionario;
 	private String motivo;

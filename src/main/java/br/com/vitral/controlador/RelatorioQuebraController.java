@@ -1,10 +1,10 @@
 package br.com.vitral.controlador;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
@@ -21,20 +21,19 @@ import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.primefaces.PrimeFaces;
-import org.primefaces.event.RowEditEvent;
 
+import br.com.vitral.modelo.FuncionarioModel;
 import br.com.vitral.modelo.QuebraModel;
+import br.com.vitral.modelo.SetorModel;
+import br.com.vitral.modelo.TipoVidroModel;
 import br.com.vitral.persistencia.QuebraDao;
 import br.com.vitral.util.Uteis;
 
-@Named(value = "quebraController")
+@Named(value = "relatorioQuebraController")
 @SessionScoped
-public class QuebraController implements Serializable {
+public class RelatorioQuebraController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
-	@Inject
-	private QuebraModel quebraModel;
 
 	@Inject
 	private QuebraDao quebraDao;
@@ -42,71 +41,99 @@ public class QuebraController implements Serializable {
 	@Produces
 	private List<QuebraModel> quebras;
 
-	@Produces
-	private List<QuebraModel> quebrasFiltradas;
+	private Date dataInicio = Uteis.getDataInicio();
 
-	@PostConstruct
-	public void init() {
-		quebras = quebraDao.listar();
-	}
+	private Date dataFim = Uteis.getDataFim();
 
-	public void cadastrar() {
-		quebraModel = new QuebraModel();
-		PrimeFaces.current().executeScript("PF('dialogCadastro').show();");
-	}
+	private FuncionarioModel funcionario;
 
-	public void salvar() {
-		quebraDao.salvar(quebraModel);
-		init();
-		this.quebraModel = new QuebraModel();
-		PrimeFaces.current().executeScript("PF('dialogCadastro').hide();");
-		PrimeFaces.current().executeScript("PF('quebras').clearFilters();");
-		Uteis.MensagemInfo("Quebra cadastrada com sucesso");
-	}
+	private TipoVidroModel tipoVidro;
 
-	public void excluir(QuebraModel quebraModel) {
-		quebraDao.remover(quebraModel.getId());
-		quebras.remove(quebraModel);
-	}
-
-	public QuebraModel getQuebraModel() {
-		return this.quebraModel;
-	}
-
-	public void setQuebraModel(QuebraModel quebraModel) {
-		this.quebraModel = quebraModel;
-	}
+	private SetorModel setor;
 
 	public List<QuebraModel> getQuebras() {
 		return quebras;
 	}
 
-	public List<QuebraModel> getQuebrasFiltradas() {
-		return quebrasFiltradas;
+	public void setQuebras(List<QuebraModel> quebras) {
+		this.quebras = quebras;
 	}
 
-	public void setQuebrasFiltradas(List<QuebraModel> quebrasFiltradas) {
-		this.quebrasFiltradas = quebrasFiltradas;
+	public Date getDataInicio() {
+		return dataInicio;
 	}
 
-	public void onRowEdit(RowEditEvent event) {
-		quebraDao.salvar((QuebraModel) event.getObject());
-		Uteis.MensagemInfo("Quebra alterada com sucesso");
+	public void setDataInicio(Date dataInicio) {
+		this.dataInicio = dataInicio;
 	}
 
-	public void onRowCancel(RowEditEvent event) {
-		Uteis.MensagemInfo("Operação cancelada");
+	public Date getDataFim() {
+		return dataFim;
 	}
 
-	public boolean filtrarFuncionario(Object value, Object filter, Locale locale) {
-		String filterText = (filter == null) ? null : filter.toString().trim();
-		if (filterText == null || filterText.equals(""))
-			return true;
+	public void setDataFim(Date dataFim) {
+		this.dataFim = dataFim;
+	}
 
-		if (value == null)
-			value = "Nenhum";
+	public FuncionarioModel getFuncionario() {
+		return funcionario;
+	}
 
-		return value.toString().compareTo(filterText) == 0;
+	public void setFuncionario(FuncionarioModel funcionario) {
+		this.funcionario = funcionario;
+	}
+
+	public TipoVidroModel getTipoVidro() {
+		return tipoVidro;
+	}
+
+	public void setTipoVidro(TipoVidroModel tipoVidro) {
+		this.tipoVidro = tipoVidro;
+	}
+
+	public SetorModel getSetor() {
+		return setor;
+	}
+
+	public void setSetor(SetorModel setor) {
+		this.setor = setor;
+	}
+
+	public double getSomaAreaTotal() {
+		double soma = 0;
+		if (quebras == null)
+			return soma;
+		for (QuebraModel q : quebras) {
+			soma += q.getAreaTotal();
+		}
+		return soma;
+	}
+
+	public double getSomaAreaAproveitada() {
+		double soma = 0;
+		if (quebras == null)
+			return soma;
+		for (QuebraModel q : quebras) {
+			soma += q.getAreaAproveitada();
+		}
+		return soma;
+	}
+
+	public void executar() {
+		List<Object> parametros = new ArrayList<>();
+		if (setor != null)
+			parametros.add(setor);
+		if (tipoVidro != null)
+			parametros.add(tipoVidro);
+		if (funcionario != null)
+			parametros.add(funcionario);
+		quebras = quebraDao.listarPorPeriodo(dataInicio, dataFim, parametros.toArray());
+	}
+
+	public void limpar() {
+		if (quebras != null)
+			quebras.clear();
+		PrimeFaces.current().resetInputs("form");
 	}
 
 	public void postProcessXLS(Object document) {
@@ -122,10 +149,8 @@ public class QuebraController implements Serializable {
 		headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 		headerStyle.setFont(headerFont);
 		headerStyle.setAlignment(HorizontalAlignment.CENTER);
-		for (int j = 0; j < header.getPhysicalNumberOfCells(); j++) {
-			HSSFCell cell = header.getCell(j);
-			cell.setCellStyle(headerStyle);
-		}
+		for (int j = 0; j < header.getPhysicalNumberOfCells(); j++)
+			header.getCell(j).setCellStyle(headerStyle);
 
 		HSSFCellStyle parStyle = wb.createCellStyle();
 		parStyle.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);

@@ -1,0 +1,57 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+	<h:form>
+		<p:focus context="txtData" />
+		<h:panelGrid columns="1">
+			<h:panelGrid columns="4">
+				<p:outputLabel value="Data" for="txtData" />
+				<p:outputLabel value="Tipo Vidro" for="txtTipoVidro" />
+				<p:outputLabel value="Quebra" for="txtAreaTotal" />
+				<p:outputLabel value="Setor" for="txtSetor" />
+
+				<p:calendar id="txtData" value="#{quebraController.quebraModel.data}" required="true"
+					requiredMessage="A Data é de preenchimento obrigatório" mask="99/99/9999" pattern="dd/MM/yyyy" />
+				<p:selectOneMenu id="txtTipoVidro" value="#{quebraController.quebraModel.tipoVidro}" required="true"
+					requiredMessage="O Tipo Vidro é de preenchimento obrigatório" converter="tipoVidroConverter">
+					<f:selectItem itemValue="" itemLabel="Selecione um" />
+					<f:selectItems value="#{tipoVidroController.tiposVidro}" var="tipoVidro" itemLabel="#{tipoVidro.nome}" />
+				</p:selectOneMenu>
+				<p:inputText id="txtAreaTotal" value="#{quebraController.quebraModel.areaTotal}" required="true"
+					requiredMessage="A Área Total é de preenchimento obrigatório">
+					<f:convertNumber />
+				</p:inputText>
+				<p:selectOneMenu id="txtSetor" value="#{quebraController.quebraModel.setor}" required="true"
+					requiredMessage="O Setor é de preenchimento obrigatório" converter="setorConverter">
+					<f:selectItem itemValue="" itemLabel="Selecione um" />
+					<f:selectItems value="#{setorController.setores}" var="setor" itemLabel="#{setor.nome}" />
+				</p:selectOneMenu>
+			</h:panelGrid>
+			<h:panelGrid columns="3">
+				<p:outputLabel value="Sobra" for="txtAreaAproveitada" />
+				<p:outputLabel value="Funcionário" for="txtFuncionario" />
+				<p:outputLabel value="Motivo" for="txtMotivo" />
+				<p:inputText id="txtAreaAproveitada" value="#{quebraController.quebraModel.areaAproveitada}" required="true"
+					requiredMessage="A Área Aproveitada é de preenchimento obrigatório">
+					<f:convertNumber />
+				</p:inputText>
+				<p:selectOneMenu id="txtFuncionario" value="#{quebraController.quebraModel.funcionario}"
+					converter="funcionarioConverter">
+					<f:selectItem itemValue="" itemLabel="Nenhum" />
+					<f:selectItems value="#{funcionarioController.funcionarios}" var="funcionario" itemLabel="#{funcionario.nome}" />
+				</p:selectOneMenu>
+				<p:inputText id="txtMotivo" value="#{quebraController.quebraModel.motivo}" required="true"
+					requiredMessage="O Motivo é de preenchimento obrigatório" />
+			</h:panelGrid>
+			<h:panelGrid columns="2">
+				<p:commandButton value="Salvar" id="btnSalvar" icon="fa fa-fw fa-save" actionListener="#{quebraController.salvar}"
+					update="form:quebras" />
+			</h:panelGrid>
+			<p:messages showDetail="false" closable="true" severity="error">
+				<p:autoUpdate />
+			</p:messages>
+
+		</h:panelGrid>
+	</h:form>
+
+</ui:composition>

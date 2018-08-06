@@ -14,7 +14,7 @@
 			update="dialogCadastro" style="margin-bottom: 10px" />
 
 		<p:dialog header="Cadastro Quebra" id="dialogCadastro" widgetVar="dialogCadastro" modal="true">
-			<ui:include src="/sistema/cadastroQuebra.xhtml" />
+			<ui:include src="/sistema/cadastro/cadastroQuebra.xhtml" />
 		</p:dialog>
 
 		<h:form id="form">
@@ -52,7 +52,7 @@
 						</f:facet>
 						<f:facet name="input">
 							<p:calendar value="#{quebra.data}" required="true" requiredMessage="A Data é de preenchimento obrigatório"
-								inputStyle="width: 100%" pattern="dd/MM/yyyy" />
+								inputStyle="width: 100%" mask="99/99/9999" pattern="dd/MM/yyyy" />
 						</f:facet>
 					</p:cellEditor>
 				</p:column>
@@ -136,18 +136,19 @@
 				</p:column>
 
 				<p:column headerText="Funcionário" filterBy="#{quebra.funcionario.nome}" filterMatchMode="exact"
-					style="width: 9%; text-align:center">
+					filterFunction="#{quebraController.filtrarFuncionario}" style="width: 9%; text-align:center">
 					<f:facet name="filter">
+						<!-- <p:inputText onchange="PF('quebras').filter()" /> -->
 						<p:selectOneMenu onchange="PF('quebras').filter()" style="width:calc(100% - 26px)">
 							<f:selectItem itemLabel="Selecione um" itemValue="#{null}" noSelectionOption="true" />
-							<f:selectItem itemValue="-" itemLabel="Nenhum" />
+							<f:selectItem itemValue="Nenhum" itemLabel="Nenhum" />
 							<f:selectItems value="#{funcionarioController.funcionarios}" var="funcionario" itemLabel="#{funcionario.nome}"
 								itemValue="#{funcionario.nome}" />
 						</p:selectOneMenu>
 					</f:facet>
 					<p:cellEditor>
 						<f:facet name="output">
-							<h:outputText value="#{quebra.funcionario.nome == null ? '-' : quebra.funcionario.nome}" />
+							<h:outputText value="#{quebra.funcionario.nome == null ? 'Nenhum' : quebra.funcionario.nome}" />
 						</f:facet>
 						<f:facet name="input">
 							<p:selectOneMenu value="#{quebra.funcionario}" converter="funcionarioConverter" style="width:calc(100% - 26px)">
@@ -158,7 +159,10 @@
 					</p:cellEditor>
 				</p:column>
 
-				<p:column headerText="Motivo">
+				<p:column headerText="Motivo" filterBy="#{quebra.motivo}" filterMatchMode="contains">
+					<f:facet name="filter">
+						<p:inputText onchange="PF('quebras').filter()" onkeydown="PF('quebras').filter()" onkeyup="PF('quebras').filter()" onkeypress="PF('quebras').filter()" style="width:calc(100% - 12px)" />
+					</f:facet>
 					<p:cellEditor>
 						<f:facet name="output">
 							<h:outputText value="#{quebra.motivo}" />
@@ -179,23 +183,11 @@
 						<h:outputText class="ui-icon ui-icon-trash" />
 					</p:commandLink>
 				</p:column>
-				<!-- <p:columnGroup type="footer">
-					<p:row>
-						<p:column />
-						<p:column />
-						<p:column>
-							<f:facet name="footer">
-								<h:outputText value="#{quebraController.somaAreaTotal}">
-									<f:convertNumber pattern="#,####0.0000 m²" />
-								</h:outputText>
-							</f:facet>
-						</p:column>
-					</p:row>
-				</p:columnGroup> -->
+
 				<f:facet name="{Exporters}">
 					<h:commandLink>
 						<p:graphicImage url="/resources/imagens/excel.png" width="24" style="float: right; margin-right: 5px" />
-						<p:dataExporter type="xls" target="quebras" fileName="quebras" />
+						<p:dataExporter type="xls" target="quebras" fileName="quebras" postProcessor="#{quebraController.postProcessXLS}"/>
 					</h:commandLink>
 				</f:facet>
 			</p:dataTable>
