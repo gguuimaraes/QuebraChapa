@@ -31,6 +31,7 @@ public class FuncionarioController implements Serializable {
 	@Produces
 	private List<FuncionarioModel> funcionarios;
 
+	
 	@PostConstruct
 	public void init() {
 		funcionarios = funcionarioDao.listar();

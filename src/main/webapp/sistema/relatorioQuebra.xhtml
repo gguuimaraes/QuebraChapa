@@ -33,6 +33,7 @@
 					<p:selectOneMenu id="txtFuncionario" value="#{relatorioQuebraController.funcionario}"
 						converter="funcionarioConverter">
 						<f:selectItem itemValue="#{null}" itemLabel="Ignorar" />
+						<f:selectItem itemValue="#{relatorioQuebraController.funcionarioNenhum}" itemLabel="Nenhum" />
 						<f:selectItems value="#{funcionarioController.funcionarios}" var="funcionario" itemValue="#{funcionario}"
 							itemLabel="#{funcionario.nome}" />
 					</p:selectOneMenu>
@@ -42,7 +43,8 @@
 					<p:commandButton value="Executar" actionListener="#{relatorioQuebraController.executar}" update="panelGrid" />
 					<p:commandButton value="Limpar" actionListener="#{relatorioQuebraController.limpar}" update="panelGrid"
 						immediate="true" />
-					<h:commandLink>
+					<h:commandLink
+						rendered="#{relatorioQuebraController.quebras != null and relatorioQuebraController.quebras.size() > 0}">
 						<p:graphicImage url="/resources/imagens/excel.png" width="24" />
 						<p:dataExporter type="xls" target="quebras" fileName="quebras"
 							postProcessor="#{relatorioQuebraController.postProcessXLS}" />

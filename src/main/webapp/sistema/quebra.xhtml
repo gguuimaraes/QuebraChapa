@@ -185,7 +185,7 @@
 				</p:column>
 
 				<f:facet name="{Exporters}">
-					<h:commandLink>
+					<h:commandLink rendered="#{quebraController.quebras != null and quebraController.quebras.size() > 0}">
 						<p:graphicImage url="/resources/imagens/excel.png" width="24" style="float: right; margin-right: 5px" />
 						<p:dataExporter type="xls" target="quebras" fileName="quebras" postProcessor="#{quebraController.postProcessXLS}"/>
 					</h:commandLink>

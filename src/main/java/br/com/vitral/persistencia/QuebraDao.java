@@ -107,11 +107,13 @@ public class QuebraDao implements Serializable {
 			} else if (p instanceof TipoVidroModel) {
 				queryString += "q.tipoVidro.id = :tipoVidroId ";
 			} else if (p instanceof FuncionarioModel) {
-				queryString += "q.funcionario.id = :funcionarioId ";
+				if (((FuncionarioModel) p).getId() != 0)
+					queryString += "q.funcionario.id = :funcionarioId ";
+				else
+					queryString += "q.funcionario.id IS NULL ";
 			}
 		}
 		queryString += "ORDER BY q.data DESC";
-		System.out.println("LISTAR POR PERIODO:\nQuery: " + queryString);
 		Query query = entityManager.createQuery(queryString);
 		query.setParameter("dataInicio", dataInicio);
 		query.setParameter("dataFim", dataFim);
@@ -121,7 +123,8 @@ public class QuebraDao implements Serializable {
 			} else if (p instanceof TipoVidroModel) {
 				query.setParameter("tipoVidroId", ((TipoVidroModel) p).getId());
 			} else if (p instanceof FuncionarioModel) {
-				query.setParameter("funcionarioId", ((FuncionarioModel) p).getId());
+				if (((FuncionarioModel) p).getId() != 0)
+					query.setParameter("funcionarioId", ((FuncionarioModel) p).getId());
 			}
 		}
 		@SuppressWarnings("unchecked")

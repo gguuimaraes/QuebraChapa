@@ -200,5 +200,12 @@ public class RelatorioQuebraController implements Serializable {
 		for (int j = 0; j < footer.getPhysicalNumberOfCells(); j++)
 			footer.getCell(j).setCellStyle(footerStyle);
 	}
+	
+	private static FuncionarioModel funcionarioNenhum = new FuncionarioModel();
+	
+	public FuncionarioModel getFuncionarioNenhum() {
+		funcionarioNenhum.setId(0);
+		return funcionarioNenhum;
+	}
 
 }
