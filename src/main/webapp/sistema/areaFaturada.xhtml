@@ -10,7 +10,7 @@
 <ui:composition template="/template/layoutBase.xhtml">
 
 	<ui:define name="content">
-		<p:commandButton icon="ui-icon-plus" actionListener="#{areaFaturadaController.cadastrar}" value="Cadastrar"
+		<p:commandButton icon="fa fa-fw fa-plus" actionListener="#{areaFaturadaController.cadastrar}" value="Cadastrar"
 			ajax="true" update="dialogCadastro" style="margin-bottom: 10px" />
 
 		<p:dialog header="Cadastro Área Faturada" id="dialogCadastro" widgetVar="dialogCadastro" modal="true">
@@ -45,7 +45,7 @@
 						</f:facet>
 						<f:facet name="input">
 							<p:calendar value="#{areaFaturada.data}" required="true" requiredMessage="A Data é de preenchimento obrigatório"
-								inputStyle="width: 100%" mask="99/99/9999" pattern="dd/MM/yyyy" />
+								mask="99/99/9999" pattern="dd/MM/yyyy" />
 						</f:facet>
 					</p:cellEditor>
 				</p:column>
@@ -58,20 +58,19 @@
 							</h:outputText>
 						</f:facet>
 						<f:facet name="input">
-							<p:inputText value="#{areaFaturada.area}" style="width:100%" required="true"
-								requiredMessage="A Área é de preenchimento obrigatório">
+							<p:inputText value="#{areaFaturada.area}" required="true" requiredMessage="A Área é de preenchimento obrigatório">
 								<f:convertNumber />
 							</p:inputText>
 						</f:facet>
 					</p:cellEditor>
 				</p:column>
 
-				<p:column style="width:32px">
-					<p:rowEditor />
+				<p:column styleClass="colicone coleditar">
+					<p:rowEditor editTitle="Editar" cancelTitle="Cancelar" saveTitle="Salvar" />
 				</p:column>
 
-				<p:column style="width:16px">
-					<p:commandLink actionListener="#{areaFaturadaController.excluir(areaFaturada)}" update=":form">
+				<p:column styleClass="colicone colexcluir">
+					<p:commandLink title="Excluir" actionListener="#{areaFaturadaController.excluir(areaFaturada)}" update=":form">
 						<h:outputText class="ui-icon ui-icon-trash" />
 					</p:commandLink>
 				</p:column>

@@ -10,7 +10,7 @@
 <ui:composition template="/template/layoutBase.xhtml">
 
 	<ui:define name="content">
-		<p:commandButton icon="ui-icon-plus" actionListener="#{quebraController.cadastrar}" value="Cadastrar [F3]" ajax="true"
+		<p:commandButton icon="fa fa-fw fa-plus" actionListener="#{quebraController.cadastrar}" value="Cadastrar [F3]" ajax="true"
 			update="dialogCadastro" style="margin-bottom: 10px" />
 
 		<p:dialog header="Cadastro Quebra" id="dialogCadastro" widgetVar="dialogCadastro" modal="true">
@@ -52,7 +52,7 @@
 						</f:facet>
 						<f:facet name="input">
 							<p:calendar value="#{quebra.data}" required="true" requiredMessage="A Data é de preenchimento obrigatório"
-								inputStyle="width: 100%" mask="99/99/9999" pattern="dd/MM/yyyy" />
+								mask="99/99/9999" pattern="dd/MM/yyyy" />
 						</f:facet>
 					</p:cellEditor>
 				</p:column>
@@ -72,8 +72,7 @@
 						</f:facet>
 						<f:facet name="input">
 							<p:selectOneMenu value="#{quebra.tipoVidro}" required="true"
-								requiredMessage="O Tipo Vidro é de preenchimento obrigatório" style="width:calc(100% - 26px)"
-								converter="tipoVidroConverter">
+								requiredMessage="O Tipo Vidro é de preenchimento obrigatório" converter="tipoVidroConverter">
 								<f:selectItem itemValue="" itemLabel="Selecione um" />
 								<f:selectItems value="#{tipoVidroController.tiposVidro}" var="tipoVidro" itemLabel="#{tipoVidro.nome}" />
 							</p:selectOneMenu>
@@ -89,7 +88,7 @@
 							</h:outputText>
 						</f:facet>
 						<f:facet name="input">
-							<p:inputText value="#{quebra.areaTotal}" style="width:100%" required="true"
+							<p:inputText value="#{quebra.areaTotal}" required="true"
 								requiredMessage="A Área Total é de preenchimento obrigatório">
 								<f:convertNumber />
 							</p:inputText>
@@ -105,7 +104,7 @@
 							</h:outputText>
 						</f:facet>
 						<f:facet name="input">
-							<p:inputText value="#{quebra.areaAproveitada}" style="width:100%" required="true"
+							<p:inputText value="#{quebra.areaAproveitada}" required="true"
 								requiredMessage="A Área Aproveitada é de preenchimento obrigatório">
 								<f:convertNumber />
 							</p:inputText>
@@ -127,7 +126,7 @@
 						</f:facet>
 						<f:facet name="input">
 							<p:selectOneMenu value="#{quebra.setor}" required="true" requiredMessage="O Setor é de preenchimento obrigatório"
-								converter="setorConverter" style="width:calc(100% - 26px)">
+								converter="setorConverter">
 								<f:selectItem itemValue="" itemLabel="Selecione um" />
 								<f:selectItems value="#{setorController.setores}" var="setor" itemLabel="#{setor.nome}" />
 							</p:selectOneMenu>
@@ -151,7 +150,7 @@
 							<h:outputText value="#{quebra.funcionario.nome == null ? 'Nenhum' : quebra.funcionario.nome}" />
 						</f:facet>
 						<f:facet name="input">
-							<p:selectOneMenu value="#{quebra.funcionario}" converter="funcionarioConverter" style="width:calc(100% - 26px)">
+							<p:selectOneMenu value="#{quebra.funcionario}" converter="funcionarioConverter">
 								<f:selectItem itemValue="" itemLabel="Nenhum" />
 								<f:selectItems value="#{funcionarioController.funcionarios}" var="funcionario" itemLabel="#{funcionario.nome}" />
 							</p:selectOneMenu>
@@ -161,25 +160,25 @@
 
 				<p:column headerText="Motivo" filterBy="#{quebra.motivo}" filterMatchMode="contains">
 					<f:facet name="filter">
-						<p:inputText onchange="PF('quebras').filter()" onkeydown="PF('quebras').filter()" onkeyup="PF('quebras').filter()" onkeypress="PF('quebras').filter()" style="width:calc(100% - 12px)" />
+						<p:inputText onchange="PF('quebras').filter()" onkeydown="PF('quebras').filter()" onkeyup="PF('quebras').filter()"
+							onkeypress="PF('quebras').filter()" style="width:calc(100% - 12px)" />
 					</f:facet>
 					<p:cellEditor>
 						<f:facet name="output">
 							<h:outputText value="#{quebra.motivo}" />
 						</f:facet>
 						<f:facet name="input">
-							<p:inputText value="#{quebra.motivo}" style="width:100%" required="true"
-								requiredMessage="O Motivo é de preenchimento obrigatório" />
+							<p:inputText value="#{quebra.motivo}" required="true" requiredMessage="O Motivo é de preenchimento obrigatório" />
 						</f:facet>
 					</p:cellEditor>
 				</p:column>
 
-				<p:column exportable="false" style="width:32px">
-					<p:rowEditor />
+				<p:column exportable="false" styleClass="colicone coleditar">
+					<p:rowEditor editTitle="Editar" cancelTitle="Cancelar" saveTitle="Salvar" />
 				</p:column>
 
-				<p:column exportable="false" style="width:16px">
-					<p:commandLink actionListener="#{quebraController.excluir(quebra)}" update=":form">
+				<p:column exportable="false" styleClass="colicone colexcluir">
+					<p:commandLink title="Excluir" actionListener="#{quebraController.excluir(quebra)}" update=":form">
 						<h:outputText class="ui-icon ui-icon-trash" />
 					</p:commandLink>
 				</p:column>
@@ -187,7 +186,7 @@
 				<f:facet name="{Exporters}">
 					<h:commandLink rendered="#{quebraController.quebras != null and quebraController.quebras.size() > 0}">
 						<p:graphicImage url="/resources/imagens/excel.png" width="24" style="float: right; margin-right: 5px" />
-						<p:dataExporter type="xls" target="quebras" fileName="quebras" postProcessor="#{quebraController.postProcessXLS}"/>
+						<p:dataExporter type="xls" target="quebras" fileName="quebras" postProcessor="#{quebraController.postProcessXLS}" />
 					</h:commandLink>
 				</f:facet>
 			</p:dataTable>
