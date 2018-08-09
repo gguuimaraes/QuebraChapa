@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+
+<ui:composition template="/template/layoutBase.xhtml">
+
+	<ui:define name="content">
+		<p:commandButton icon="fa fa-fw fa-plus" actionListener="#{pesoController.cadastrar}" value="Cadastrar"
+			ajax="true" update="dialogCadastro" style="margin-bottom: 10px" />
+
+		<p:dialog header="Cadastro Peso" id="dialogCadastro" widgetVar="dialogCadastro" modal="true">
+			<ui:include src="/sistema/cadastro/cadastroPeso.xhtml" />
+		</p:dialog>
+
+		<h:form id="form">
+			<p:growl id="msgs" showDetail="true" />
+			<p:dataTable id="pesos" var="peso" value="#{pesoController.pesos}" editable="true"
+				emptyMessage="Nenhum registro.">
+
+				<p:ajax event="rowEdit" listener="#{pesoController.onRowEdit}" update=":form:msgs" />
+				<p:ajax event="rowEditCancel" listener="#{pesoController.onRowCancel}" update=":form:msgs" />
+
+				<!-- <p:column headerText="Id">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{peso.id}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{peso.id}" style="width:100%" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column> -->
+
+				<p:column headerText="Data">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{peso.data}">
+								<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+							</h:outputText>
+						</f:facet>
+						<f:facet name="input">
+							<p:calendar value="#{peso.data}" required="true" requiredMessage="A Data é de preenchimento obrigatório"
+								mask="99/99/9999 99:99:99" pattern="dd/MM/yyyy HH:mm:ss" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Setor" style="width: 9%; text-align:center">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{peso.setor.nome}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:selectOneMenu value="#{peso.setor}" required="true"
+								requiredMessage="O Setor é de preenchimento obrigatório" converter="setorConverter">
+								<f:selectItem itemValue="" itemLabel="Selecione um" />
+								<f:selectItems value="#{setorController.setores}" var="setor" itemLabel="#{setor.nome}" />
+							</p:selectOneMenu>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Funcionário" style="width: 9%; text-align:center">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{peso.funcionario.nome}" />
+						</f:facet>
+						<f:facet name="input" required="true" requiredMessage="O Funcionário é de preenchimento obrigatório">
+							<p:selectOneMenu value="#{peso.funcionario}" converter="funcionarioConverter">
+								<f:selectItem itemValue="" itemLabel="Selecione um" />
+								<f:selectItems value="#{funcionarioController.funcionarios}" var="funcionario" itemLabel="#{funcionario.nome}" />
+							</p:selectOneMenu>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Peso (kg)">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{peso.peso}">
+								<f:convertNumber />
+							</h:outputText>
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{peso.peso}" required="true" requiredMessage="O Peso é de preenchimento obrigatório">
+								<f:convertNumber />
+							</p:inputText>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column styleClass="colicone coleditar">
+					<p:rowEditor editTitle="Editar" cancelTitle="Cancelar" saveTitle="Salvar" />
+				</p:column>
+
+				<p:column styleClass="colicone colexcluir">
+					<p:commandLink title="Excluir" actionListener="#{pesoController.excluir(peso)}" update=":form">
+						<h:outputText class="ui-icon ui-icon-trash" />
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>
+
+
+</html>

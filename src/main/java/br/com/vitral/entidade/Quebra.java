@@ -48,7 +48,7 @@ public class Quebra implements Serializable {
 	@OneToOne
 	private Setor setor;
 
-	@OneToOne
+	@OneToOne(optional = true)
 	private Funcionario funcionario;
 
 	@Column(name = "motivo")

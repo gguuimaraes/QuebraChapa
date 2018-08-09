@@ -46,7 +46,7 @@ public class AreaFaturadaController implements Serializable {
 		init();
 		this.areaFaturadaModel = new AreaFaturadaModel();
 		PrimeFaces.current().executeScript("PF('dialogCadastro').hide();");
-		Uteis.MensagemInfo("AreaFaturada cadastrado com sucesso");
+		Uteis.MensagemInfo("Área Faturada cadastrada com sucesso");
 	}
 
 	public void excluir(AreaFaturadaModel areaFaturadaModel) {
@@ -68,7 +68,7 @@ public class AreaFaturadaController implements Serializable {
 
 	public void onRowEdit(RowEditEvent event) {
 		areaFaturadaDao.salvar((AreaFaturadaModel) event.getObject());
-		Uteis.MensagemInfo("AreaFaturada alterado com sucesso");
+		Uteis.MensagemInfo("Área Faturada alterada com sucesso");
 	}
 
 	public void onRowCancel(RowEditEvent event) {
