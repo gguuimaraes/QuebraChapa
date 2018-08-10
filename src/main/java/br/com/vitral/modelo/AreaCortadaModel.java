@@ -8,7 +8,7 @@ public class AreaCortadaModel implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
-	private Date data;
+	private Date data = new Date();
 	private FuncionarioModel funcionario;
 	private SetorModel setor;
 	private Float area;

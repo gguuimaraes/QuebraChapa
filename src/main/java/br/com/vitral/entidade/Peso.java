@@ -12,38 +12,42 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Table(name = "peso")
 @Entity
 
-@NamedQueries({ @NamedQuery(name = "Peso.findAll", query = "SELECT p FROM Peso p ORDER BY p.data DESC") })
+@NamedQueries({ @NamedQuery(name = "Peso.findAll", query = "SELECT p FROM Peso p ORDER BY p.data DESC"),
+		@NamedQuery(name = "Peso.findPesosDoDia", query = "SELECT p FROM Peso p WHERE p.data = :data ORDER BY p.peso DESC") })
+
 public class Peso implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
-
-	@Column(name = "data")
-	private Date data;
-
+	
 	@OneToOne
 	private Funcionario funcionario;
 
 	@OneToOne
 	private Setor setor;
 
+	@Column(name = "data")
+	@Temporal(TemporalType.DATE)
+	private Date data;
+
 	@Column(name = "peso")
 	private float peso;
 
-	public Integer getId() {
+	public int getId() {
 		return id;
 	}
-
-	public void setId(Integer id) {
+	
+	public void setId(int id) {
 		this.id = id;
 	}
 

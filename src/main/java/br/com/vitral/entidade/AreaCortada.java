@@ -12,12 +12,12 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 @Table(name = "areacortada")
 @Entity
 
-@NamedQueries({ @NamedQuery(name = "AreaCortada.findAll", query = "SELECT a FROM AreaCortada a ORDER BY a.data DESC") })
+@NamedQueries({ @NamedQuery(name = "AreaCortada.findAll", query = "SELECT a FROM AreaCortada a ORDER BY a.data DESC"),
+	@NamedQuery(name = "AreaCortada.findAreasCortadasDoDia", query = "SELECT a FROM AreaCortada a WHERE a.data = :data ORDER BY a.area DESC") })
 public class AreaCortada implements Serializable {
 
 	private static final long serialVersionUID = 1L;

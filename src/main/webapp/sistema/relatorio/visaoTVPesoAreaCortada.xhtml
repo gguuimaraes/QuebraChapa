@@ -4,9 +4,81 @@
 	xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
 <h:head></h:head>
 <h:body>
-	<h:panelGrid columns="2" style="margin: auto">
+	<h:panelGrid columns="2" cellspacing="20px" style="width: 80%; margin: auto; font-family: Arial; font-size: 30px; text-align: center">
 
+		<h:dataTable value="#{visaoTVPesoAreaCortadaController.pesosExpedicao}" var="peso" cellspacing="4"
+			style="border-style: groove; width: 100%">
+			<f:facet name="header">
+				<div style="background-color: red; color: white">EXPEDIÇÃO</div>
+			</f:facet>
+			<h:column>
+				<f:facet name="header">Funcionário</f:facet>
+				<h:outputText value="#{peso.funcionario.nome.substring(0, peso.funcionario.nome.indexOf(' '))}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">Peso (kg)</f:facet>
+				<h:outputText value="#{peso.peso}">
+					<f:convertNumber pattern="#,##0.00" />
+				</h:outputText>
+			</h:column>
+		</h:dataTable>
+
+		<h:dataTable value="#{visaoTVPesoAreaCortadaController.pesosEntrega}" var="peso" cellspacing="4"
+			style="border-style: groove; width: 100%">
+			<f:facet name="header">
+				<div style="background-color: blue; color: white">ENTREGA</div>
+			</f:facet>
+			<h:column>
+				<f:facet name="header">Funcionário</f:facet>
+				<h:outputText value="#{peso.funcionario.nome.substring(0, peso.funcionario.nome.indexOf(' '))}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">Peso (kg)</f:facet>
+				<h:outputText value="#{peso.peso}">
+					<f:convertNumber pattern="#,##0.00" />
+				</h:outputText>
+			</h:column>
+
+		</h:dataTable>
 		
+		
+		
+		
+		<h:dataTable value="#{visaoTVPesoAreaCortadaController.areasCortadasWesley}" var="areaCortada" cellspacing="4"
+			style="border-style: groove; width: 100%">
+			<f:facet name="header">
+				<div style="background-color: red; color: white">MESA PEQUENA</div>
+			</f:facet>
+			<h:column>
+				<f:facet name="header">Funcionário</f:facet>
+				<h:outputText value="#{areaCortada.funcionario.nome.substring(0, areaCortada.funcionario.nome.indexOf(' '))}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">Área (m²)</f:facet>
+				<h:outputText value="#{areaCortada.area}">
+					<f:convertNumber pattern="#,##0.00" />
+				</h:outputText>
+			</h:column>
+		</h:dataTable>
+
+		<h:dataTable value="#{visaoTVPesoAreaCortadaController.areasCortadasMauricio}" var="areaCortada" cellspacing="4"
+			style="border-style: groove; width: 100%">
+			<f:facet name="header">
+				<div style="background-color: blue; color: white">MESA GRANDE</div>
+			</f:facet>
+			<h:column>
+				<f:facet name="header">Funcionário</f:facet>
+				<h:outputText value="#{areaCortada.funcionario.nome.substring(0, areaCortada.funcionario.nome.indexOf(' '))}" />
+			</h:column>
+			<h:column>
+				<f:facet name="header">Área (m²)</f:facet>
+				<h:outputText value="#{areaCortada.area}">
+					<f:convertNumber pattern="#,##0.00" />
+				</h:outputText>
+			</h:column>
+
+		</h:dataTable>
+
 	</h:panelGrid>
 </h:body>
 </html>

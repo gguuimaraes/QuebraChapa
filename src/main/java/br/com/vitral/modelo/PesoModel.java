@@ -8,7 +8,7 @@ public class PesoModel implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
-	private Date data;
+	private Date data = new Date();
 	private FuncionarioModel funcionario;
 	private SetorModel setor;
 	private Float peso;
@@ -57,7 +57,9 @@ public class PesoModel implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((data == null) ? 0 : data.hashCode());
+		result = prime * result + ((funcionario == null) ? 0 : funcionario.hashCode());
+		result = prime * result + ((setor == null) ? 0 : setor.hashCode());
 		return result;
 	}
 
@@ -70,18 +72,27 @@ public class PesoModel implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		PesoModel other = (PesoModel) obj;
-		if (id == null) {
-			if (other.id != null)
+		if (data == null) {
+			if (other.data != null)
 				return false;
-		} else if (!id.equals(other.id))
+		} else if (!data.equals(other.data))
+			return false;
+		if (funcionario == null) {
+			if (other.funcionario != null)
+				return false;
+		} else if (!funcionario.equals(other.funcionario))
+			return false;
+		if (setor == null) {
+			if (other.setor != null)
+				return false;
+		} else if (!setor.equals(other.setor))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "PesoModel [id=" + id + ", data=" + data + ", funcionarioModel=" + funcionario + ", setorModel="
-				+ setor + ", peso=" + peso + "]";
+		return "PesoModel [data=" + data + ", funcionario=" + funcionario + ", setor=" + setor + ", peso=" + peso + "]";
 	}
 
 }

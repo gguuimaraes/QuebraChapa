@@ -3,6 +3,7 @@ package br.com.vitral.persistencia;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -20,7 +21,7 @@ public class AreaCortadaDao implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Inject
 	AreaCortada areaCortada;
-	EntityManager entityManager;
+	EntityManager em;
 
 	@Inject
 	SetorDao setorDao;
@@ -28,28 +29,28 @@ public class AreaCortadaDao implements Serializable {
 	FuncionarioDao funcionarioDao;
 
 	public void salvar(AreaCortadaModel areaCortadaModel) {
-		entityManager = Uteis.JpaEntityManager();
+		em = Uteis.JpaEntityManager();
 		if (areaCortadaModel.getId() == null) {
 			areaCortada = new AreaCortada();
 			areaCortada.setData(areaCortadaModel.getData());
 			areaCortada.setFuncionario(funcionarioDao.consultar(areaCortadaModel.getFuncionario().getId()));
 			areaCortada.setSetor(setorDao.consultar(areaCortadaModel.getSetor().getId()));
 			areaCortada.setArea(areaCortadaModel.getArea());
-			entityManager.persist(areaCortada);
+			em.persist(areaCortada);
 		} else {
-			areaCortada = entityManager.find(AreaCortada.class, areaCortadaModel.getId());
+			areaCortada = em.find(AreaCortada.class, areaCortadaModel.getId());
 			areaCortada.setData(areaCortadaModel.getData());
 			areaCortada.setFuncionario(funcionarioDao.consultar(areaCortadaModel.getFuncionario().getId()));
 			areaCortada.setSetor(setorDao.consultar(areaCortadaModel.getSetor().getId()));
 			areaCortada.setArea(areaCortadaModel.getArea());
-			entityManager.merge(areaCortada);
+			em.merge(areaCortada);
 		}
 	}
 
 	public List<AreaCortadaModel> listar() {
 		List<AreaCortadaModel> areasCortadasModel = new ArrayList<AreaCortadaModel>();
-		entityManager = Uteis.JpaEntityManager();
-		Query query = entityManager.createNamedQuery("AreaCortada.findAll");
+		em = Uteis.JpaEntityManager();
+		Query query = em.createNamedQuery("AreaCortada.findAll");
 		@SuppressWarnings("unchecked")
 		Collection<AreaCortada> areasCortadas = (Collection<AreaCortada>) query.getResultList();
 		AreaCortadaModel areaCortadaModel = null;
@@ -72,12 +73,38 @@ public class AreaCortadaDao implements Serializable {
 	}
 
 	public void remover(int id) {
-		entityManager = Uteis.JpaEntityManager();
-		entityManager.remove(entityManager.find(AreaCortada.class, id));
+		em = Uteis.JpaEntityManager();
+		em.remove(em.find(AreaCortada.class, id));
 	}
 
 	public AreaCortada consultar(int id) {
 		return Uteis.JpaEntityManager().find(AreaCortada.class, id);
+	}
+	
+	public List<AreaCortadaModel> listarAreasDoDia(Date dia) {
+		List<AreaCortadaModel> areasModel = new ArrayList<AreaCortadaModel>();
+		em = Uteis.JpaEntityManager();
+		Query query = em.createNamedQuery("AreaCortada.findAreasCortadasDoDia");
+		query.setParameter("data", dia);
+		@SuppressWarnings("unchecked")
+		Collection<AreaCortadaModel> areas = (Collection<AreaCortadaModel>) query.getResultList();
+		AreaCortadaModel areaModel = null;
+		for (AreaCortadaModel a : areas) {
+			areaModel = new AreaCortadaModel();
+			areaModel.setId(a.getId());
+			areaModel.setData(a.getData());
+			FuncionarioModel funcionarioModel = new FuncionarioModel();
+			funcionarioModel.setId(a.getFuncionario().getId());
+			funcionarioModel.setNome(a.getFuncionario().getNome());
+			areaModel.setFuncionario(funcionarioModel);
+			SetorModel setorModel = new SetorModel();
+			setorModel.setId(a.getSetor().getId());
+			setorModel.setNome(a.getSetor().getNome());
+			areaModel.setSetor(setorModel);
+			areaModel.setArea(a.getArea());
+			areasModel.add(areaModel);
+		}
+		return areasModel;
 	}
 
 }

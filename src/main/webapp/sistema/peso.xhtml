@@ -40,7 +40,7 @@
 					<p:cellEditor>
 						<f:facet name="output">
 							<h:outputText value="#{peso.data}">
-								<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+								<f:convertDateTime timeZone="GMT-3" pattern="dd/MM/yyyy HH:mm:ss" />
 							</h:outputText>
 						</f:facet>
 						<f:facet name="input">
@@ -50,7 +50,7 @@
 					</p:cellEditor>
 				</p:column>
 
-				<p:column headerText="Setor" style="width: 9%; text-align:center">
+				<p:column headerText="Setor" style="width: 15%; text-align:center">
 					<p:cellEditor>
 						<f:facet name="output">
 							<h:outputText value="#{peso.setor.nome}" />
@@ -65,7 +65,7 @@
 					</p:cellEditor>
 				</p:column>
 
-				<p:column headerText="Funcionário" style="width: 9%; text-align:center">
+				<p:column headerText="Funcionário" style="width: 30%; text-align:center">
 					<p:cellEditor>
 						<f:facet name="output">
 							<h:outputText value="#{peso.funcionario.nome}" />

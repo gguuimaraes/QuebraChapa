@@ -4,15 +4,9 @@
 	<h:form>
 		<p:focus context="txtData" />
 		<h:panelGrid columns="2" cellpadding="10">
-
-			<p:outputLabel value="Id" for="txtId" rendered="#{pesoController.pesoModel.id != null}" />
-			<p:inputText id="txtId" value="#{pesoController.pesoModel.id}" style="width:50px" readonly="true"
-				rendered="#{pesoController.pesoModel.id != null}" />
-
 			<p:outputLabel value="Data" for="txtData" />
 			<p:calendar id="txtData" value="#{pesoController.pesoModel.data}" required="true"
-				requiredMessage="A Data é de preenchimento obrigatório" inputStyle="width:100%" mask="99/99/9999 99:99:99"
-				pattern="dd/MM/yyyy HH:mm:ss" />
+				requiredMessage="A Data é de preenchimento obrigatório" mask="99/99/9999 99:99:99" pattern="dd/MM/yyyy HH:mm:ss" />
 
 			<p:outputLabel value="Setor" for="txtSetor" />
 			<p:selectOneMenu id="txtSetor" value="#{pesoController.pesoModel.setor}" required="true"
@@ -20,25 +14,24 @@
 				<f:selectItem itemValue="" itemLabel="Selecione um" />
 				<f:selectItems value="#{setorController.setores}" var="setor" itemLabel="#{setor.nome}" />
 			</p:selectOneMenu>
-			
+
 			<p:outputLabel value="Funcionário" for="txtFuncionario" />
 			<p:selectOneMenu id="txtFuncionario" value="#{pesoController.pesoModel.funcionario}" required="true"
-				requiredMessage="O Funcionário é de preenchimento obrigatório"
-					converter="funcionarioConverter">
-					<f:selectItem itemValue="" itemLabel="Selecione um" />
-					<f:selectItems value="#{funcionarioController.funcionarios}" var="funcionario" itemLabel="#{funcionario.nome}" />
-				</p:selectOneMenu>
+				requiredMessage="O Funcionário é de preenchimento obrigatório" converter="funcionarioConverter">
+				<f:selectItem itemValue="" itemLabel="Selecione um" />
+				<f:selectItems value="#{funcionarioController.funcionarios}" var="funcionario" itemLabel="#{funcionario.nome}" />
+			</p:selectOneMenu>
 
 			<p:outputLabel value="Peso" for="txtPeso" />
-			<p:inputText id="txtPeso" value="#{pesoController.pesoModel.peso}" style="width:100%" required="true"
+			<p:inputText id="txtPeso" value="#{pesoController.pesoModel.peso}" required="true"
 				requiredMessage="O Peso é de preenchimento obrigatório">
 				<f:convertNumber />
 			</p:inputText>
 
 			<p:spacer />
 
-			<p:commandButton value="Salvar" id="btnSalvar" icon="fa fa-fw fa-save"
-				actionListener="#{pesoController.salvar}" update="form" />
+			<p:commandButton value="Salvar" id="btnSalvar" icon="fa fa-fw fa-save" actionListener="#{pesoController.salvar}"
+				update="form" />
 
 			<p:spacer />
 			<p:messages showDetail="false" closable="true" severity="error">
