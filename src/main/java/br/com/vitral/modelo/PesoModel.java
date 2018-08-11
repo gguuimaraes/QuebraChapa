@@ -7,17 +7,17 @@ public class PesoModel implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Integer id;
+	private int id;
 	private Date data = new Date();
 	private FuncionarioModel funcionario;
 	private SetorModel setor;
 	private Float peso;
 
-	public Integer getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -57,9 +57,7 @@ public class PesoModel implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((data == null) ? 0 : data.hashCode());
-		result = prime * result + ((funcionario == null) ? 0 : funcionario.hashCode());
-		result = prime * result + ((setor == null) ? 0 : setor.hashCode());
+		result = prime * result + id;
 		return result;
 	}
 
@@ -72,22 +70,7 @@ public class PesoModel implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		PesoModel other = (PesoModel) obj;
-		if (data == null) {
-			if (other.data != null)
-				return false;
-		} else if (!data.equals(other.data))
-			return false;
-		if (funcionario == null) {
-			if (other.funcionario != null)
-				return false;
-		} else if (!funcionario.equals(other.funcionario))
-			return false;
-		if (setor == null) {
-			if (other.setor != null)
-				return false;
-		} else if (!setor.equals(other.setor))
-			return false;
-		return true;
+		return id != other.id;
 	}
 
 	@Override

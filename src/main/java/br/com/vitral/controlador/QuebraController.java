@@ -94,7 +94,7 @@ public class QuebraController implements Serializable {
 		Uteis.MensagemInfo("Quebra alterada com sucesso");
 	}
 
-	public void onRowCancel(RowEditEvent event) {
+	public void onRowCancel() {
 		Uteis.MensagemInfo("Operação cancelada");
 	}
 

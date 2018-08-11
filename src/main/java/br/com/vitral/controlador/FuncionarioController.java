@@ -72,7 +72,7 @@ public class FuncionarioController implements Serializable {
 		Uteis.MensagemInfo("Funcionário alterado com sucesso");
 	}
 
-	public void onRowCancel(RowEditEvent event) {
+	public void onRowCancel() {
 		Uteis.MensagemInfo("Operação cancelada");
 	}
 }

@@ -9,6 +9,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.Transient;
 
 import br.com.vitral.entidade.Quebra;
 import br.com.vitral.modelo.FuncionarioModel;
@@ -20,10 +21,11 @@ import br.com.vitral.util.Uteis;
 public class QuebraDao implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	@Inject
-	Quebra quebra;
+
 	EntityManager entityManager;
 
+	@Inject
+	Quebra quebra;
 	@Inject
 	TipoVidroDao tipoVidroDao;
 	@Inject
@@ -33,7 +35,7 @@ public class QuebraDao implements Serializable {
 
 	public void salvar(QuebraModel quebraModel) {
 		entityManager = Uteis.JpaEntityManager();
-		if (quebraModel.getId() == null) {
+		if (quebraModel.getId() == 0) {
 			quebra = new Quebra();
 			quebra.setData(quebraModel.getData());
 			quebra.setTipoVidro(tipoVidroDao.consultar(quebraModel.getTipoVidro().getId()));
@@ -92,29 +94,24 @@ public class QuebraDao implements Serializable {
 	}
 
 	public List<QuebraModel> listarPorPeriodo(Date dataInicio, Date dataFim, Object... parametros) {
-		List<QuebraModel> quebrasModel = new ArrayList<QuebraModel>();
+		List<QuebraModel> quebrasModel = new ArrayList<>();
 		entityManager = Uteis.JpaEntityManager();
-		String queryString = "SELECT q FROM Quebra q ";
-		queryString += "WHERE ";
-		queryString += "q.data >= :dataInicio ";
-		queryString += "AND ";
-		queryString += "q.data <= :dataFim ";
-
+		StringBuilder sb = new StringBuilder("SELECT q FROM Quebra q WHERE q.data >= :dataInicio AND q.data <= :dataFim ");
 		for (Object p : parametros) {
-			queryString += "AND ";
+			sb.append("AND ");
 			if (p instanceof SetorModel) {
-				queryString += "q.setor.id = :setorId ";
+				sb.append("q.setor.id = :setorId ");
 			} else if (p instanceof TipoVidroModel) {
-				queryString += "q.tipoVidro.id = :tipoVidroId ";
+				sb.append("q.tipoVidro.id = :tipoVidroId ");
 			} else if (p instanceof FuncionarioModel) {
 				if (((FuncionarioModel) p).getId() != 0)
-					queryString += "q.funcionario.id = :funcionarioId ";
+					sb.append("q.funcionario.id = :funcionarioId ");
 				else
-					queryString += "q.funcionario.id IS NULL ";
+					sb.append("q.funcionario.id IS NULL ");
 			}
 		}
-		queryString += "ORDER BY q.data DESC";
-		Query query = entityManager.createQuery(queryString);
+		sb.append("ORDER BY q.data DESC");
+		Query query = entityManager.createQuery(sb.toString());
 		query.setParameter("dataInicio", dataInicio);
 		query.setParameter("dataFim", dataFim);
 		for (Object p : parametros) {
@@ -122,9 +119,8 @@ public class QuebraDao implements Serializable {
 				query.setParameter("setorId", ((SetorModel) p).getId());
 			} else if (p instanceof TipoVidroModel) {
 				query.setParameter("tipoVidroId", ((TipoVidroModel) p).getId());
-			} else if (p instanceof FuncionarioModel) {
-				if (((FuncionarioModel) p).getId() != 0)
-					query.setParameter("funcionarioId", ((FuncionarioModel) p).getId());
+			} else if (p instanceof FuncionarioModel && ((FuncionarioModel) p).getId() != 0) {
+				query.setParameter("funcionarioId", ((FuncionarioModel) p).getId());
 			}
 		}
 		@SuppressWarnings("unchecked")
@@ -176,7 +172,6 @@ public class QuebraDao implements Serializable {
 		query.setParameter("dataFim", dataFim);
 		@SuppressWarnings("unchecked")
 		Collection<Object[]> lista = (Collection<Object[]>) query.getResultList();
-		SetorDao setorDao = new SetorDao();
 		for (Object[] l : lista) {
 			l[0] = setorDao.consultar((int) l[0]).getNome();
 		}

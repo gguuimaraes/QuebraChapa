@@ -22,7 +22,7 @@ public class FuncionarioDao implements Serializable {
 
 	public void salvar(FuncionarioModel funcionarioModel) {
 		entityManager = Uteis.JpaEntityManager();
-		if (funcionarioModel.getId() == null) {
+		if (funcionarioModel.getId() == 0) {
 			funcionario = new Funcionario();
 			funcionario.setNome(funcionarioModel.getNome());
 			entityManager.persist(funcionario);

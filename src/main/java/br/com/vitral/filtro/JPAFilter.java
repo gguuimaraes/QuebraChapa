@@ -13,61 +13,35 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 
-/***
- * ESSE FILTER VAI SER CHAMADO TODA VEZ QUE FOR REALIZADO UMA REQUISIÇÃO PARA O
- * FACES SERVLET.
- */
 @WebFilter(servletNames = { "Faces Servlet" })
 public class JPAFilter implements Filter {
 
-	private EntityManagerFactory entityManagerFactory;
-
-	private String persistence_unit_name = "unit_app";
-
-	public JPAFilter() {
-
-	}
+	private EntityManagerFactory emFactory;
+	private static final String PERSISTENCE_UNIT_NAME = "unit_app";
 
 	public void destroy() {
-
-		this.entityManagerFactory.close();
+		this.emFactory.close();
 	}
 
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
 			throws IOException, ServletException {
 
-		/* CRIANDO UM ENTITYMANAGER */
-		EntityManager entityManager = this.entityManagerFactory.createEntityManager();
-
-		/* ADICIONANDO ELE NA REQUISIÇÃO */
-		request.setAttribute("entityManager", entityManager);
-
-		/* INICIANDO UMA TRANSAÇÃO */
-		entityManager.getTransaction().begin();
-
-		/* INICIANDO FACES SERVLET */
-		chain.doFilter(request, response);
+		EntityManager em = this.emFactory.createEntityManager();
+		req.setAttribute("entityManager", em);
+		em.getTransaction().begin();
+		chain.doFilter(req, resp);
 
 		try {
-
-			/* SE NÃO TIVER ERRO NA OPERAÇÃO ELE EXECUTA O COMMIT */
-			entityManager.getTransaction().commit();
-
+			em.getTransaction().commit();
 		} catch (Exception e) {
-
-			/* SE TIVER ERRO NA OPERAÇÃO É EXECUTADO O rollback */
-			entityManager.getTransaction().rollback();
+			em.getTransaction().rollback();
 		} finally {
-
-			/* DEPOIS DE DAR O COMMIT OU ROLLBACK ELE FINALIZA O entityManager */
-			entityManager.close();
+			em.close();
 		}
 	}
 
 	public void init(FilterConfig fConfig) throws ServletException {
-
-		/* CRIA O entityManagerFactory COM OS PARÂMETROS DEFINIDOS NO persistence.xml */
-		this.entityManagerFactory = Persistence.createEntityManagerFactory(this.persistence_unit_name);
+		this.emFactory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
 	}
 
 }

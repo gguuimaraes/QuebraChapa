@@ -30,7 +30,7 @@ public class PesoDao implements Serializable {
 
 	public void salvar(PesoModel pesoModel) {
 		em = Uteis.JpaEntityManager();
-		if (pesoModel.getId() == null) {
+		if (pesoModel.getId() == 0) {
 			peso = new Peso();
 			peso.setData(pesoModel.getData());
 			peso.setFuncionario(funcionarioDao.consultar(pesoModel.getFuncionario().getId()));

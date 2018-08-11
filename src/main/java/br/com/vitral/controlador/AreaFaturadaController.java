@@ -71,7 +71,7 @@ public class AreaFaturadaController implements Serializable {
 		Uteis.MensagemInfo("Área Faturada alterada com sucesso");
 	}
 
-	public void onRowCancel(RowEditEvent event) {
+	public void onRowCancel() {
 		Uteis.MensagemInfo("Operação cancelada");
 	}
 }

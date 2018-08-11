@@ -19,30 +19,26 @@ import br.com.vitral.modelo.UsuarioModel;
 @WebFilter("/sistema/usuario.xhtml")
 public class UsuarioFilter implements Filter {
 
-	public UsuarioFilter() {
-	}
-
-	public void destroy() {
-	}
-
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
 			throws IOException, ServletException {
-		HttpSession httpSession = ((HttpServletRequest) request).getSession();
-		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-		HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+		HttpSession httpSession = ((HttpServletRequest) req).getSession();
+		HttpServletRequest httpServletRequest = (HttpServletRequest) req;
+		HttpServletResponse httpServletResponse = (HttpServletResponse) resp;
 		if (httpServletRequest.getRequestURI().indexOf("index.xhtml") <= -1) {
 			UsuarioModel usuarioModel = (UsuarioModel) httpSession.getAttribute("usuarioAutenticado");
 			if (usuarioModel.getTipo() != TipoUsuario.MESTRE) {
 				httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/sistema/home.xhtml");
 			} else {
-				chain.doFilter(request, response);
+				chain.doFilter(req, resp);
 			}
 		} else {
-			chain.doFilter(request, response);
+			chain.doFilter(req, resp);
 		}
 	}
 
 	public void init(FilterConfig fConfig) throws ServletException {
 	}
 
+	public void destroy() {
+	}
 }

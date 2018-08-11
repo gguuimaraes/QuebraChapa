@@ -10,7 +10,6 @@ import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -145,7 +144,7 @@ public class RelatorioQuebraController implements Serializable {
 		headerFont.setColor(IndexedColors.WHITE.getIndex());
 		headerFont.setBold(true);
 		HSSFCellStyle headerStyle = wb.createCellStyle();
-		headerStyle.setFillForegroundColor(HSSFColor.BLACK.index);
+		headerStyle.setFillForegroundColor(IndexedColors.BLACK.getIndex());
 		headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 		headerStyle.setFont(headerFont);
 		headerStyle.setAlignment(HorizontalAlignment.CENTER);

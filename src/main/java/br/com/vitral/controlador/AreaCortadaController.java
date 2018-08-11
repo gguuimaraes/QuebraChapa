@@ -71,7 +71,7 @@ public class AreaCortadaController implements Serializable {
 		Uteis.MensagemInfo("Área Cortada alterada com sucesso");
 	}
 
-	public void onRowCancel(RowEditEvent event) {
+	public void onRowCancel() {
 		Uteis.MensagemInfo("Operação cancelada");
 	}
 }

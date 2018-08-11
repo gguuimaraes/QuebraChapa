@@ -19,9 +19,11 @@ import br.com.vitral.util.Uteis;
 public class AreaCortadaDao implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	EntityManager em;
+	
 	@Inject
 	AreaCortada areaCortada;
-	EntityManager em;
+	
 
 	@Inject
 	SetorDao setorDao;
@@ -30,7 +32,7 @@ public class AreaCortadaDao implements Serializable {
 
 	public void salvar(AreaCortadaModel areaCortadaModel) {
 		em = Uteis.JpaEntityManager();
-		if (areaCortadaModel.getId() == null) {
+		if (areaCortadaModel.getId() == 0) {
 			areaCortada = new AreaCortada();
 			areaCortada.setData(areaCortadaModel.getData());
 			areaCortada.setFuncionario(funcionarioDao.consultar(areaCortadaModel.getFuncionario().getId()));
@@ -48,7 +50,7 @@ public class AreaCortadaDao implements Serializable {
 	}
 
 	public List<AreaCortadaModel> listar() {
-		List<AreaCortadaModel> areasCortadasModel = new ArrayList<AreaCortadaModel>();
+		List<AreaCortadaModel> areasCortadasModel = new ArrayList<>();
 		em = Uteis.JpaEntityManager();
 		Query query = em.createNamedQuery("AreaCortada.findAll");
 		@SuppressWarnings("unchecked")
@@ -82,7 +84,7 @@ public class AreaCortadaDao implements Serializable {
 	}
 	
 	public List<AreaCortadaModel> listarAreasDoDia(Date dia) {
-		List<AreaCortadaModel> areasModel = new ArrayList<AreaCortadaModel>();
+		List<AreaCortadaModel> areasModel = new ArrayList<>();
 		em = Uteis.JpaEntityManager();
 		Query query = em.createNamedQuery("AreaCortada.findAreasCortadasDoDia");
 		query.setParameter("data", dia);

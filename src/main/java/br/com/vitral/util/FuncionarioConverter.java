@@ -22,9 +22,9 @@ public class FuncionarioConverter implements Converter {
 	public String getAsString(FacesContext facesContext, UIComponent uiComponent, Object value) {
 		if (value instanceof FuncionarioModel) {
 			FuncionarioModel entity = (FuncionarioModel) value;
-			if (entity != null && entity instanceof FuncionarioModel && entity.getId() != null) {
-				uiComponent.getAttributes().put(entity.getId().toString(), entity);
-				return entity.getId().toString();
+			if (entity != null && entity instanceof FuncionarioModel && entity.getId() != 0) {
+				uiComponent.getAttributes().put(String.valueOf(entity.getId()), entity);
+				return String.valueOf(entity.getId());
 			}
 		}
 		return "";
