@@ -50,6 +50,7 @@ public class PesoController implements Serializable {
 	}
 
 	public void excluir(PesoModel pesoModel) {
+		System.out.println(pesoModel);
 		pesoDao.remover(pesoModel.getId());
 		pesos.remove(pesoModel);
 	}

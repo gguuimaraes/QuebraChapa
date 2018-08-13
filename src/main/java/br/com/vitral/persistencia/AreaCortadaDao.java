@@ -11,23 +11,25 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import br.com.vitral.entidade.AreaCortada;
+import br.com.vitral.entidade.Setor;
 import br.com.vitral.modelo.AreaCortadaModel;
 import br.com.vitral.modelo.FuncionarioModel;
+import br.com.vitral.modelo.PesoModel;
 import br.com.vitral.modelo.SetorModel;
 import br.com.vitral.util.Uteis;
 
 public class AreaCortadaDao implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	transient EntityManager em;
-	
+
 	@Inject
 	AreaCortada areaCortada;
-	
+
 	@Inject
 	SetorDao setorDao;
-	
+
 	@Inject
 	FuncionarioDao funcionarioDao;
 
@@ -51,28 +53,21 @@ public class AreaCortadaDao implements Serializable {
 	}
 
 	public List<AreaCortadaModel> listar() {
-		List<AreaCortadaModel> areasCortadasModel = new ArrayList<>();
-		em = Uteis.getEntityManager();
-		Query query = em.createNamedQuery("AreaCortada.findAll");
-		@SuppressWarnings("unchecked")
-		Collection<AreaCortada> areasCortadas = (Collection<AreaCortada>) query.getResultList();
-		AreaCortadaModel areaCortadaModel = null;
-		for (AreaCortada a : areasCortadas) {
-			areaCortadaModel = new AreaCortadaModel();
-			areaCortadaModel.setId(a.getId());
-			areaCortadaModel.setData(a.getData());
-			FuncionarioModel funcionarioModel = new FuncionarioModel();
-			funcionarioModel.setId(a.getFuncionario().getId());
-			funcionarioModel.setNome(a.getFuncionario().getNome());
-			areaCortadaModel.setFuncionario(funcionarioModel);
-			SetorModel setorModel = new SetorModel();
-			setorModel.setId(a.getSetor().getId());
-			setorModel.setNome(a.getSetor().getNome());
-			areaCortadaModel.setSetor(setorModel);
-			areaCortadaModel.setArea(a.getArea());
-			areasCortadasModel.add(areaCortadaModel);
-		}
-		return areasCortadasModel;
+		Query query = Uteis.getEntityManager().createNamedQuery("AreaCortada.findAll");
+		return converterLista(query.getResultList());
+	}
+
+	public List<AreaCortadaModel> listar(Date dia) {
+		Query query = Uteis.getEntityManager().createNamedQuery("AreaCortada.findAreasCortadasDoDia");
+		query.setParameter("data", dia);
+		return converterLista(query.getResultList());
+	}
+
+	public List<AreaCortadaModel> listar(Setor setor, Date dia) {
+		Query query = Uteis.getEntityManager().createNamedQuery("AreaCortada.findAreasPorSetorDia");
+		query.setParameter("data", dia);
+		query.setParameter("setorId", setor.getId());
+		return converterLista(query.getResultList());
 	}
 
 	public void remover(int id) {
@@ -83,31 +78,39 @@ public class AreaCortadaDao implements Serializable {
 	public AreaCortada consultar(int id) {
 		return Uteis.getEntityManager().find(AreaCortada.class, id);
 	}
-	
-	public List<AreaCortadaModel> listarAreasDoDia(Date dia) {
+
+	private List<AreaCortadaModel> converterLista(Collection<AreaCortada> lista) {
 		List<AreaCortadaModel> areasModel = new ArrayList<>();
-		em = Uteis.getEntityManager();
-		Query query = em.createNamedQuery("AreaCortada.findAreasCortadasDoDia");
-		query.setParameter("data", dia);
-		@SuppressWarnings("unchecked")
-		Collection<AreaCortada> areas = (Collection<AreaCortada>) query.getResultList();
 		AreaCortadaModel areaModel = null;
-		for (AreaCortada a : areas) {
-			areaModel = new AreaCortadaModel();
-			areaModel.setId(a.getId());
-			areaModel.setData(a.getData());
-			FuncionarioModel funcionarioModel = new FuncionarioModel();
-			funcionarioModel.setId(a.getFuncionario().getId());
-			funcionarioModel.setNome(a.getFuncionario().getNome());
-			areaModel.setFuncionario(funcionarioModel);
-			SetorModel setorModel = new SetorModel();
-			setorModel.setId(a.getSetor().getId());
-			setorModel.setNome(a.getSetor().getNome());
-			areaModel.setSetor(setorModel);
-			areaModel.setArea(a.getArea());
-			areasModel.add(areaModel);
+		if (lista != null) {
+			for (AreaCortada a : lista) {
+				areaModel = new AreaCortadaModel();
+				areaModel.setId(a.getId());
+				areaModel.setData(a.getData());
+				FuncionarioModel funcionarioModel = new FuncionarioModel();
+				funcionarioModel.setId(a.getFuncionario().getId());
+				funcionarioModel.setNome(a.getFuncionario().getNome());
+				areaModel.setFuncionario(funcionarioModel);
+				SetorModel setorModel = new SetorModel();
+				setorModel.setId(a.getSetor().getId());
+				setorModel.setNome(a.getSetor().getNome());
+				areaModel.setSetor(setorModel);
+				areaModel.setArea(a.getArea());
+				areasModel.add(areaModel);
+			}
 		}
+
 		return areasModel;
+	}
+
+	public Double consultarAreaTotal(Setor setor, Date dia) {
+		Double areaTotal = null;
+		em = Uteis.getEntityManager();
+		Query query = em.createNamedQuery("AreaCortada.findAreaTotalSetorDia");
+		query.setParameter("setorId", setor.getId());
+		query.setParameter("data", dia);
+		areaTotal = (Double) query.getSingleResult();
+		return areaTotal;
 	}
 
 }

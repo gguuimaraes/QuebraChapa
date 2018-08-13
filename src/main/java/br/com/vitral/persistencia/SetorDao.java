@@ -16,7 +16,7 @@ import br.com.vitral.util.Uteis;
 public class SetorDao implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	transient EntityManager em;
 
 	@Inject
@@ -58,5 +58,11 @@ public class SetorDao implements Serializable {
 
 	public Setor consultar(int id) {
 		return Uteis.getEntityManager().find(Setor.class, id);
+	}
+
+	public Setor consultarPeloNome(String nome) {
+		Object obj = Uteis.getEntityManager().createNamedQuery("Setor.findPeloNome").setParameter("nome", nome)
+				.getSingleResult();
+		return obj != null ? (Setor) obj : null;
 	}
 }

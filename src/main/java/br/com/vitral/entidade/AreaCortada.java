@@ -19,7 +19,9 @@ import javax.persistence.TemporalType;
 @Entity
 
 @NamedQueries({ @NamedQuery(name = "AreaCortada.findAll", query = "SELECT a FROM AreaCortada a ORDER BY a.data DESC"),
-	@NamedQuery(name = "AreaCortada.findAreasCortadasDoDia", query = "SELECT a FROM AreaCortada a WHERE a.data = :data ORDER BY a.area DESC") })
+		@NamedQuery(name = "AreaCortada.findAreasCortadasDoDia", query = "SELECT a FROM AreaCortada a WHERE a.data = :data ORDER BY a.area DESC"),
+		@NamedQuery(name = "AreaCortada.findAreaTotalSetorDia", query = "SELECT SUM(a.area) FROM AreaCortada a WHERE a.setor.id = :setorId AND a.data = :data"),
+		@NamedQuery(name = "AreaCortada.findAreasPorSetorDia", query = "SELECT a FROM AreaCortada a WHERE a.setor.id = :setorId AND a.data = :data ORDER BY a.area DESC") })
 public class AreaCortada implements Serializable {
 
 	private static final long serialVersionUID = 1L;

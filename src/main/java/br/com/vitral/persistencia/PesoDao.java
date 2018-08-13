@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import br.com.vitral.entidade.Peso;
+import br.com.vitral.entidade.Setor;
 import br.com.vitral.modelo.FuncionarioModel;
 import br.com.vitral.modelo.PesoModel;
 import br.com.vitral.modelo.SetorModel;
@@ -21,13 +22,13 @@ public class PesoDao implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	transient EntityManager em;
-	
+
 	@Inject
 	Peso peso;
 
 	@Inject
 	SetorDao setorDao;
-	
+
 	@Inject
 	FuncionarioDao funcionarioDao;
 
@@ -51,26 +52,42 @@ public class PesoDao implements Serializable {
 	}
 
 	public List<PesoModel> listar() {
+		Query query = Uteis.getEntityManager().createNamedQuery("Peso.findAll");
+		return converterLista(query.getResultList());
+	}
+
+	public List<PesoModel> listar(Date dia) {
+		Query query = Uteis.getEntityManager().createNamedQuery("Peso.findPesosDoDia");
+		query.setParameter("data", dia);
+		return converterLista(query.getResultList());
+	}
+
+	public List<PesoModel> listar(Setor setor, Date dia) {
+		Query query = Uteis.getEntityManager().createNamedQuery("Peso.findPesosPorSetorDia");
+		query.setParameter("data", dia);
+		query.setParameter("setorId", setor.getId());
+		return converterLista(query.getResultList());
+	}
+
+	private List<PesoModel> converterLista(Collection<Peso> lista) {
 		List<PesoModel> pesosModel = new ArrayList<>();
-		em = Uteis.getEntityManager();
-		Query query = em.createNamedQuery("Peso.findAll");
-		@SuppressWarnings("unchecked")
-		Collection<Peso> pesos = (Collection<Peso>) query.getResultList();
 		PesoModel pesoModel = null;
-		for (Peso p : pesos) {
-			pesoModel = new PesoModel();
-			pesoModel.setId(p.getId());
-			pesoModel.setData(p.getData());
-			FuncionarioModel funcionarioModel = new FuncionarioModel();
-			funcionarioModel.setId(p.getFuncionario().getId());
-			funcionarioModel.setNome(p.getFuncionario().getNome());
-			pesoModel.setFuncionario(funcionarioModel);
-			SetorModel setorModel = new SetorModel();
-			setorModel.setId(p.getSetor().getId());
-			setorModel.setNome(p.getSetor().getNome());
-			pesoModel.setSetor(setorModel);
-			pesoModel.setPeso(p.getPeso());
-			pesosModel.add(pesoModel);
+		if (lista != null) {
+			for (Peso p : lista) {
+				pesoModel = new PesoModel();
+				pesoModel.setId(p.getId());
+				pesoModel.setData(p.getData());
+				FuncionarioModel funcionarioModel = new FuncionarioModel();
+				funcionarioModel.setId(p.getFuncionario().getId());
+				funcionarioModel.setNome(p.getFuncionario().getNome());
+				pesoModel.setFuncionario(funcionarioModel);
+				SetorModel setorModel = new SetorModel();
+				setorModel.setId(p.getSetor().getId());
+				setorModel.setNome(p.getSetor().getNome());
+				pesoModel.setSetor(setorModel);
+				pesoModel.setPeso(p.getPeso());
+				pesosModel.add(pesoModel);
+			}
 		}
 		return pesosModel;
 	}
@@ -84,30 +101,14 @@ public class PesoDao implements Serializable {
 		return Uteis.getEntityManager().find(Peso.class, pesoModel.getId());
 	}
 
-	public List<PesoModel> listarPesosDoDia(Date dia) {
-		List<PesoModel> pesosModel = new ArrayList<>();
+	public Double consultarPesoTotal(Setor setor, Date dia) {
+		Double pesoTotal = null;
 		em = Uteis.getEntityManager();
-		Query query = em.createNamedQuery("Peso.findPesosDoDia");
+		Query query = em.createNamedQuery("Peso.findPesoTotalSetorDia");
+		query.setParameter("setorId", setor.getId());
 		query.setParameter("data", dia);
-		@SuppressWarnings("unchecked")
-		Collection<Peso> pesos = (Collection<Peso>) query.getResultList();
-		PesoModel pesoModel = null;
-		for (Peso p : pesos) {
-			pesoModel = new PesoModel();
-			pesoModel.setId(p.getId());
-			pesoModel.setData(p.getData());
-			FuncionarioModel funcionarioModel = new FuncionarioModel();
-			funcionarioModel.setId(p.getFuncionario().getId());
-			funcionarioModel.setNome(p.getFuncionario().getNome());
-			pesoModel.setFuncionario(funcionarioModel);
-			SetorModel setorModel = new SetorModel();
-			setorModel.setId(p.getSetor().getId());
-			setorModel.setNome(p.getSetor().getNome());
-			pesoModel.setSetor(setorModel);
-			pesoModel.setPeso(p.getPeso());
-			pesosModel.add(pesoModel);
-		}
-		return pesosModel;
+		pesoTotal = (Double) query.getSingleResult();
+		return pesoTotal;
 	}
 
 }

@@ -14,7 +14,8 @@ import javax.persistence.Table;
 @Table(name = "setor")
 @Entity
 
-@NamedQueries({ @NamedQuery(name = "Setor.findAll", query = "SELECT s FROM Setor s ORDER BY s.nome")
+@NamedQueries({ @NamedQuery(name = "Setor.findAll", query = "SELECT s FROM Setor s ORDER BY s.nome"),
+	 @NamedQuery(name = "Setor.findPeloNome", query = "SELECT s FROM Setor s WHERE s.nome = :nome")
 
 })
 public class Setor implements Serializable {

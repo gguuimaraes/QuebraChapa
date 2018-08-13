@@ -70,7 +70,7 @@ public class PesoModel implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		PesoModel other = (PesoModel) obj;
-		return id != other.id;
+		return id == other.id;
 	}
 
 	@Override
