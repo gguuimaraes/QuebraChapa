@@ -16,27 +16,29 @@ import br.com.vitral.util.Uteis;
 public class TipoVidroDao implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+
+	transient EntityManager em;
+
 	@Inject
 	TipoVidro tipoVidro;
-	EntityManager entityManager;
 
 	public void salvar(TipoVidroModel tipoVidroModel) {
-		entityManager = Uteis.JpaEntityManager();
+		em = Uteis.getEntityManager();
 		if (tipoVidroModel.getId() == null) {
 			tipoVidro = new TipoVidro();
 			tipoVidro.setNome(tipoVidroModel.getNome());
-			entityManager.persist(tipoVidro);
+			em.persist(tipoVidro);
 		} else {
-			tipoVidro = entityManager.find(TipoVidro.class, tipoVidroModel.getId());
+			tipoVidro = em.find(TipoVidro.class, tipoVidroModel.getId());
 			tipoVidro.setNome(tipoVidroModel.getNome());
-			entityManager.merge(tipoVidro);
+			em.merge(tipoVidro);
 		}
 	}
 
 	public List<TipoVidroModel> listar() {
-		List<TipoVidroModel> tiposVidroModel = new ArrayList<TipoVidroModel>();
-		entityManager = Uteis.JpaEntityManager();
-		Query query = entityManager.createNamedQuery("TipoVidro.findAll");
+		List<TipoVidroModel> tiposVidroModel = new ArrayList<>();
+		em = Uteis.getEntityManager();
+		Query query = em.createNamedQuery("TipoVidro.findAll");
 		@SuppressWarnings("unchecked")
 		Collection<TipoVidro> tiposVidro = (Collection<TipoVidro>) query.getResultList();
 		TipoVidroModel tipoVidroModel = null;
@@ -50,11 +52,11 @@ public class TipoVidroDao implements Serializable {
 	}
 
 	public void remover(int id) {
-		entityManager = Uteis.JpaEntityManager();
-		entityManager.remove(entityManager.find(TipoVidro.class, id));
+		em = Uteis.getEntityManager();
+		em.remove(em.find(TipoVidro.class, id));
 	}
 
 	public TipoVidro consultar(int id) {
-		return Uteis.JpaEntityManager().find(TipoVidro.class, id);
+		return Uteis.getEntityManager().find(TipoVidro.class, id);
 	}
 }

@@ -19,17 +19,20 @@ import br.com.vitral.util.Uteis;
 public class PesoDao implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+
+	transient EntityManager em;
+	
 	@Inject
 	Peso peso;
-	EntityManager em;
 
 	@Inject
 	SetorDao setorDao;
+	
 	@Inject
 	FuncionarioDao funcionarioDao;
 
 	public void salvar(PesoModel pesoModel) {
-		em = Uteis.JpaEntityManager();
+		em = Uteis.getEntityManager();
 		if (pesoModel.getId() == 0) {
 			peso = new Peso();
 			peso.setData(pesoModel.getData());
@@ -48,8 +51,8 @@ public class PesoDao implements Serializable {
 	}
 
 	public List<PesoModel> listar() {
-		List<PesoModel> pesosModel = new ArrayList<PesoModel>();
-		em = Uteis.JpaEntityManager();
+		List<PesoModel> pesosModel = new ArrayList<>();
+		em = Uteis.getEntityManager();
 		Query query = em.createNamedQuery("Peso.findAll");
 		@SuppressWarnings("unchecked")
 		Collection<Peso> pesos = (Collection<Peso>) query.getResultList();
@@ -73,17 +76,17 @@ public class PesoDao implements Serializable {
 	}
 
 	public void remover(int id) {
-		em = Uteis.JpaEntityManager();
+		em = Uteis.getEntityManager();
 		em.remove(em.find(Peso.class, id));
 	}
 
 	public Peso consultar(PesoModel pesoModel) {
-		return Uteis.JpaEntityManager().find(Peso.class, pesoModel.getId());
+		return Uteis.getEntityManager().find(Peso.class, pesoModel.getId());
 	}
 
 	public List<PesoModel> listarPesosDoDia(Date dia) {
-		List<PesoModel> pesosModel = new ArrayList<PesoModel>();
-		em = Uteis.JpaEntityManager();
+		List<PesoModel> pesosModel = new ArrayList<>();
+		em = Uteis.getEntityManager();
 		Query query = em.createNamedQuery("Peso.findPesosDoDia");
 		query.setParameter("data", dia);
 		@SuppressWarnings("unchecked")

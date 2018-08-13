@@ -18,13 +18,13 @@ public class AreaFaturadaDao implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	EntityManager em;
+	transient EntityManager em;
 
 	@Inject
 	AreaFaturada areaFaturada;
 
 	public void salvar(AreaFaturadaModel areaFaturadaModel) {
-		em = Uteis.JpaEntityManager();
+		em = Uteis.getEntityManager();
 		if (areaFaturadaModel.getId() == 0) {
 			areaFaturada = new AreaFaturada();
 			areaFaturada.setData(areaFaturadaModel.getData());
@@ -40,7 +40,7 @@ public class AreaFaturadaDao implements Serializable {
 
 	public List<AreaFaturadaModel> listar() {
 		List<AreaFaturadaModel> areasFaturadasModel = new ArrayList<>();
-		em = Uteis.JpaEntityManager();
+		em = Uteis.getEntityManager();
 		Query query = em.createNamedQuery("AreaFaturada.findAll");
 		@SuppressWarnings("unchecked")
 		Collection<AreaFaturada> areasFaturadas = (Collection<AreaFaturada>) query.getResultList();
@@ -56,16 +56,16 @@ public class AreaFaturadaDao implements Serializable {
 	}
 
 	public void remover(int id) {
-		em = Uteis.JpaEntityManager();
+		em = Uteis.getEntityManager();
 		em.remove(em.find(AreaFaturada.class, id));
 	}
 
 	public AreaFaturada consultar(int id) {
-		return Uteis.JpaEntityManager().find(AreaFaturada.class, id);
+		return Uteis.getEntityManager().find(AreaFaturada.class, id);
 	}
 
 	public Float maiorAreaPorPeriodo(Date dataInicio, Date dataFim) {
-		em = Uteis.JpaEntityManager();
+		em = Uteis.getEntityManager();
 		Query query = em.createNamedQuery("AreaFaturada.findMaiorAreaPorPeriodo");
 		query.setParameter("dataInicio", dataInicio);
 		query.setParameter("dataFim", dataFim);

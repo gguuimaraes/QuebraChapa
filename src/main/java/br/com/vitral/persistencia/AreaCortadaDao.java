@@ -19,19 +19,20 @@ import br.com.vitral.util.Uteis;
 public class AreaCortadaDao implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	EntityManager em;
+	
+	transient EntityManager em;
 	
 	@Inject
 	AreaCortada areaCortada;
 	
-
 	@Inject
 	SetorDao setorDao;
+	
 	@Inject
 	FuncionarioDao funcionarioDao;
 
 	public void salvar(AreaCortadaModel areaCortadaModel) {
-		em = Uteis.JpaEntityManager();
+		em = Uteis.getEntityManager();
 		if (areaCortadaModel.getId() == 0) {
 			areaCortada = new AreaCortada();
 			areaCortada.setData(areaCortadaModel.getData());
@@ -51,7 +52,7 @@ public class AreaCortadaDao implements Serializable {
 
 	public List<AreaCortadaModel> listar() {
 		List<AreaCortadaModel> areasCortadasModel = new ArrayList<>();
-		em = Uteis.JpaEntityManager();
+		em = Uteis.getEntityManager();
 		Query query = em.createNamedQuery("AreaCortada.findAll");
 		@SuppressWarnings("unchecked")
 		Collection<AreaCortada> areasCortadas = (Collection<AreaCortada>) query.getResultList();
@@ -75,23 +76,23 @@ public class AreaCortadaDao implements Serializable {
 	}
 
 	public void remover(int id) {
-		em = Uteis.JpaEntityManager();
+		em = Uteis.getEntityManager();
 		em.remove(em.find(AreaCortada.class, id));
 	}
 
 	public AreaCortada consultar(int id) {
-		return Uteis.JpaEntityManager().find(AreaCortada.class, id);
+		return Uteis.getEntityManager().find(AreaCortada.class, id);
 	}
 	
 	public List<AreaCortadaModel> listarAreasDoDia(Date dia) {
 		List<AreaCortadaModel> areasModel = new ArrayList<>();
-		em = Uteis.JpaEntityManager();
+		em = Uteis.getEntityManager();
 		Query query = em.createNamedQuery("AreaCortada.findAreasCortadasDoDia");
 		query.setParameter("data", dia);
 		@SuppressWarnings("unchecked")
-		Collection<AreaCortadaModel> areas = (Collection<AreaCortadaModel>) query.getResultList();
+		Collection<AreaCortada> areas = (Collection<AreaCortada>) query.getResultList();
 		AreaCortadaModel areaModel = null;
-		for (AreaCortadaModel a : areas) {
+		for (AreaCortada a : areas) {
 			areaModel = new AreaCortadaModel();
 			areaModel.setId(a.getId());
 			areaModel.setData(a.getData());

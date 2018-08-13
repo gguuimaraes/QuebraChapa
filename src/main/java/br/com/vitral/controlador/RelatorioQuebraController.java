@@ -14,7 +14,6 @@ import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
@@ -152,11 +151,11 @@ public class RelatorioQuebraController implements Serializable {
 			header.getCell(j).setCellStyle(headerStyle);
 
 		HSSFCellStyle parStyle = wb.createCellStyle();
-		parStyle.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
+		parStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
 		parStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
 		HSSFCellStyle imparStyle = wb.createCellStyle();
-		imparStyle.setFillForegroundColor(HSSFColor.WHITE.index);
+		imparStyle.setFillForegroundColor(IndexedColors.WHITE.getIndex());
 		imparStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
 		for (int i = 1; i < sheet.getPhysicalNumberOfRows(); i++) {
@@ -185,7 +184,7 @@ public class RelatorioQuebraController implements Serializable {
 		footerFont.setBold(true);
 		footerFont.setItalic(true);
 		HSSFCellStyle footerStyle = wb.createCellStyle();
-		footerStyle.setFillForegroundColor(HSSFColor.BLACK.index);
+		footerStyle.setFillForegroundColor(IndexedColors.BLACK.getIndex());
 		footerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 		footerStyle.setFont(footerFont);
 		footerStyle.setAlignment(HorizontalAlignment.RIGHT);

@@ -6,14 +6,13 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 import br.com.vitral.modelo.SetorModel;
-import br.com.vitral.modelo.TipoVidroModel;
 
 @FacesConverter(value = "setorConverter", forClass = SetorModel.class)
 public class SetorConverter implements Converter {
 	@Override
 	public Object getAsObject(FacesContext facesContext, UIComponent uiComponent, String value) {
 		if (value != null && !value.isEmpty()) {
-			return (SetorModel) uiComponent.getAttributes().get(value);
+			return uiComponent.getAttributes().get(value);
 		}
 		return null;
 	}
@@ -22,7 +21,7 @@ public class SetorConverter implements Converter {
 	public String getAsString(FacesContext facesContext, UIComponent uiComponent, Object value) {
 		if (value instanceof SetorModel) {
 			SetorModel entity = (SetorModel) value;
-			if (entity != null && entity instanceof SetorModel && entity.getId() != null) {
+			if (entity instanceof SetorModel && entity.getId() != null) {
 				uiComponent.getAttributes().put(entity.getId().toString(), entity);
 				return entity.getId().toString();
 			}

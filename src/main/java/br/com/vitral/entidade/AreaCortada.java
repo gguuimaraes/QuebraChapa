@@ -12,6 +12,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Table(name = "areacortada")
 @Entity
@@ -28,6 +30,7 @@ public class AreaCortada implements Serializable {
 	private Integer id;
 
 	@Column(name = "data")
+	@Temporal(TemporalType.DATE)
 	private Date data;
 
 	@OneToOne

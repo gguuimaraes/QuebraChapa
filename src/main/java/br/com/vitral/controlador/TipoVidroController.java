@@ -46,7 +46,7 @@ public class TipoVidroController implements Serializable {
 		init();
 		this.tipoVidroModel = new TipoVidroModel();
 		PrimeFaces.current().executeScript("PF('dialogCadastro').hide();");
-		Uteis.MensagemInfo("Tipo Vidro cadastrado com sucesso");
+		Uteis.messageInformation("Tipo Vidro cadastrado com sucesso");
 	}
 
 	public void excluir(TipoVidroModel tipoVidroModel) {
@@ -68,10 +68,10 @@ public class TipoVidroController implements Serializable {
 
 	public void onRowEdit(RowEditEvent event) {
 		tipoVidroDao.salvar((TipoVidroModel) event.getObject());
-		Uteis.MensagemInfo("Tipo Vidro alterado com sucesso");
+		Uteis.messageInformation("Tipo Vidro alterado com sucesso");
 	}
 
-	public void onRowCancel(RowEditEvent event) {
-		Uteis.MensagemInfo("Operação cancelada");
+	public void onRowCancel() {
+		Uteis.messageInformation("Operação cancelada");
 	}
 }

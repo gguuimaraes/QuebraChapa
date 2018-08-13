@@ -50,7 +50,6 @@ public class VisaoTVController implements Serializable {
 		quebraAnual.setTitle("Quebra Mensal");
 		quebraAnual.setShowPointLabels(true);
 		DateAxis eixoX = new DateAxis();
-		// eixoX.setTickFormat("%b");
 		eixoX.setTickFormat("%m/%Y");
 		eixoX.setTickAngle(-15);
 		eixoX.setTickInterval("2592000000");
@@ -69,8 +68,7 @@ public class VisaoTVController implements Serializable {
 			if (areaQuebra != null) {
 				c.set(Calendar.DATE, 1);
 				quebra.set(c.getTimeInMillis(), areaQuebra);
-			} else
-				i = 12;
+			} else break;
 		}
 		quebraAnual.addSeries(quebra);
 		quebraAnual.setSeriesColors("ff8000");
@@ -82,7 +80,6 @@ public class VisaoTVController implements Serializable {
 		taxaQuebraAnual.setTitle("% Quebra Anual");
 		taxaQuebraAnual.setShowPointLabels(true);
 		DateAxis eixoX = new DateAxis();
-		// eixoX.setTickFormat("%b");
 		eixoX.setTickFormat("%m/%Y");
 		eixoX.setTickAngle(-15);
 		eixoX.setTickInterval("2592000000");
@@ -103,8 +100,7 @@ public class VisaoTVController implements Serializable {
 			if (areaQuebra != null && areaFaturada != null) {
 				c.set(Calendar.DATE, 1);
 				taxa.set(c.getTimeInMillis(), areaQuebra / areaFaturada * 100);
-			} else
-				i = 12;
+			} else break;
 		}
 		taxaQuebraAnual.addSeries(taxa);
 

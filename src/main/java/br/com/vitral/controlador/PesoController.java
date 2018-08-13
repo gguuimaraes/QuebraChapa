@@ -46,7 +46,7 @@ public class PesoController implements Serializable {
 		init();
 		this.pesoModel = new PesoModel();
 		PrimeFaces.current().executeScript("PF('dialogCadastro').hide();");
-		Uteis.MensagemInfo("Peso cadastrado com sucesso");
+		Uteis.messageInformation("Peso cadastrado com sucesso");
 	}
 
 	public void excluir(PesoModel pesoModel) {
@@ -68,10 +68,10 @@ public class PesoController implements Serializable {
 
 	public void onRowEdit(RowEditEvent event) {
 		pesoDao.salvar((PesoModel) event.getObject());
-		Uteis.MensagemInfo("Peso alterado com sucesso");
+		Uteis.messageInformation("Peso alterado com sucesso");
 	}
 
-	public void onRowCancel(RowEditEvent event) {
-		Uteis.MensagemInfo("Operação cancelada");
+	public void onRowCancel() {
+		Uteis.messageInformation("Operação cancelada");
 	}
 }

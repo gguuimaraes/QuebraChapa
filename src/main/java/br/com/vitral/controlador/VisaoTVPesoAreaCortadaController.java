@@ -27,7 +27,7 @@ public class VisaoTVPesoAreaCortadaController implements Serializable {
 	private AreaCortadaDao areaCortadaDao;
 
 	public List<PesoModel> getPesosExpedicao() {
-		List<PesoModel> pesosExpedicao = new ArrayList<PesoModel>();
+		List<PesoModel> pesosExpedicao = new ArrayList<>();
 		for (PesoModel p : pesoDao.listarPesosDoDia(new Date())) {
 			if (p.getSetor().getNome().equals("EXPEDICAO")) {
 				pesosExpedicao.add(p);
@@ -37,7 +37,7 @@ public class VisaoTVPesoAreaCortadaController implements Serializable {
 	}
 
 	public List<PesoModel> getPesosEntrega() {
-		List<PesoModel> pesosEntrega = new ArrayList<PesoModel>();
+		List<PesoModel> pesosEntrega = new ArrayList<>();
 		for (PesoModel p : pesoDao.listarPesosDoDia(new Date())) {
 			if (p.getSetor().getNome().equals("ENTREGA")) {
 				pesosEntrega.add(p);
@@ -45,25 +45,25 @@ public class VisaoTVPesoAreaCortadaController implements Serializable {
 		}
 		return pesosEntrega;
 	}
-	
-	public List<AreaCortadaModel> getAreasCortadasWesley() {
-		List<AreaCortadaModel> areasCortadasWesley = new ArrayList<AreaCortadaModel>();
+
+	public List<AreaCortadaModel> getAreasCortadasMesaPequena() {
+		List<AreaCortadaModel> areasCortadas = new ArrayList<>();
 		for (AreaCortadaModel a : areaCortadaDao.listarAreasDoDia(new Date())) {
-			if (a.getFuncionario().getNome().contains("WESLEY")) {
-				areasCortadasWesley.add(a);
+			if (a.getSetor().getNome().equals("MESA PEQUENA")) {
+				areasCortadas.add(a);
 			}
 		}
-		return areasCortadasWesley;
+		return areasCortadas;
 	}
 
-	public List<AreaCortadaModel> getAreasCortadasMauricio() {
-		List<AreaCortadaModel> areasCortadasMauricio = new ArrayList<AreaCortadaModel>();
+	public List<AreaCortadaModel> getAreasCortadasMesaGrande() {
+		List<AreaCortadaModel> areasCortadas = new ArrayList<>();
 		for (AreaCortadaModel a : areaCortadaDao.listarAreasDoDia(new Date())) {
-			if (a.getFuncionario().getNome().contains("MAURICIO")) {
-				areasCortadasMauricio.add(a);
+			if (a.getSetor().getNome().equals("MESA GRANDE")) {
+				areasCortadas.add(a);
 			}
 		}
-		return areasCortadasMauricio;
+		return areasCortadas;
 	}
 
 }

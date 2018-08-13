@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.jboss.weld.exceptions.UnsupportedOperationException;
+
 import br.com.vitral.entidade.Usuario.TipoUsuario;
 import br.com.vitral.modelo.UsuarioModel;
 
@@ -37,8 +39,10 @@ public class UsuarioFilter implements Filter {
 	}
 
 	public void init(FilterConfig fConfig) throws ServletException {
+		//throw new UnsupportedOperationException("UsuarioFilter.init() não foi implementado.");
 	}
 
 	public void destroy() {
+		//throw new UnsupportedOperationException("UsuarioFilter.destroy() não foi implementado.");
 	}
 }

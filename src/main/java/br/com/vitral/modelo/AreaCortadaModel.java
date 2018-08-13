@@ -70,7 +70,7 @@ public class AreaCortadaModel implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		AreaCortadaModel other = (AreaCortadaModel) obj;
-		return id != other.id;
+		return id == other.id;
 	}
 
 	@Override

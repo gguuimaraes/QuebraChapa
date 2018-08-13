@@ -42,12 +42,10 @@ public class SetorModel implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		SetorModel other = (SetorModel) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
+		if (id == null && other.id != null) {
 			return false;
-		return true;
+		}
+		return id == (other.id);
 	}
 
 }

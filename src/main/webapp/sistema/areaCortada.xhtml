@@ -40,12 +40,12 @@
 					<p:cellEditor>
 						<f:facet name="output">
 							<h:outputText value="#{areaCortada.data}">
-								<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+								<f:convertDateTime pattern="dd/MM/yyyy" />
 							</h:outputText>
 						</f:facet>
 						<f:facet name="input">
 							<p:calendar value="#{areaCortada.data}" required="true" requiredMessage="A Data é de preenchimento obrigatório"
-								mask="99/99/9999 99:99:99" pattern="dd/MM/yyyy HH:mm:ss" />
+								mask="99/99/9999" pattern="dd/MM/yyyy" />
 						</f:facet>
 					</p:cellEditor>
 				</p:column>

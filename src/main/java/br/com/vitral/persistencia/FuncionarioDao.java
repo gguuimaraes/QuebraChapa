@@ -16,27 +16,29 @@ import br.com.vitral.util.Uteis;
 public class FuncionarioDao implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+
+	transient EntityManager em;
+	
 	@Inject
 	Funcionario funcionario;
-	EntityManager entityManager;
 
 	public void salvar(FuncionarioModel funcionarioModel) {
-		entityManager = Uteis.JpaEntityManager();
+		em = Uteis.getEntityManager();
 		if (funcionarioModel.getId() == 0) {
 			funcionario = new Funcionario();
 			funcionario.setNome(funcionarioModel.getNome());
-			entityManager.persist(funcionario);
+			em.persist(funcionario);
 		} else {
-			funcionario = entityManager.find(Funcionario.class, funcionarioModel.getId());
+			funcionario = em.find(Funcionario.class, funcionarioModel.getId());
 			funcionario.setNome(funcionarioModel.getNome());
-			entityManager.merge(funcionario);
+			em.merge(funcionario);
 		}
 	}
 
 	public List<FuncionarioModel> listar() {
-		List<FuncionarioModel> funcionariosModel = new ArrayList<FuncionarioModel>();
-		entityManager = Uteis.JpaEntityManager();
-		Query query = entityManager.createNamedQuery("Funcionario.findAll");
+		List<FuncionarioModel> funcionariosModel = new ArrayList<>();
+		em = Uteis.getEntityManager();
+		Query query = em.createNamedQuery("Funcionario.findAll");
 		@SuppressWarnings("unchecked")
 		Collection<Funcionario> funcionarios = (Collection<Funcionario>) query.getResultList();
 		FuncionarioModel funcionarioModel = null;
@@ -48,13 +50,13 @@ public class FuncionarioDao implements Serializable {
 		}
 		return funcionariosModel;
 	}
-	
+
 	public void remover(int id) {
-		entityManager = Uteis.JpaEntityManager();
-		entityManager.remove(entityManager.find(Funcionario.class, id));
+		em = Uteis.getEntityManager();
+		em.remove(em.find(Funcionario.class, id));
 	}
-	
+
 	public Funcionario consultar(int id) {
-		return Uteis.JpaEntityManager().find(Funcionario.class, id);
+		return Uteis.getEntityManager().find(Funcionario.class, id);
 	}
 }

@@ -46,7 +46,7 @@ public class SetorController implements Serializable {
 		init();
 		this.setorModel = new SetorModel();
 		PrimeFaces.current().executeScript("PF('dialogCadastro').hide();");
-		Uteis.MensagemInfo("Setor cadastrado com sucesso");
+		Uteis.messageInformation("Setor cadastrado com sucesso");
 	}
 
 	public void excluir(SetorModel setorModel) {
@@ -68,10 +68,10 @@ public class SetorController implements Serializable {
 
 	public void onRowEdit(RowEditEvent event) {
 		setorDao.salvar((SetorModel) event.getObject());
-		Uteis.MensagemInfo("Setor alterado com sucesso");
+		Uteis.messageInformation("Setor alterado com sucesso");
 	}
 
-	public void onRowCancel(RowEditEvent event) {
-		Uteis.MensagemInfo("Operação cancelada");
+	public void onRowCancel( ) {
+		Uteis.messageInformation("Operação cancelada");
 	}
 }

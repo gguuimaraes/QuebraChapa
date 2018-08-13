@@ -47,7 +47,7 @@ public class FuncionarioController implements Serializable {
 		init();
 		this.funcionarioModel = new FuncionarioModel();
 		PrimeFaces.current().executeScript("PF('dialogCadastro').hide();");
-		Uteis.MensagemInfo("Funcionário cadastrado com sucesso");
+		Uteis.messageInformation("Funcionário cadastrado com sucesso");
 	}
 
 	public void excluir(FuncionarioModel funcionarioModel) {
@@ -69,10 +69,10 @@ public class FuncionarioController implements Serializable {
 
 	public void onRowEdit(RowEditEvent event) {
 		funcionarioDao.salvar((FuncionarioModel) event.getObject());
-		Uteis.MensagemInfo("Funcionário alterado com sucesso");
+		Uteis.messageInformation("Funcionário alterado com sucesso");
 	}
 
 	public void onRowCancel() {
-		Uteis.MensagemInfo("Operação cancelada");
+		Uteis.messageInformation("Operação cancelada");
 	}
 }
