@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import br.com.vitral.entidade.Setor;
@@ -53,7 +54,7 @@ public class SetorDao implements Serializable {
 
 	public void remover(int id) {
 		em = Uteis.getEntityManager();
-		em.remove(em.find(Setor.class, id));
+		em.remove(consultar(id));
 	}
 
 	public Setor consultar(int id) {
@@ -61,8 +62,11 @@ public class SetorDao implements Serializable {
 	}
 
 	public Setor consultarPeloNome(String nome) {
-		Object obj = Uteis.getEntityManager().createNamedQuery("Setor.findPeloNome").setParameter("nome", nome)
-				.getSingleResult();
-		return obj != null ? (Setor) obj : null;
+		try {
+			return (Setor) Uteis.getEntityManager().createNamedQuery("Setor.findPeloNome").setParameter("nome", nome)
+			.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
 }
