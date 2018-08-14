@@ -1,0 +1,45 @@
+.corpo {
+	width: 80%;
+	margin: auto;
+	font-family: Arial;
+	font-size: 20px;
+	text-align: center;
+}
+
+.painel {
+	width: 100%;
+}
+
+.painel td{ 
+	vertical-align: top;
+	width: 50%;
+	min-height: 1000px;
+}
+
+.painel2 {
+	width: 100%;
+	height: 100%;
+}
+
+.tabela {
+	margin: auto;
+	border-style: groove;
+	width: 100%;
+	height: 100%;
+}
+
+.tabela2 {
+	margin: auto;
+	border-style: groove;
+	width: 50%;
+	height: 100%;
+}
+
+div.jqplot-table-legend-swatch {
+	width: auto;
+}
+
+div.jqplot-table-legend-swatch-outline {
+	border: none;
+	padding: 0;
+}

@@ -2,111 +2,150 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
-<h:head></h:head>
+<h:head>
+	<h:outputStylesheet library="css" name="visaoTV2.css" />
+</h:head>
 <h:body>
-	<h:panelGrid columns="2" cellspacing="20px"
-		style="width: 80%; margin: auto; font-family: Arial; font-size: 25px; text-align: center">
-
-		<h:dataTable value="#{visaoTVPesoAreaCortadaController.getPesos('EXPEDICAO')}" var="peso" cellspacing="4"
-			style="border-style: groove; width: 100%"
-			rendered="#{visaoTVPesoAreaCortadaController.getPesos('EXPEDICAO').size() > 0}">
-			<f:facet name="header">
-				<div style="background-color: red; color: white">EXPEDIÇÃO</div>
-			</f:facet>
-			<h:column>
-				<f:facet name="header">Funcionário</f:facet>
-				<h:outputText value="#{peso.funcionario.nome.substring(0, peso.funcionario.nome.indexOf(' '))}" />
-			</h:column>
-			<h:column>
-				<f:facet name="header">Peso (kg)</f:facet>
-				<h:outputText value="#{peso.peso}">
-					<f:convertNumber pattern="#,##0.00" />
-				</h:outputText>
-				<f:facet name="footer">
-					<h:outputText value="TOTAL" style="float: left" />
-					<h:outputText value="#{visaoTVPesoAreaCortadaController.getPesoTotal('EXPEDICAO')}" style="float: right">
+	<div class="corpo">
+		<h:panelGrid styleClass="painel" columns="3" cellspacing="20">
+			<h:dataTable styleClass="tabela" value="#{visaoTVPesoAreaCortadaController.getPesos('EXPEDICAO')}" var="peso"
+				cellspacing="4" rendered="#{visaoTVPesoAreaCortadaController.getPesos('EXPEDICAO').size() > 0}">
+				<f:facet name="header">
+					<div style="background-color: red; color: white">EXPEDIÇÃO</div>
+				</f:facet>
+				<h:column>
+					<f:facet name="header">Funcionário</f:facet>
+					<h:outputText value="#{peso.funcionario.nome.substring(0, peso.funcionario.nome.indexOf(' '))}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">Peso (kg)</f:facet>
+					<h:outputText value="#{peso.peso}">
 						<f:convertNumber pattern="#,##0.00" />
 					</h:outputText>
-				</f:facet>
-			</h:column>
-		</h:dataTable>
+					<f:facet name="footer">
+						<h:outputText value="TOTAL" style="float: left" />
+						<h:outputText value="#{visaoTVPesoAreaCortadaController.getPesoTotal('EXPEDICAO')}" style="float: right">
+							<f:convertNumber pattern="#,##0.00" />
+						</h:outputText>
+					</f:facet>
+				</h:column>
+			</h:dataTable>
 
-		<h:dataTable value="#{visaoTVPesoAreaCortadaController.getAreasCortadas('MESA PEQUENA')}" var="areaCortada"
-			cellspacing="4" style="border-style: groove; width: 100%"
-			rendered="#{visaoTVPesoAreaCortadaController.getAreasCortadas('MESA PEQUENA').size() > 0}">
-			<f:facet name="header">
-				<div style="background-color: orange; color: white">MESA PEQUENA</div>
-			</f:facet>
-			<h:column>
-				<f:facet name="header">Funcionário</f:facet>
-				<h:outputText value="#{areaCortada.funcionario.nome.substring(0, areaCortada.funcionario.nome.indexOf(' '))}" />
-			</h:column>
-			<h:column>
-				<f:facet name="header">Área (m²)</f:facet>
-				<h:outputText value="#{areaCortada.area}">
-					<f:convertNumber pattern="#,##0.00" />
-				</h:outputText>
-				<f:facet name="footer">
-					<h:outputText value="TOTAL" style="float: left" />
-					<h:outputText value="#{visaoTVPesoAreaCortadaController.getAreaTotal('MESA PEQUENA')}" style="float: right">
+			<h:dataTable styleClass="tabela" value="#{visaoTVPesoAreaCortadaController.getAreasCortadas('MESA PEQUENA')}"
+				var="areaCortada" cellspacing="4"
+				rendered="#{visaoTVPesoAreaCortadaController.getAreasCortadas('MESA PEQUENA').size() > 0}">
+				<f:facet name="header">
+					<div style="background-color: orange; color: white">MESA PEQUENA</div>
+				</f:facet>
+				<h:column>
+					<f:facet name="header">Funcionário</f:facet>
+					<h:outputText value="#{areaCortada.funcionario.nome.substring(0, areaCortada.funcionario.nome.indexOf(' '))}" />
+					<f:facet name="footer">
+						<h:outputText value="TOTAL" style="float: right" />
+					</f:facet>
+				</h:column>
+				<h:column>
+					<f:facet name="header">Área (m²)</f:facet>
+					<h:outputText value="#{areaCortada.area}">
 						<f:convertNumber pattern="#,##0.00" />
 					</h:outputText>
-				</f:facet>
-			</h:column>
-		</h:dataTable>
+					<f:facet name="footer">
+						<h:outputText value="#{visaoTVPesoAreaCortadaController.getAreaTotal('MESA PEQUENA')}" style="float: right">
+							<f:convertNumber pattern="#,##0.00" />
+						</h:outputText>
+					</f:facet>
+				</h:column>
+			</h:dataTable>
 
-		<h:dataTable value="#{visaoTVPesoAreaCortadaController.getPesos('ENTREGA')}" var="peso" cellspacing="4"
-			style="border-style: groove; width: 100%"
-			rendered="#{visaoTVPesoAreaCortadaController.getPesos('ENTREGA').size() > 0}">
-			<f:facet name="header">
-				<div style="background-color: blue; color: white">ENTREGA</div>
-			</f:facet>
-			<h:column>
-				<f:facet name="header">Funcionário</f:facet>
-				<h:outputText value="#{peso.funcionario.nome.substring(0, peso.funcionario.nome.indexOf(' '))}" />
-			</h:column>
-			<h:column>
-				<f:facet name="header">Peso (kg)</f:facet>
-				<h:outputText value="#{peso.peso}">
-					<f:convertNumber pattern="#,##0.00" />
-				</h:outputText>
-				<f:facet name="footer">
-					<h:outputText value="TOTAL" style="float: left" />
-					<h:outputText value="#{visaoTVPesoAreaCortadaController.getPesoTotal('ENTREGA')}" style="float: right">
+			<h:dataTable styleClass="tabela" value="#{visaoTVPesoAreaCortadaController.getAreasCortadas('MESA GRANDE')}"
+				var="areaCortada" cellspacing="4"
+				rendered="#{visaoTVPesoAreaCortadaController.getAreasCortadas('MESA GRANDE').size() > 0}">
+				<f:facet name="header">
+					<div style="background-color: green; color: white">MESA GRANDE</div>
+				</f:facet>
+				<h:column>
+					<f:facet name="header">Funcionário</f:facet>
+					<h:outputText value="#{areaCortada.funcionario.nome.substring(0, areaCortada.funcionario.nome.indexOf(' '))}" />
+					<f:facet name="footer">
+						<h:outputText value="TOTAL" style="float: right" />
+					</f:facet>
+				</h:column>
+				<h:column>
+					<f:facet name="header">Área (m²)</f:facet>
+					<h:outputText value="#{areaCortada.area}">
 						<f:convertNumber pattern="#,##0.00" />
 					</h:outputText>
-				</f:facet>
-			</h:column>
-		</h:dataTable>
+					<f:facet name="footer">
+						<h:outputText value="#{visaoTVPesoAreaCortadaController.getAreaTotal('MESA GRANDE')}" style="float: right">
+							<f:convertNumber pattern="#,##0.00" />
+						</h:outputText>
+					</f:facet>
+				</h:column>
+			</h:dataTable>
 
-		<h:dataTable value="#{visaoTVPesoAreaCortadaController.getAreasCortadas('MESA GRANDE')}" var="areaCortada"
-			cellspacing="4" style="border-style: groove; width: 100%"
-			rendered="#{visaoTVPesoAreaCortadaController.getAreasCortadas('MESA GRANDE').size() > 0}">
-			<f:facet name="header">
-				<div style="background-color: green; color: white">MESA GRANDE</div>
-			</f:facet>
-			<h:column>
-				<f:facet name="header">Funcionário</f:facet>
-				<h:outputText value="#{areaCortada.funcionario.nome.substring(0, areaCortada.funcionario.nome.indexOf(' '))}" />
-			</h:column>
-			<h:column>
-				<f:facet name="header">Área (m²)</f:facet>
-				<h:outputText value="#{areaCortada.area}">
-					<f:convertNumber pattern="#,##0.00" />
-				</h:outputText>
-				<f:facet name="footer">
-					<h:outputText value="TOTAL" style="float: left" />
-					<h:outputText value="#{visaoTVPesoAreaCortadaController.getAreaTotal('MESA GRANDE')}" style="float: right">
+			<p:spacer />
+
+			<h:dataTable styleClass="tabela" value="#{visaoTVPesoAreaCortadaController.getPesos('PONTE ROLANTE')}" var="peso"
+				cellspacing="4" rendered="#{visaoTVPesoAreaCortadaController.getPesos('PONTE ROLANTE').size() > 0}">
+				<f:facet name="header">
+					<div style="background-color: purple; color: white">PONTE ROLANTE</div>
+				</f:facet>
+				<h:column>
+					<f:facet name="header">Funcionário</f:facet>
+					<h:outputText value="#{peso.funcionario.nome.substring(0, peso.funcionario.nome.indexOf(' '))}" />
+					<f:facet name="footer">
+						<h:outputText value="TOTAL" style="float: right" />
+					</f:facet>
+				</h:column>
+				<h:column>
+					<f:facet name="header">Peso (kg)</f:facet>
+					<h:outputText value="#{peso.peso}">
 						<f:convertNumber pattern="#,##0.00" />
 					</h:outputText>
+					<f:facet name="footer">
+						<h:outputText value="#{visaoTVPesoAreaCortadaController.getPesoTotal('PONTE ROLANTE')}" style="float: right">
+							<f:convertNumber pattern="#,##0.00" />
+						</h:outputText>
+					</f:facet>
+				</h:column>
+			</h:dataTable>
+
+			<h:dataTable styleClass="tabela" value="#{visaoTVPesoAreaCortadaController.getPesos('ENTREGA')}" var="peso"
+				cellspacing="4" rendered="#{visaoTVPesoAreaCortadaController.getPesos('ENTREGA').size() > 0}">
+				<f:facet name="header">
+					<div style="background-color: blue; color: white">ENTREGA</div>
 				</f:facet>
-			</h:column>
-		</h:dataTable>
-		
-		<p:chart type="bar" model="#{visaoTVPesoAreaCortadaController.pesoMensal}" />
-		<p:chart type="bar" model="#{visaoTVPesoAreaCortadaController.areaMensal}" />
-	</h:panelGrid>
+				<h:column>
+					<f:facet name="header">Funcionário</f:facet>
+					<h:outputText value="#{peso.funcionario.nome.substring(0, peso.funcionario.nome.indexOf(' '))}" />
+					<f:facet name="footer">
+						<h:outputText value="TOTAL" style="float: right" />
+					</f:facet>
+				</h:column>
+				<h:column>
+					<f:facet name="header">Peso (kg)</f:facet>
+					<h:outputText value="#{peso.peso}">
+						<f:convertNumber pattern="#,##0.00" />
+					</h:outputText>
+					<f:facet name="footer">
+						<h:outputText value="#{visaoTVPesoAreaCortadaController.getPesoTotal('ENTREGA')}" style="float: right">
+							<f:convertNumber pattern="#,##0.00" />
+						</h:outputText>
+					</f:facet>
+				</h:column>
+			</h:dataTable>
+
+		</h:panelGrid>
 
 
+		<h:panelGrid styleClass="painel2" columns="2" cellpadding="20">
+			<p:chart widgetVar="pesoMensal" type="bar" model="#{visaoTVPesoAreaCortadaController.pesoMensal}"
+				style="height: 100%" />
+
+			<p:chart widgetVar="areaMensal" type="bar" model="#{visaoTVPesoAreaCortadaController.areaMensal}"
+				style="height: 100%" />
+		</h:panelGrid>
+
+	</div>
 </h:body>
 </html>

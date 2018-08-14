@@ -12,11 +12,12 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.DateAxis;
-import org.primefaces.model.chart.LineChartModel;
+import org.primefaces.model.chart.LegendPlacement;
 
 import br.com.vitral.entidade.Setor;
 import br.com.vitral.modelo.AreaCortadaModel;
@@ -44,9 +45,11 @@ public class VisaoTVPesoAreaCortadaController implements Serializable {
 	private Setor setorEntrega;
 	private Setor setorMesaGrande;
 	private Setor setorMesaPequena;
+	private Setor setorPonteRolante;
 
 	private static final String STR_EXPEDICAO = "EXPEDICAO";
 	private static final String STR_ENTREGA = "ENTREGA";
+	private static final String STR_PONTE_ROLANTE = "PONTE ROLANTE";
 	private static final String STR_MESA_GRANDE = "MESA GRANDE";
 	private static final String STR_MESA_PEQUENA = "MESA PEQUENA";
 
@@ -54,6 +57,7 @@ public class VisaoTVPesoAreaCortadaController implements Serializable {
 	public void init() {
 		setorExpedicao = setorDao.consultarPeloNome(STR_EXPEDICAO);
 		setorEntrega = setorDao.consultarPeloNome(STR_ENTREGA);
+		setorPonteRolante = setorDao.consultarPeloNome(STR_PONTE_ROLANTE);
 		setorMesaGrande = setorDao.consultarPeloNome(STR_MESA_GRANDE);
 		setorMesaPequena = setorDao.consultarPeloNome(STR_MESA_PEQUENA);
 	}
@@ -68,6 +72,8 @@ public class VisaoTVPesoAreaCortadaController implements Serializable {
 			return pesoDao.listar(setorExpedicao, dia);
 		case STR_ENTREGA:
 			return pesoDao.listar(setorEntrega, dia);
+		case STR_PONTE_ROLANTE:
+			return pesoDao.listar(setorPonteRolante, dia);
 		default:
 			return new ArrayList<>();
 		}
@@ -98,6 +104,8 @@ public class VisaoTVPesoAreaCortadaController implements Serializable {
 			return pesoDao.consultarPesoTotal(setorExpedicao, dia);
 		case STR_ENTREGA:
 			return pesoDao.consultarPesoTotal(setorEntrega, dia);
+		case STR_PONTE_ROLANTE:
+			return pesoDao.consultarPesoTotal(setorPonteRolante, dia);
 		default:
 			return null;
 		}
@@ -119,13 +127,20 @@ public class VisaoTVPesoAreaCortadaController implements Serializable {
 	}
 
 	public BarChartModel getPesoMensal() {
-		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-		
+		SimpleDateFormat df = new SimpleDateFormat("dd/MM");
+
 		BarChartModel model = new BarChartModel();
+
+		Axis xAxis = model.getAxis(AxisType.X);
+		xAxis.setLabel("Data");
+
+		Axis yAxis = model.getAxis(AxisType.Y);
+		yAxis.setLabel("Peso (kg)");
+		yAxis.setMin(0);
 
 		ChartSeries expedicao = new ChartSeries();
 		expedicao.setLabel(STR_EXPEDICAO);
-		for (int i = 0; i < 30; i++) {
+		for (int i = 7; i >= 0; i--) {
 			Calendar c = Calendar.getInstance();
 			c.add(Calendar.DATE, i * -1);
 			Double peso = pesoDao.consultarPesoTotal(setorExpedicao, c.getTime());
@@ -133,10 +148,11 @@ public class VisaoTVPesoAreaCortadaController implements Serializable {
 				expedicao.set(df.format(c.getTime()), peso);
 			}
 		}
+		model.addSeries(expedicao);
 
 		ChartSeries entrega = new ChartSeries();
 		entrega.setLabel(STR_ENTREGA);
-		for (int i = 0; i < 30; i++) {
+		for (int i = 7; i >= 0; i--) {
 			Calendar c = Calendar.getInstance();
 			c.add(Calendar.DATE, i * -1);
 			Double peso = pesoDao.consultarPesoTotal(setorEntrega, c.getTime());
@@ -144,28 +160,45 @@ public class VisaoTVPesoAreaCortadaController implements Serializable {
 				entrega.set(df.format(c.getTime()), peso);
 			}
 		}
-
-		DateAxis eixoX = new DateAxis();
-		eixoX.setTickFormat("%#d/%m/%Y");
-		eixoX.setTickInterval("86400000");
-		model.getAxes().put(AxisType.X, eixoX);
-
-		model.addSeries(expedicao);
 		model.addSeries(entrega);
+		
+		ChartSeries ponteRolante = new ChartSeries();
+		ponteRolante.setLabel(STR_PONTE_ROLANTE);
+		for (int i = 7; i >= 0; i--) {
+			Calendar c = Calendar.getInstance();
+			c.add(Calendar.DATE, i * -1);
+			Double peso = pesoDao.consultarPesoTotal(setorPonteRolante, c.getTime());
+			if (peso != null) {
+				ponteRolante.set(df.format(c.getTime()), peso);
+			} 
+		}
+		model.addSeries(ponteRolante);
 
-		model.setSeriesColors("ff0000,0000ff");
+		model.setTitle("Peso Mensal");
+		model.setLegendPosition("s");
+		model.setLegendPlacement(LegendPlacement.OUTSIDEGRID);
+		model.setDatatipFormat("%s - %s");
+		model.setSeriesColors("ff0000,0000ff,800080");
 		model.setBarWidth(30);
+		model.setLegendCols(3);
 		return model;
 	}
-	
+
 	public BarChartModel getAreaMensal() {
-		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-		
+		SimpleDateFormat df = new SimpleDateFormat("dd/MM");
+
 		BarChartModel model = new BarChartModel();
+
+		Axis xAxis = model.getAxis(AxisType.X);
+		xAxis.setLabel("Data");
+
+		Axis yAxis = model.getAxis(AxisType.Y);
+		yAxis.setLabel("Área (m²)");
+		yAxis.setMin(0);
 
 		ChartSeries mesaPequena = new ChartSeries();
 		mesaPequena.setLabel(STR_MESA_PEQUENA);
-		for (int i = 0; i < 30; i++) {
+		for (int i = 7; i >= 0; i--) {
 			Calendar c = Calendar.getInstance();
 			c.add(Calendar.DATE, i * -1);
 			Double area = areaCortadaDao.consultarAreaTotal(setorMesaPequena, c.getTime());
@@ -173,10 +206,11 @@ public class VisaoTVPesoAreaCortadaController implements Serializable {
 				mesaPequena.set(df.format(c.getTime()), area);
 			}
 		}
-
+		model.addSeries(mesaPequena);
+		
 		ChartSeries mesaGrande = new ChartSeries();
 		mesaGrande.setLabel(STR_MESA_GRANDE);
-		for (int i = 0; i < 30; i++) {
+		for (int i = 7; i >= 0; i--) {
 			Calendar c = Calendar.getInstance();
 			c.add(Calendar.DATE, i * -1);
 			Double area = areaCortadaDao.consultarAreaTotal(setorMesaGrande, c.getTime());
@@ -184,17 +218,15 @@ public class VisaoTVPesoAreaCortadaController implements Serializable {
 				mesaGrande.set(df.format(c.getTime()), area);
 			}
 		}
-
-		DateAxis eixoX = new DateAxis();
-		eixoX.setTickFormat("%#d/%m/%Y");
-		eixoX.setTickInterval("86400000");
-		model.getAxes().put(AxisType.X, eixoX);
-
-		model.addSeries(mesaPequena);
 		model.addSeries(mesaGrande);
 
+		model.setTitle("Área Cortada Mensal");
+		model.setLegendPosition("s");
+		model.setLegendPlacement(LegendPlacement.OUTSIDEGRID);
+		model.setDatatipFormat("%s - %s");
 		model.setSeriesColors("ffa500,008000");
 		model.setBarWidth(30);
+		model.setLegendCols(2);
 		return model;
 	}
 

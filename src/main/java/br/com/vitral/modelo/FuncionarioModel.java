@@ -13,7 +13,7 @@ public class FuncionarioModel implements Serializable {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -42,7 +42,6 @@ public class FuncionarioModel implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		FuncionarioModel other = (FuncionarioModel) obj;
-		return id != other.id;
+		return id == other.id;
 	}
-
 }
