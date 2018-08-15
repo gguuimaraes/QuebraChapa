@@ -10,29 +10,27 @@
 	width: 100%;
 }
 
-.painel td{ 
-	vertical-align: top;
-	width: 50%;
-	min-height: 1000px;
-}
-
 .painel2 {
 	width: 100%;
+}
+
+.painel td {
+	vertical-align: top;
+	width: 50%;
 	height: 100%;
 }
 
 .tabela {
-	margin: auto;
 	border-style: groove;
 	width: 100%;
 	height: 100%;
 }
 
 .tabela2 {
-	margin: auto;
 	border-style: groove;
-	width: 50%;
+	width: calc(100% - 10px);
 	height: 100%;
+	margin-bottom: 10px;
 }
 
 div.jqplot-table-legend-swatch {

@@ -4,11 +4,6 @@
 	<h:form>
 		<p:focus context="txtNome" />
 		<h:panelGrid columns="2" cellpadding="10">
-
-			<p:outputLabel value="Id" for="txtId" rendered="#{tipoVidroController.tipoVidroModel.id != null}" />
-			<p:inputText id="txtId" value="#{tipoVidroController.tipoVidroModel.id}" style="width:50px" readonly="true"
-				rendered="#{tipoVidroController.tipoVidroModel.id != null}" />
-
 			<p:outputLabel value="Descrição" for="txtNome" />
 			<p:inputText id="txtNome" style="width:150px" maxlength="25" value="#{tipoVidroController.tipoVidroModel.nome}"
 				required="true" requiredMessage="A descrição é de preenchimento obrigatório" />

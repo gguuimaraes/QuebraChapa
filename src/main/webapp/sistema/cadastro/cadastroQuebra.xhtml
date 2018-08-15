@@ -11,7 +11,7 @@
 				<p:outputLabel value="Setor" for="txtSetor" />
 
 				<p:calendar id="txtData" value="#{quebraController.quebraModel.data}" required="true"
-					requiredMessage="A Data é de preenchimento obrigatório" mask="99/99/9999" pattern="dd/MM/yyyy" />
+					requiredMessage="A Data é de preenchimento obrigatório" mask="99/99/9999" pattern="dd/MM/yyyy" showOn="button" />
 				<p:selectOneMenu id="txtTipoVidro" value="#{quebraController.quebraModel.tipoVidro}" required="true"
 					requiredMessage="O Tipo Vidro é de preenchimento obrigatório" converter="tipoVidroConverter">
 					<f:selectItem itemValue="" itemLabel="Selecione um" />

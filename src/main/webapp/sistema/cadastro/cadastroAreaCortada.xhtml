@@ -4,15 +4,10 @@
 	<h:form>
 		<p:focus context="txtData" />
 		<h:panelGrid columns="2" cellpadding="10">
-
-			<p:outputLabel value="Id" for="txtId" rendered="#{areaCortadaController.areaCortadaModel.id != null}" />
-			<p:inputText id="txtId" value="#{areaCortadaController.areaCortadaModel.id}" style="width:50px" readonly="true"
-				rendered="#{areaCortadaController.areaCortadaModel.id != null}" />
-
 			<p:outputLabel value="Data" for="txtData" />
 			<p:calendar id="txtData" value="#{areaCortadaController.areaCortadaModel.data}" required="true"
-				requiredMessage="A Data é de preenchimento obrigatório" inputStyle="width:100%" mask="99/99/9999"
-				pattern="dd/MM/yyyy" />
+				requiredMessage="A Data é de preenchimento obrigatório" mask="99/99/9999"
+				pattern="dd/MM/yyyy" showOn="button" />
 
 			<p:outputLabel value="Setor" for="txtSetor" />
 			<p:selectOneMenu id="txtSetor" value="#{areaCortadaController.areaCortadaModel.setor}" required="true"

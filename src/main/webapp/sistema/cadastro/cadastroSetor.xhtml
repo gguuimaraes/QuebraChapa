@@ -4,11 +4,6 @@
 	<h:form>
 		<p:focus context="txtNome" />
 		<h:panelGrid columns="2" cellpadding="10">
-
-			<p:outputLabel value="Id" for="txtId" rendered="#{setorController.setorModel.id != null}" />
-			<p:inputText id="txtId" value="#{setorController.setorModel.id}" style="width:50px" readonly="true"
-				rendered="#{setorController.setorModel.id != null}" />
-
 			<p:outputLabel value="Nome" for="txtNome" />
 			<p:inputText id="txtNome" style="width:150px" maxlength="20" value="#{setorController.setorModel.nome}"
 				required="true" requiredMessage="O nome é de preenchimento obrigatório" />

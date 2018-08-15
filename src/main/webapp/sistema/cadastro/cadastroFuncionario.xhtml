@@ -5,10 +5,6 @@
 		<p:focus context="txtNome" />
 		<h:panelGrid columns="2" cellpadding="10">
 
-			<p:outputLabel value="Id" for="txtId" rendered="#{funcionarioController.funcionarioModel.id != null}" />
-			<p:inputText id="txtId" value="#{funcionarioController.funcionarioModel.id}" style="width:50px" readonly="true"
-				rendered="#{funcionarioController.funcionarioModel.id != null}" />
-
 			<p:outputLabel value="Nome" for="txtNome" />
 			<p:inputText id="txtNome" style="width:150px" maxlength="200" value="#{funcionarioController.funcionarioModel.nome}"
 				required="true" requiredMessage="O nome é de preenchimento obrigatório" />

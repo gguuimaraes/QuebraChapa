@@ -6,7 +6,7 @@
 		<h:panelGrid columns="2" cellpadding="10">
 			<p:outputLabel value="Data" for="txtData" />
 			<p:calendar id="txtData" value="#{pesoController.pesoModel.data}" required="true"
-				requiredMessage="A Data é de preenchimento obrigatório" mask="99/99/9999" pattern="dd/MM/yyyy" />
+				requiredMessage="A Data é de preenchimento obrigatório" mask="99/99/9999" pattern="dd/MM/yyyy" showOn="button"/>
 
 			<p:outputLabel value="Setor" for="txtSetor" />
 			<p:selectOneMenu id="txtSetor" value="#{pesoController.pesoModel.setor}" required="true"
