@@ -41,3 +41,8 @@ div.jqplot-table-legend-swatch-outline {
 	border: none;
 	padding: 0;
 }
+
+.jqplot-title, .jqplot-table-legend.jqplot-table-legend-label,
+	.jqplot-point-label {
+	color: black;
+}

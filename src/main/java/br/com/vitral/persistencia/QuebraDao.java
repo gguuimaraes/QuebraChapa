@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import br.com.vitral.entidade.Quebra;
+import br.com.vitral.entidade.Setor;
 import br.com.vitral.modelo.FuncionarioModel;
 import br.com.vitral.modelo.QuebraModel;
 import br.com.vitral.modelo.SetorModel;
@@ -177,7 +178,12 @@ public class QuebraDao implements Serializable {
 		@SuppressWarnings("unchecked")
 		Collection<Object[]> lista = (Collection<Object[]>) query.getResultList();
 		for (Object[] l : lista) {
-			l[0] = setorDao.consultar((int) l[0]).getNome();
+			Setor s = setorDao.consultar((int) l[0]);
+			SetorModel sModel = new SetorModel();
+			sModel.setId(s.getId());
+			sModel.setNome(s.getNome());
+			sModel.setCor(s.getCor());
+			l[0] = sModel;
 		}
 		return lista;
 	}

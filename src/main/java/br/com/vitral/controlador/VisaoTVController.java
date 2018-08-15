@@ -15,6 +15,7 @@ import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.LineChartSeries;
 import org.primefaces.model.chart.PieChartModel;
 
+import br.com.vitral.modelo.SetorModel;
 import br.com.vitral.persistencia.AreaFaturadaDao;
 import br.com.vitral.persistencia.QuebraDao;
 import br.com.vitral.util.Uteis;
@@ -32,17 +33,22 @@ public class VisaoTVController implements Serializable {
 	private AreaFaturadaDao areaFaturadaDao;
 
 	public PieChartModel getQuebraPorSetor() {
-		PieChartModel quebraPorSetor = new PieChartModel();
-		quebraPorSetor.setTitle("% Quebra por Setor");
-		quebraPorSetor.setLegendPosition("e");
-		quebraPorSetor.setShowDataLabels(true);
-		quebraPorSetor.setDatatipFormat("%s - %#.4f");
-		quebraPorSetor.setSeriesColors("aaf,afa,faa,ffa,aff,faf,ddd");
+		PieChartModel model = new PieChartModel();
+		model.setTitle("% Quebra por Setor");
+		model.setLegendPosition("e");
+		model.setShowDataLabels(true);
+		model.setDatatipFormat("%s - %#.4f");
+		StringBuilder cores = new StringBuilder();
 		Collection<Object[]> lista = quebraDao.quebraPorSetor(Uteis.getDataInicio(), Uteis.getDataFim());
 		for (Object[] l : lista) {
-			quebraPorSetor.set(String.format("%s: %.4f", l[0], l[1]), (Double) l[1]);
+			if (cores.toString().length() != 0) cores.append(',');
+			model.set(String.format("%s: %.4f", ((SetorModel) l[0]).getNome(), l[1]), (Double) l[1]);
+			cores.append(((SetorModel) l[0]).getCor());
 		}
-		return quebraPorSetor;
+
+		model.setSeriesColors(cores.toString());
+	
+		return model;
 	}
 
 	public LineChartModel getQuebraAnual() {
@@ -68,7 +74,8 @@ public class VisaoTVController implements Serializable {
 			if (areaQuebra != null) {
 				c.set(Calendar.DATE, 1);
 				quebra.set(c.getTimeInMillis(), areaQuebra);
-			} else break;
+			} else
+				break;
 		}
 		quebraAnual.addSeries(quebra);
 		quebraAnual.setSeriesColors("ff8000");
@@ -100,7 +107,8 @@ public class VisaoTVController implements Serializable {
 			if (areaQuebra != null && areaFaturada != null) {
 				c.set(Calendar.DATE, 1);
 				taxa.set(c.getTimeInMillis(), areaQuebra / areaFaturada * 100);
-			} else break;
+			} else
+				break;
 		}
 		taxaQuebraAnual.addSeries(taxa);
 

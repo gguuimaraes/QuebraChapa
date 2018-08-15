@@ -25,17 +25,6 @@
 				<p:ajax event="rowEdit" listener="#{setorController.onRowEdit}" update=":form:msgs" />
 				<p:ajax event="rowEditCancel" listener="#{setorController.onRowCancel}" update=":form:msgs" />
 
-				<!-- <p:column headerText="Id">
-					<p:cellEditor>
-						<f:facet name="output">
-							<h:outputText value="#{setor.id}" />
-						</f:facet>
-						<f:facet name="input">
-							<p:inputText value="#{setor.id}" style="width:100%" />
-						</f:facet>
-					</p:cellEditor>
-				</p:column> -->
-
 				<p:column headerText="Nome">
 					<p:cellEditor>
 						<f:facet name="output">
@@ -44,6 +33,18 @@
 						<f:facet name="input">
 							<p:inputText value="#{setor.nome}" maxlength="20" required="true"
 								requiredMessage="O nome é de preenchimento obrigatório" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Cor">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText class="fa fa-fw fa-paint-brush" style="color: ##{setor.cor}"/>
+						</f:facet>
+						<f:facet name="input">
+							<h:outputText class="fa fa-fw fa-paint-brush" style="margin-left: 20px; color: ##{setor.cor}"/>
+							<p:colorPicker value="#{setor.cor}" style="margin-left: 20px" />
 						</f:facet>
 					</p:cellEditor>
 				</p:column>

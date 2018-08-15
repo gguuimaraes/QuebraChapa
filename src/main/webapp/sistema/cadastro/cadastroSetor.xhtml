@@ -7,8 +7,9 @@
 			<p:outputLabel value="Nome" for="txtNome" />
 			<p:inputText id="txtNome" style="width:150px" maxlength="20" value="#{setorController.setorModel.nome}"
 				required="true" requiredMessage="O nome é de preenchimento obrigatório" />
-
-			<p:spacer />
+			
+			<p:outputLabel value="Cor" for="txtCor" />
+			<p:colorPicker id="txtCor" value="#{setorController.setorModel.cor}" />
 
 			<p:commandButton value="Salvar" id="btnSalvar" icon="fa fa-fw fa-save" actionListener="#{setorController.salvar}"
 				update="form" />

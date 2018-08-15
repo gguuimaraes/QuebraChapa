@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @Entity
 
 @NamedQueries({ @NamedQuery(name = "Setor.findAll", query = "SELECT s FROM Setor s ORDER BY s.nome"),
-	 @NamedQuery(name = "Setor.findPeloNome", query = "SELECT s FROM Setor s WHERE s.nome = :nome")
+		@NamedQuery(name = "Setor.findPeloNome", query = "SELECT s FROM Setor s WHERE s.nome = :nome")
 
 })
 public class Setor implements Serializable {
@@ -29,6 +29,9 @@ public class Setor implements Serializable {
 
 	@Column(name = "nome", unique = true)
 	private String nome;
+
+	@Column(name = "cor")
+	private String cor;
 
 	public Integer getId() {
 		return id;
@@ -44,6 +47,14 @@ public class Setor implements Serializable {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public String getCor() {
+		return cor;
+	}
+
+	public void setCor(String cor) {
+		this.cor = cor;
 	}
 
 }

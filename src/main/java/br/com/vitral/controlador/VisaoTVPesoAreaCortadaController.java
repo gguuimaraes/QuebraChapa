@@ -25,7 +25,7 @@ import br.com.vitral.persistencia.AreaCortadaDao;
 import br.com.vitral.persistencia.PesoDao;
 import br.com.vitral.persistencia.SetorDao;
 
-@Named(value = "visaoTVPesoAreaCortadaController")
+@Named(value = "visaoTV2")
 @SessionScoped
 public class VisaoTVPesoAreaCortadaController implements Serializable {
 
@@ -52,7 +52,7 @@ public class VisaoTVPesoAreaCortadaController implements Serializable {
 	private static final String STR_MESA_GRANDE = "MESA GRANDE";
 	private static final String STR_MESA_PEQUENA = "MESA PEQUENA";
 
-	private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM");
+	private static SimpleDateFormat df = new SimpleDateFormat("dd/MM");
 
 	@PostConstruct
 	public void init() {
@@ -147,9 +147,9 @@ public class VisaoTVPesoAreaCortadaController implements Serializable {
 			Double pEn = pesoDao.consultarPesoTotal(setorEntrega, c.getTime());
 			Double pPR = pesoDao.consultarPesoTotal(setorPonteRolante, c.getTime());
 			if (pEx != null || pEn != null || pPR != null) {
-				expedicao.set(DATE_FORMAT.format(c.getTime()), pEx == null ? 0f : pEx);
-				entrega.set(DATE_FORMAT.format(c.getTime()), pEn == null ? 0f : pEn);
-				ponteRolante.set(DATE_FORMAT.format(c.getTime()), pPR == null ? 0f : pPR);
+				expedicao.set(df.format(c.getTime()), pEx == null ? 0f : pEx);
+				entrega.set(df.format(c.getTime()), pEn == null ? 0f : pEn);
+				ponteRolante.set(df.format(c.getTime()), pPR == null ? 0f : pPR);
 			}
 		}
 		model.addSeries(expedicao);
@@ -160,7 +160,13 @@ public class VisaoTVPesoAreaCortadaController implements Serializable {
 		model.setLegendPosition("s");
 		model.setLegendPlacement(LegendPlacement.OUTSIDEGRID);
 		model.setDatatipFormat("%s - %s");
-		model.setSeriesColors("ff0000,0000ff,800080");
+		StringBuilder cores = new StringBuilder();
+		cores.append(setorExpedicao.getCor());
+		cores.append(',');
+		cores.append(setorEntrega.getCor());
+		cores.append(',');
+		cores.append(setorPonteRolante.getCor());
+		model.setSeriesColors(cores.toString());
 		model.setBarWidth(15);
 		model.setLegendCols(3);
 		return model;
@@ -184,8 +190,8 @@ public class VisaoTVPesoAreaCortadaController implements Serializable {
 			Double aMP = areaCortadaDao.consultarAreaTotal(setorMesaPequena, c.getTime());
 			Double aMG = areaCortadaDao.consultarAreaTotal(setorMesaGrande, c.getTime());
 			if (aMP != null || aMG != null) {
-				mesaPequena.set(DATE_FORMAT.format(c.getTime()), aMP == null ? 0f : aMP);
-				mesaGrande.set(DATE_FORMAT.format(c.getTime()), aMG == null ? 0f : aMG);
+				mesaPequena.set(df.format(c.getTime()), aMP == null ? 0f : aMP);
+				mesaGrande.set(df.format(c.getTime()), aMG == null ? 0f : aMG);
 			}
 
 		}
@@ -197,10 +203,33 @@ public class VisaoTVPesoAreaCortadaController implements Serializable {
 		model.setLegendPosition("s");
 		model.setLegendPlacement(LegendPlacement.OUTSIDEGRID);
 		model.setDatatipFormat("%s - %s");
-		model.setSeriesColors("ffa500,008000");
+		StringBuilder cores = new StringBuilder();
+		cores.append(setorMesaPequena.getCor());
+		cores.append(',');
+		cores.append(setorMesaGrande.getCor());
+		model.setSeriesColors(cores.toString());
 		model.setBarWidth(15);
 		model.setLegendCols(2);
 		return model;
 	}
 
+	public Setor getSetorExpedicao() {
+		return setorExpedicao;
+	}
+
+	public Setor getSetorEntrega() {
+		return setorEntrega;
+	}
+
+	public Setor getSetorMesaGrande() {
+		return setorMesaGrande;
+	}
+
+	public Setor getSetorMesaPequena() {
+		return setorMesaPequena;
+	}
+
+	public Setor getSetorPonteRolante() {
+		return setorPonteRolante;
+	}
 }

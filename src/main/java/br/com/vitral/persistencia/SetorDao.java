@@ -28,10 +28,12 @@ public class SetorDao implements Serializable {
 		if (setorModel.getId() == null) {
 			setor = new Setor();
 			setor.setNome(setorModel.getNome());
+			setor.setCor(setorModel.getCor());
 			em.persist(setor);
 		} else {
 			setor = em.find(Setor.class, setorModel.getId());
 			setor.setNome(setorModel.getNome());
+			setor.setCor(setorModel.getCor());
 			em.merge(setor);
 		}
 	}
@@ -47,6 +49,7 @@ public class SetorDao implements Serializable {
 			setorModel = new SetorModel();
 			setorModel.setId(s.getId());
 			setorModel.setNome(s.getNome());
+			setorModel.setCor(s.getCor());
 			setoresModel.add(setorModel);
 		}
 		return setoresModel;

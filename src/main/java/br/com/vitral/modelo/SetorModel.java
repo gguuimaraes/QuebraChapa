@@ -8,6 +8,7 @@ public class SetorModel implements Serializable {
 
 	private Integer id;
 	private String nome;
+	private String cor;
 
 	public Integer getId() {
 		return id;
@@ -23,6 +24,14 @@ public class SetorModel implements Serializable {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+	
+	public String getCor() {
+		return cor;
+	}
+
+	public void setCor(String cor) {
+		this.cor = cor;
 	}
 
 	@Override
