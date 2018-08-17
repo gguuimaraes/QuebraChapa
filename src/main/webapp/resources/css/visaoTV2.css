@@ -1,16 +1,14 @@
 .corpo {
-	width: 80%;
+	width: 90%;
 	margin: auto;
+	margin-top: 10px;
 	font-family: Arial;
 	font-size: 20px;
 	text-align: center;
+	height: 100%;
 }
 
-.painel {
-	width: 100%;
-}
-
-.painel2 {
+.painel, .painel2 {
 	width: 100%;
 }
 
@@ -24,6 +22,7 @@
 	border-style: groove;
 	width: 100%;
 	height: 100%;
+	margin-bottom: 10px;
 }
 
 .tabela2 {
@@ -42,7 +41,6 @@ div.jqplot-table-legend-swatch-outline {
 	padding: 0;
 }
 
-.jqplot-title, .jqplot-table-legend.jqplot-table-legend-label,
-	.jqplot-point-label {
+.jqplot-target {
 	color: black;
 }

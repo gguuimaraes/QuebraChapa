@@ -27,7 +27,7 @@ import br.com.vitral.persistencia.SetorDao;
 
 @Named(value = "visaoTV2")
 @SessionScoped
-public class VisaoTVPesoAreaCortadaController implements Serializable {
+public class VisaoTV2Controller implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -41,12 +41,14 @@ public class VisaoTVPesoAreaCortadaController implements Serializable {
 	private AreaCortadaDao areaCortadaDao;
 
 	private Setor setorExpedicao;
+	private Setor setorExpedicaoVPE;
 	private Setor setorEntrega;
 	private Setor setorMesaGrande;
 	private Setor setorMesaPequena;
 	private Setor setorPonteRolante;
 
 	private static final String STR_EXPEDICAO = "EXPEDICAO";
+	private static final String STR_EXPEDICAO_VPE = "EXPEDICAO VPE";
 	private static final String STR_ENTREGA = "ENTREGA";
 	private static final String STR_PONTE_ROLANTE = "PONTE ROLANTE";
 	private static final String STR_MESA_GRANDE = "MESA GRANDE";
@@ -57,6 +59,7 @@ public class VisaoTVPesoAreaCortadaController implements Serializable {
 	@PostConstruct
 	public void init() {
 		setorExpedicao = setorDao.consultarPeloNome(STR_EXPEDICAO);
+		setorExpedicaoVPE = setorDao.consultarPeloNome(STR_EXPEDICAO_VPE);
 		setorEntrega = setorDao.consultarPeloNome(STR_ENTREGA);
 		setorPonteRolante = setorDao.consultarPeloNome(STR_PONTE_ROLANTE);
 		setorMesaGrande = setorDao.consultarPeloNome(STR_MESA_GRANDE);
@@ -71,6 +74,8 @@ public class VisaoTVPesoAreaCortadaController implements Serializable {
 		switch (nomeSetor) {
 		case STR_EXPEDICAO:
 			return pesoDao.listar(setorExpedicao, dia);
+		case STR_EXPEDICAO_VPE:
+			return pesoDao.listar(setorExpedicaoVPE, dia);
 		case STR_ENTREGA:
 			return pesoDao.listar(setorEntrega, dia);
 		case STR_PONTE_ROLANTE:
@@ -103,6 +108,8 @@ public class VisaoTVPesoAreaCortadaController implements Serializable {
 		switch (nomeSetor) {
 		case STR_EXPEDICAO:
 			return pesoDao.consultarPesoTotal(setorExpedicao, dia);
+		case STR_EXPEDICAO_VPE:
+			return pesoDao.consultarPesoTotal(setorExpedicaoVPE, dia);
 		case STR_ENTREGA:
 			return pesoDao.consultarPesoTotal(setorEntrega, dia);
 		case STR_PONTE_ROLANTE:
@@ -135,24 +142,29 @@ public class VisaoTVPesoAreaCortadaController implements Serializable {
 		yAxis.setMin(0);
 
 		ChartSeries expedicao = new ChartSeries();
+		ChartSeries expedicaoVPE = new ChartSeries();
 		ChartSeries entrega = new ChartSeries();
 		ChartSeries ponteRolante = new ChartSeries();
 		expedicao.setLabel(STR_EXPEDICAO);
+		expedicaoVPE.setLabel(STR_EXPEDICAO_VPE);
 		entrega.setLabel(STR_ENTREGA);
 		ponteRolante.setLabel(STR_PONTE_ROLANTE);
 		for (int i = 30; i >= 0; i--) {
 			Calendar c = Calendar.getInstance();
 			c.add(Calendar.DATE, i * -1);
 			Double pEx = pesoDao.consultarPesoTotal(setorExpedicao, c.getTime());
+			Double pExVPE = pesoDao.consultarPesoTotal(setorExpedicaoVPE, c.getTime());
 			Double pEn = pesoDao.consultarPesoTotal(setorEntrega, c.getTime());
 			Double pPR = pesoDao.consultarPesoTotal(setorPonteRolante, c.getTime());
-			if (pEx != null || pEn != null || pPR != null) {
+			if (pEx != null || pExVPE != null  || pEn != null || pPR != null) {
 				expedicao.set(df.format(c.getTime()), pEx == null ? 0f : pEx);
+				expedicaoVPE.set(df.format(c.getTime()), pExVPE == null ? 0f : pExVPE);
 				entrega.set(df.format(c.getTime()), pEn == null ? 0f : pEn);
 				ponteRolante.set(df.format(c.getTime()), pPR == null ? 0f : pPR);
 			}
 		}
 		model.addSeries(expedicao);
+		model.addSeries(expedicaoVPE);
 		model.addSeries(entrega);
 		model.addSeries(ponteRolante);
 
@@ -163,12 +175,16 @@ public class VisaoTVPesoAreaCortadaController implements Serializable {
 		StringBuilder cores = new StringBuilder();
 		cores.append(setorExpedicao.getCor());
 		cores.append(',');
+		cores.append(setorExpedicaoVPE.getCor());
+		cores.append(',');
 		cores.append(setorEntrega.getCor());
 		cores.append(',');
 		cores.append(setorPonteRolante.getCor());
 		model.setSeriesColors(cores.toString());
 		model.setBarWidth(15);
-		model.setLegendCols(3);
+		model.setLegendCols(4);
+		
+		model.setExtender("ext");
 		return model;
 	}
 
@@ -210,11 +226,17 @@ public class VisaoTVPesoAreaCortadaController implements Serializable {
 		model.setSeriesColors(cores.toString());
 		model.setBarWidth(15);
 		model.setLegendCols(2);
+		
+		model.setExtender("ext");
 		return model;
 	}
 
 	public Setor getSetorExpedicao() {
 		return setorExpedicao;
+	}
+	
+	public Setor getSetorExpedicaoVPE() {
+		return setorExpedicaoVPE;
 	}
 
 	public Setor getSetorEntrega() {

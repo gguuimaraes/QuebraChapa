@@ -1,9 +1,12 @@
-.jqplot-title, .jqplot-table-legend.jqplot-table-legend-label,
-	.jqplot-point-label {
+.jqplot-target {
 	color: black;
 }
 
 .jqplot-pie-series.jqplot-data-label {
 	color: white;
-	/* font-weight: bold; */
+	text-shadow:
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000; 
 }

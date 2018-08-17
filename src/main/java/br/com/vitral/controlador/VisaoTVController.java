@@ -41,26 +41,27 @@ public class VisaoTVController implements Serializable {
 		StringBuilder cores = new StringBuilder();
 		Collection<Object[]> lista = quebraDao.quebraPorSetor(Uteis.getDataInicio(), Uteis.getDataFim());
 		for (Object[] l : lista) {
-			if (cores.toString().length() != 0) cores.append(',');
+			if (cores.toString().length() != 0)
+				cores.append(',');
 			model.set(String.format("%s: %.4f", ((SetorModel) l[0]).getNome(), l[1]), (Double) l[1]);
 			cores.append(((SetorModel) l[0]).getCor());
 		}
 
 		model.setSeriesColors(cores.toString());
-	
+
 		return model;
 	}
 
 	public LineChartModel getQuebraAnual() {
-		LineChartModel quebraAnual = new LineChartModel();
-		quebraAnual.setTitle("Quebra Mensal");
-		quebraAnual.setShowPointLabels(true);
+		LineChartModel model = new LineChartModel();
+		model.setTitle("Metragem de Quebra Mensal");
+		model.setShowPointLabels(true);
 		DateAxis eixoX = new DateAxis();
 		eixoX.setTickFormat("%m/%Y");
 		eixoX.setTickAngle(-15);
 		eixoX.setTickInterval("2592000000");
-		quebraAnual.getAxes().put(AxisType.X, eixoX);
-		Axis eixoY = quebraAnual.getAxis(AxisType.Y);
+		model.getAxes().put(AxisType.X, eixoX);
+		Axis eixoY = model.getAxis(AxisType.Y);
 		eixoY.setTickFormat("%.4f");
 		eixoY.setMin(0);
 		eixoY.setLabel("Quebra (m²)");
@@ -77,24 +78,26 @@ public class VisaoTVController implements Serializable {
 			} else
 				break;
 		}
-		quebraAnual.addSeries(quebra);
-		quebraAnual.setSeriesColors("ff8000");
-		return quebraAnual;
+		model.addSeries(quebra);
+		model.setSeriesColors("ff8000");
+
+		model.setExtender("ext");
+		return model;
 	}
 
 	public LineChartModel getTaxaQuebraAnual() {
-		LineChartModel taxaQuebraAnual = new LineChartModel();
-		taxaQuebraAnual.setTitle("% Quebra Anual");
-		taxaQuebraAnual.setShowPointLabels(true);
+		LineChartModel model = new LineChartModel();
+		model.setTitle("Porcentual de Quebra Mensal");
+		model.setShowPointLabels(true);
 		DateAxis eixoX = new DateAxis();
 		eixoX.setTickFormat("%m/%Y");
 		eixoX.setTickAngle(-15);
 		eixoX.setTickInterval("2592000000");
-		taxaQuebraAnual.getAxes().put(AxisType.X, eixoX);
-		Axis eixoY = taxaQuebraAnual.getAxis(AxisType.Y);
+		model.getAxes().put(AxisType.X, eixoX);
+		Axis eixoY = model.getAxis(AxisType.Y);
 		eixoY.setTickFormat("%.2f%");
 		eixoY.setMin(0);
-		eixoY.setLabel("Taxa");
+		eixoY.setLabel("Porcentual");
 
 		LineChartSeries taxa = new LineChartSeries();
 		for (int i = 0; i < 12; i++) {
@@ -110,9 +113,10 @@ public class VisaoTVController implements Serializable {
 			} else
 				break;
 		}
-		taxaQuebraAnual.addSeries(taxa);
+		model.addSeries(taxa);
 
-		return taxaQuebraAnual;
+		model.setExtender("ext");
+		return model;
 	}
 
 	public Float getAreaFaturada() {

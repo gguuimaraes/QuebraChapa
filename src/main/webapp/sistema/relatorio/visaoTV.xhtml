@@ -6,22 +6,28 @@
 	<h:outputStylesheet library="css" name="visaoTV.css" />
 </h:head>
 <h:body>
+	<script>
+		function ext() {
+			this.cfg.axes.xaxis.tickOptions.textColor = '#000';
+			this.cfg.axes.yaxis.tickOptions.textColor = '#000';
+		}
+	</script>
 	<h:panelGrid columns="2" style="margin: auto">
 
 		<p:chart type="pie" model="#{visaoTVController.quebraPorSetor}" style="margin-left: 5vw; width: 40vw; height: 44vh"
 			responsive="true" />
 
-		<h:panelGrid style="text-align: right; margin: auto; font-family: Arial; font-size: 20px " columns="2">
-			<h:outputLabel value="Quebra:   " />
-			<h:outputLabel value="#{visaoTVController.areaQuebra}">
-				<f:convertNumber pattern="#,####0.00 m²" />
+		<h:panelGrid style="text-align: right; margin: auto; font-family: Arial; font-size: 40px " columns="2">
+			<h:outputLabel value="Quebra: " />
+			<h:outputLabel value="#{visaoTVController.areaQuebra}" style="float: left">
+				<f:convertNumber pattern="#,###.## m²" />
 			</h:outputLabel>
-			<h:outputLabel value="Faturada:   " />
-			<h:outputLabel value="#{visaoTVController.areaFaturada}">
-				<f:convertNumber pattern="#,####0.00 m²" />
+			<h:outputLabel value="Faturada: " />
+			<h:outputLabel value="#{visaoTVController.areaFaturada}" style="float: left">
+				<f:convertNumber pattern="#,###.## m²" />
 			</h:outputLabel>
-			<h:outputLabel value="% Quebra: " />
-			<h:outputLabel value="#{visaoTVController.areaQuebra / visaoTVController.areaFaturada * 100}">
+			<h:outputLabel value="Quebra: " />
+			<h:outputLabel value="#{visaoTVController.areaQuebra / visaoTVController.areaFaturada * 100}" style="float: left">
 				<f:convertNumber pattern="0,00%" />
 			</h:outputLabel>
 		</h:panelGrid>
