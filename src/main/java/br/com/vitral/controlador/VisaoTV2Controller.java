@@ -181,9 +181,7 @@ public class VisaoTV2Controller implements Serializable {
 		cores.append(',');
 		cores.append(setorPonteRolante.getCor());
 		model.setSeriesColors(cores.toString());
-		model.setBarWidth(15);
-		model.setLegendCols(4);
-		
+		model.setLegendCols(model.getSeries().size());
 		model.setExtender("ext");
 		return model;
 	}
@@ -209,7 +207,6 @@ public class VisaoTV2Controller implements Serializable {
 				mesaPequena.set(df.format(c.getTime()), aMP == null ? 0f : aMP);
 				mesaGrande.set(df.format(c.getTime()), aMG == null ? 0f : aMG);
 			}
-
 		}
 
 		model.addSeries(mesaPequena);
@@ -224,9 +221,7 @@ public class VisaoTV2Controller implements Serializable {
 		cores.append(',');
 		cores.append(setorMesaGrande.getCor());
 		model.setSeriesColors(cores.toString());
-		model.setBarWidth(15);
-		model.setLegendCols(2);
-		
+		model.setLegendCols(model.getSeries().size());
 		model.setExtender("ext");
 		return model;
 	}
