@@ -37,12 +37,12 @@ public class AutenticacaoFilter implements Filter {
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-		//throw new UnsupportedOperationException("AutenticacaoFilter.init() não foi implementado.");
+		
 	}
 
 	@Override
 	public void destroy() {
-		//throw new UnsupportedOperationException("AutenticacaoFilter.destroy() não foi implementado.");
+		
 	}
 
 }

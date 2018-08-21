@@ -14,7 +14,6 @@ import br.com.vitral.entidade.AreaCortada;
 import br.com.vitral.entidade.Setor;
 import br.com.vitral.modelo.AreaCortadaModel;
 import br.com.vitral.modelo.FuncionarioModel;
-import br.com.vitral.modelo.PesoModel;
 import br.com.vitral.modelo.SetorModel;
 import br.com.vitral.util.Uteis;
 

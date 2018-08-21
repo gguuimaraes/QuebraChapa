@@ -37,10 +37,10 @@ public class UsuarioFilter implements Filter {
 	}
 
 	public void init(FilterConfig fConfig) throws ServletException {
-		//throw new UnsupportedOperationException("UsuarioFilter.init() não foi implementado.");
+	
 	}
 
 	public void destroy() {
-		//throw new UnsupportedOperationException("UsuarioFilter.destroy() não foi implementado.");
+	
 	}
 }

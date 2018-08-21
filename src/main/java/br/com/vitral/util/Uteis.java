@@ -45,8 +45,8 @@ public class Uteis {
 		inicio.set(Calendar.MILLISECOND, 0);
 		inicio.set(Calendar.SECOND, 0);
 		inicio.set(Calendar.MINUTE, 0);
-		inicio.set(Calendar.HOUR, 12);
-		if (inicio.get(Calendar.DATE) < 22) {
+		inicio.set(Calendar.HOUR_OF_DAY, 0);
+		if (inicio.get(Calendar.DATE) <= 21) {
 			inicio.add(Calendar.MONTH, -1);
 		}
 		inicio.set(Calendar.DATE, 22);
@@ -59,7 +59,7 @@ public class Uteis {
 		fim.set(Calendar.MILLISECOND, 999);
 		fim.set(Calendar.SECOND, 59);
 		fim.set(Calendar.MINUTE, 59);
-		fim.set(Calendar.HOUR, 23);
+		fim.set(Calendar.HOUR_OF_DAY, 23);
 		fim.set(Calendar.DATE, 21);
 		fim.add(Calendar.MONTH, 1);
 		return fim.getTime();
