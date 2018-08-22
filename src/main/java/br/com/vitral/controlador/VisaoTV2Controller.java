@@ -64,6 +64,9 @@ public class VisaoTV2Controller implements Serializable {
 		setorPonteRolante = setorDao.consultarPeloNome(STR_PONTE_ROLANTE);
 		setorMesaGrande = setorDao.consultarPeloNome(STR_MESA_GRANDE);
 		setorMesaPequena = setorDao.consultarPeloNome(STR_MESA_PEQUENA);
+
+		iniciaPesoMensal();
+		iniciaAreaCortadaMensal();
 	}
 
 	public List<PesoModel> getPesos(String nomeSetor) {
@@ -134,102 +137,20 @@ public class VisaoTV2Controller implements Serializable {
 		}
 	}
 
-	public BarChartModel getPesoMensal() {
-		BarChartModel model = new BarChartModel();
-
-		Axis yAxis = model.getAxis(AxisType.Y);
-		yAxis.setLabel("Peso (kg)");
-		yAxis.setMin(0);
-
-		ChartSeries expedicao = new ChartSeries();
-		ChartSeries expedicaoVPE = new ChartSeries();
-		ChartSeries entrega = new ChartSeries();
-		ChartSeries ponteRolante = new ChartSeries();
-		expedicao.setLabel(STR_EXPEDICAO);
-		expedicaoVPE.setLabel(STR_EXPEDICAO_VPE);
-		entrega.setLabel(STR_ENTREGA);
-		ponteRolante.setLabel(STR_PONTE_ROLANTE);
-		for (int i = 30; i >= 0; i--) {
-			Calendar c = Calendar.getInstance();
-			c.add(Calendar.DATE, i * -1);
-			Double pEx = pesoDao.consultarPesoTotal(setorExpedicao, c.getTime());
-			Double pExVPE = pesoDao.consultarPesoTotal(setorExpedicaoVPE, c.getTime());
-			Double pEn = pesoDao.consultarPesoTotal(setorEntrega, c.getTime());
-			Double pPR = pesoDao.consultarPesoTotal(setorPonteRolante, c.getTime());
-			if (pEx != null || pExVPE != null  || pEn != null || pPR != null) {
-				expedicao.set(df.format(c.getTime()), pEx == null ? 0f : pEx);
-				expedicaoVPE.set(df.format(c.getTime()), pExVPE == null ? 0f : pExVPE);
-				entrega.set(df.format(c.getTime()), pEn == null ? 0f : pEn);
-				ponteRolante.set(df.format(c.getTime()), pPR == null ? 0f : pPR);
-			}
-		}
-		model.addSeries(expedicao);
-		model.addSeries(expedicaoVPE);
-		model.addSeries(entrega);
-		model.addSeries(ponteRolante);
-
-		model.setTitle("Peso Mensal");
-		model.setLegendPosition("s");
-		model.setLegendPlacement(LegendPlacement.OUTSIDEGRID);
-		model.setDatatipFormat("%s - %s");
-		StringBuilder cores = new StringBuilder();
-		cores.append(setorExpedicao.getCor());
-		cores.append(',');
-		cores.append(setorExpedicaoVPE.getCor());
-		cores.append(',');
-		cores.append(setorEntrega.getCor());
-		cores.append(',');
-		cores.append(setorPonteRolante.getCor());
-		model.setSeriesColors(cores.toString());
-		model.setLegendCols(model.getSeries().size());
-		model.setExtender("ext");
-		return model;
+	public BarChartModel getModelPesoMensal() {
+		desenhaPesoMensal();
+		return modelPesoMensal;
 	}
 
-	public BarChartModel getAreaMensal() {
-		BarChartModel model = new BarChartModel();
-
-		Axis yAxis = model.getAxis(AxisType.Y);
-		yAxis.setLabel("Área (m²)");
-		yAxis.setMin(0);
-
-		ChartSeries mesaPequena = new ChartSeries();
-		ChartSeries mesaGrande = new ChartSeries();
-		mesaPequena.setLabel(STR_MESA_PEQUENA);
-		mesaGrande.setLabel(STR_MESA_GRANDE);
-
-		for (int i = 30; i >= 0; i--) {
-			Calendar c = Calendar.getInstance();
-			c.add(Calendar.DATE, i * -1);
-			Double aMP = areaCortadaDao.consultarAreaTotal(setorMesaPequena, c.getTime());
-			Double aMG = areaCortadaDao.consultarAreaTotal(setorMesaGrande, c.getTime());
-			if (aMP != null || aMG != null) {
-				mesaPequena.set(df.format(c.getTime()), aMP == null ? 0f : aMP);
-				mesaGrande.set(df.format(c.getTime()), aMG == null ? 0f : aMG);
-			}
-		}
-
-		model.addSeries(mesaPequena);
-		model.addSeries(mesaGrande);
-
-		model.setTitle("Área Cortada Mensal");
-		model.setLegendPosition("s");
-		model.setLegendPlacement(LegendPlacement.OUTSIDEGRID);
-		model.setDatatipFormat("%s - %s");
-		StringBuilder cores = new StringBuilder();
-		cores.append(setorMesaPequena.getCor());
-		cores.append(',');
-		cores.append(setorMesaGrande.getCor());
-		model.setSeriesColors(cores.toString());
-		model.setLegendCols(model.getSeries().size());
-		model.setExtender("ext");
-		return model;
+	public BarChartModel getModelAreaMensal() {
+		desenhaAreaCortadaMensal();
+		return modelAreaCortadaMensal;
 	}
 
 	public Setor getSetorExpedicao() {
 		return setorExpedicao;
 	}
-	
+
 	public Setor getSetorExpedicaoVPE() {
 		return setorExpedicaoVPE;
 	}
@@ -248,5 +169,98 @@ public class VisaoTV2Controller implements Serializable {
 
 	public Setor getSetorPonteRolante() {
 		return setorPonteRolante;
+	}
+
+	private BarChartModel modelPesoMensal;
+	private BarChartModel modelAreaCortadaMensal;
+
+	private void iniciaPesoMensal() {
+		modelPesoMensal = new BarChartModel();
+		modelPesoMensal.setTitle("Peso Mensal");
+		modelPesoMensal.setLegendPosition("s");
+		modelPesoMensal.setLegendPlacement(LegendPlacement.OUTSIDEGRID);
+		modelPesoMensal.setLegendCols(4);
+		modelPesoMensal.setDatatipFormat("%s - %s");		
+		modelPesoMensal.setExtender("ext");
+		Axis yAxis = modelPesoMensal.getAxis(AxisType.Y);
+		yAxis.setLabel("Peso (kg)");
+		yAxis.setMin(0);
+		StringBuilder cores = new StringBuilder();
+		cores.append(setorExpedicao.getCor());
+		cores.append(',');
+		cores.append(setorExpedicaoVPE.getCor());
+		cores.append(',');
+		cores.append(setorEntrega.getCor());
+		cores.append(',');
+		cores.append(setorPonteRolante.getCor());
+		modelPesoMensal.setSeriesColors(cores.toString());
+	}
+
+	private void iniciaAreaCortadaMensal() {
+		modelAreaCortadaMensal = new BarChartModel();
+		modelAreaCortadaMensal.setTitle("Área Cortada Mensal");
+		modelAreaCortadaMensal.setLegendPosition("s");
+		modelAreaCortadaMensal.setLegendPlacement(LegendPlacement.OUTSIDEGRID);
+		modelAreaCortadaMensal.setLegendCols(2);
+		modelAreaCortadaMensal.setDatatipFormat("%s - %s");
+		modelAreaCortadaMensal.setExtender("ext");
+		Axis yAxis = modelAreaCortadaMensal.getAxis(AxisType.Y);
+		yAxis.setLabel("Área (m²)");
+		yAxis.setMin(0);
+		StringBuilder cores = new StringBuilder();
+		cores.append(setorMesaPequena.getCor());
+		cores.append(',');
+		cores.append(setorMesaGrande.getCor());
+		modelAreaCortadaMensal.setSeriesColors(cores.toString());
+	}
+
+	private void desenhaPesoMensal() {
+		ChartSeries expedicao = new ChartSeries();
+		ChartSeries expedicaoVPE = new ChartSeries();
+		ChartSeries entrega = new ChartSeries();
+		ChartSeries ponteRolante = new ChartSeries();
+		expedicao.setLabel(STR_EXPEDICAO);
+		expedicaoVPE.setLabel(STR_EXPEDICAO_VPE);
+		entrega.setLabel(STR_ENTREGA);
+		ponteRolante.setLabel(STR_PONTE_ROLANTE);
+		for (int i = 30; i >= 0; i--) {
+			Calendar c = Calendar.getInstance();
+			c.add(Calendar.DATE, i * -1);
+			Double pEx = pesoDao.consultarPesoTotal(setorExpedicao, c.getTime());
+			Double pExVPE = pesoDao.consultarPesoTotal(setorExpedicaoVPE, c.getTime());
+			Double pEn = pesoDao.consultarPesoTotal(setorEntrega, c.getTime());
+			Double pPR = pesoDao.consultarPesoTotal(setorPonteRolante, c.getTime());
+			if (pEx != null || pExVPE != null || pEn != null || pPR != null) {
+				expedicao.set(df.format(c.getTime()), pEx == null ? 0f : pEx);
+				expedicaoVPE.set(df.format(c.getTime()), pExVPE == null ? 0f : pExVPE);
+				entrega.set(df.format(c.getTime()), pEn == null ? 0f : pEn);
+				ponteRolante.set(df.format(c.getTime()), pPR == null ? 0f : pPR);
+			}
+		}
+		modelPesoMensal.clear();
+		modelPesoMensal.addSeries(expedicao);
+		modelPesoMensal.addSeries(expedicaoVPE);
+		modelPesoMensal.addSeries(entrega);
+		modelPesoMensal.addSeries(ponteRolante);
+	}
+
+	private void desenhaAreaCortadaMensal() {
+		ChartSeries mesaPequena = new ChartSeries();
+		ChartSeries mesaGrande = new ChartSeries();
+		mesaPequena.setLabel(STR_MESA_PEQUENA);
+		mesaGrande.setLabel(STR_MESA_GRANDE);
+		for (int i = 30; i >= 0; i--) {
+			Calendar c = Calendar.getInstance();
+			c.add(Calendar.DATE, i * -1);
+			Double aMP = areaCortadaDao.consultarAreaTotal(setorMesaPequena, c.getTime());
+			Double aMG = areaCortadaDao.consultarAreaTotal(setorMesaGrande, c.getTime());
+			if (aMP != null || aMG != null) {
+				mesaPequena.set(df.format(c.getTime()), aMP == null ? 0f : aMP);
+				mesaGrande.set(df.format(c.getTime()), aMG == null ? 0f : aMG);
+			}
+		}
+		modelAreaCortadaMensal.clear();
+		modelAreaCortadaMensal.addSeries(mesaPequena);
+		modelAreaCortadaMensal.addSeries(mesaGrande);
 	}
 }

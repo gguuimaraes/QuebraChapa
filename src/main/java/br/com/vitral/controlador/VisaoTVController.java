@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Collection;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -32,74 +33,97 @@ public class VisaoTVController implements Serializable {
 	@Inject
 	private AreaFaturadaDao areaFaturadaDao;
 
-	public PieChartModel getQuebraPorSetor() {
-		PieChartModel model = new PieChartModel();
-		model.setTitle("% Quebra por Setor");
-		model.setLegendPosition("e");
-		model.setShowDataLabels(true);
-		model.setDatatipFormat("%s - %#.4f");
+	private PieChartModel modelQuebraSetor;
+
+	private LineChartModel modelAreaQuebraMensal;
+
+	private LineChartModel modelTaxaQuebraMensal;
+
+	@PostConstruct
+	public void init() {
+		iniciaQuebraSetor();
+		iniciaAreaQuebraMensal();
+		iniciaTaxaQuebraMensal();
+		desenhaQuebraSetor();
+		desenhaAreaQuebraMensal();
+		desenhaTaxaQuebraMensal();
+	}
+
+	private void iniciaQuebraSetor() {
+		modelQuebraSetor = new PieChartModel();
+		modelQuebraSetor.setTitle("% Quebra por Setor");
+		modelQuebraSetor.setLegendPosition("e");
+		modelQuebraSetor.setShowDataLabels(true);
+		modelQuebraSetor.setDatatipFormat("%s - %#.4f");
+	}
+
+	private void iniciaAreaQuebraMensal() {
+		modelAreaQuebraMensal = new LineChartModel();
+		modelAreaQuebraMensal.setTitle("Metragem de Quebra Mensal");
+		modelAreaQuebraMensal.setShowPointLabels(true);
+		modelAreaQuebraMensal.setSeriesColors("ff8000");
+		modelAreaQuebraMensal.setExtender("ext");
+
+		DateAxis x = new DateAxis();
+		x.setTickFormat("%m/%Y");
+		x.setTickAngle(-15);
+		x.setTickInterval("2592000000");
+		modelAreaQuebraMensal.getAxes().put(AxisType.X, x);
+		Axis y = modelAreaQuebraMensal.getAxis(AxisType.Y);
+		y.setTickFormat("%.2f");
+		y.setMin(0);
+		y.setLabel("Quebra (m²)");
+	}
+
+	private void iniciaTaxaQuebraMensal() {
+		modelTaxaQuebraMensal = new LineChartModel();
+		modelTaxaQuebraMensal.setTitle("Porcentual de Quebra Mensal");
+		modelTaxaQuebraMensal.setShowPointLabels(true);
+		modelTaxaQuebraMensal.setExtender("ext");
+
+		DateAxis x = new DateAxis();
+		x.setTickFormat("%m/%Y");
+		x.setTickAngle(-15);
+		x.setTickInterval("2592000000");
+		modelTaxaQuebraMensal.getAxes().put(AxisType.X, x);
+		Axis y = modelTaxaQuebraMensal.getAxis(AxisType.Y);
+		y.setTickFormat("%.2f%");
+		y.setMin(0);
+		y.setLabel("Porcentual");
+	}
+
+	private void desenhaQuebraSetor() {
+		modelQuebraSetor.clear();
 		StringBuilder cores = new StringBuilder();
 		Collection<Object[]> lista = quebraDao.quebraPorSetor(Uteis.getDataInicio(), Uteis.getDataFim());
 		for (Object[] l : lista) {
 			if (cores.toString().length() != 0)
 				cores.append(',');
-			model.set(String.format("%s: %.4f", ((SetorModel) l[0]).getNome(), l[1]), (Double) l[1]);
+			modelQuebraSetor.set(String.format("%s: %.4f", ((SetorModel) l[0]).getNome(), l[1]), (Double) l[1]);
 			cores.append(((SetorModel) l[0]).getCor());
 		}
-
-		model.setSeriesColors(cores.toString());
-
-		return model;
+		modelQuebraSetor.setSeriesColors(cores.toString());
 	}
 
-	public LineChartModel getQuebraAnual() {
-		LineChartModel model = new LineChartModel();
-		model.setTitle("Metragem de Quebra Mensal");
-		model.setShowPointLabels(true);
-		DateAxis eixoX = new DateAxis();
-		eixoX.setTickFormat("%m/%Y");
-		eixoX.setTickAngle(-15);
-		eixoX.setTickInterval("2592000000");
-		model.getAxes().put(AxisType.X, eixoX);
-		Axis eixoY = model.getAxis(AxisType.Y);
-		eixoY.setTickFormat("%.4f");
-		eixoY.setMin(0);
-		eixoY.setLabel("Quebra (m²)");
-
-		LineChartSeries quebra = new LineChartSeries();
+	private void desenhaAreaQuebraMensal() {
+		modelAreaQuebraMensal.clear();
+		LineChartSeries series = new LineChartSeries();
 		for (int i = 0; i < 12; i++) {
 			Calendar c = Calendar.getInstance();
 			c.add(Calendar.MONTH, i * -1);
 			Double areaQuebra = quebraDao.areaPorPeriodo(Uteis.getDataInicio(c.getTime()),
 					Uteis.getDataFim(c.getTime()));
-			if (areaQuebra != null) {
-				c.set(Calendar.DATE, 1);
-				quebra.set(c.getTimeInMillis(), areaQuebra);
-			} else
+			c.set(Calendar.DATE, 1);
+			if (areaQuebra == null && i != 0)
 				break;
+			series.set(c.getTimeInMillis(), areaQuebra != null ? areaQuebra : 0);
 		}
-		model.addSeries(quebra);
-		model.setSeriesColors("ff8000");
-
-		model.setExtender("ext");
-		return model;
+		modelAreaQuebraMensal.addSeries(series);
 	}
 
-	public LineChartModel getTaxaQuebraAnual() {
-		LineChartModel model = new LineChartModel();
-		model.setTitle("Porcentual de Quebra Mensal");
-		model.setShowPointLabels(true);
-		DateAxis eixoX = new DateAxis();
-		eixoX.setTickFormat("%m/%Y");
-		eixoX.setTickAngle(-15);
-		eixoX.setTickInterval("2592000000");
-		model.getAxes().put(AxisType.X, eixoX);
-		Axis eixoY = model.getAxis(AxisType.Y);
-		eixoY.setTickFormat("%.2f%");
-		eixoY.setMin(0);
-		eixoY.setLabel("Porcentual");
-
-		LineChartSeries taxa = new LineChartSeries();
+	private void desenhaTaxaQuebraMensal() {
+		modelTaxaQuebraMensal.clear();
+		LineChartSeries series = new LineChartSeries();
 		for (int i = 0; i < 12; i++) {
 			Calendar c = Calendar.getInstance();
 			c.add(Calendar.MONTH, i * -1);
@@ -107,16 +131,28 @@ public class VisaoTVController implements Serializable {
 					Uteis.getDataFim(c.getTime()));
 			Float areaFaturada = areaFaturadaDao.maiorAreaPorPeriodo(Uteis.getDataInicio(c.getTime()),
 					Uteis.getDataFim(c.getTime()));
-			if (areaQuebra != null && areaFaturada != null) {
-				c.set(Calendar.DATE, 1);
-				taxa.set(c.getTimeInMillis(), areaQuebra / areaFaturada * 100);
-			} else
+			c.set(Calendar.DATE, 1);
+			if (areaQuebra == null && areaFaturada == null && i != 0)
 				break;
+			series.set(c.getTimeInMillis(),
+					areaQuebra != null && areaFaturada != null ? areaQuebra / areaFaturada * 100 : 0);
 		}
-		model.addSeries(taxa);
+		modelTaxaQuebraMensal.addSeries(series);
+	}
 
-		model.setExtender("ext");
-		return model;
+	public PieChartModel getModelQuebraSetor() {
+		desenhaQuebraSetor();
+		return modelQuebraSetor;
+	}
+
+	public LineChartModel getModelAreaQuebraMensal() {
+		desenhaAreaQuebraMensal();
+		return modelAreaQuebraMensal;
+	}
+
+	public LineChartModel getModelTaxaQuebraMensal() {
+		desenhaTaxaQuebraMensal();
+		return modelTaxaQuebraMensal;
 	}
 
 	public Float getAreaFaturada() {
