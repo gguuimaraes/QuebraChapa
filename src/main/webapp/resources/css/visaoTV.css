@@ -11,3 +11,17 @@
 	text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px
 		0 #000;
 }
+
+.main-container {
+	display: table;
+	height: 100%;
+	width: 100%;
+}
+
+.child1, .child2 {
+	display: table-row;
+}
+
+.child2 {
+	height: 100%;
+}

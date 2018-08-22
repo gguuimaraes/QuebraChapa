@@ -5,47 +5,43 @@
 <h:head>
 	<h:outputStylesheet library="css" name="visaoTV.css" />
 </h:head>
-<h:body>
+<h:body style="height: calc(100vh - 10px); margin: 0">
 	<script>
 		function ext() {
 			this.cfg.axes.xaxis.tickOptions.textColor = '#000';
 			this.cfg.axes.yaxis.tickOptions.textColor = '#000';
 		}
 	</script>
-	<h:panelGrid id="painel" columns="2" style="width: 100%">
-		<p:chart type="pie" model="#{visaoTVController.modelQuebraSetor}" style="margin-left: 5vw; width: 40vw; height: 44vh" />
+	<div class="main-container">
+		<div class="child1">
+			<h:panelGrid id="painel" columns="2" style="width: 100%">
+				<p:chart type="pie" model="#{visaoTVController.modelQuebraSetor}"
+					style="margin-left: 5vw; width: 40vw; height: 44vh" />
 
-		<h:panelGrid style="text-align: right; margin: auto; font-family: Arial; font-size: 40px " columns="2">
-			<h:outputLabel value="Quebra: " />
-			<h:outputLabel value="#{visaoTVController.areaQuebra != null ? visaoTVController.areaQuebra : 0}" style="float: left">
-				<f:convertNumber pattern="#,###.## m²" />
-			</h:outputLabel>
-			<h:outputLabel value="Faturada: " />
-			<h:outputLabel value="#{visaoTVController.areaFaturada != null ? visaoTVController.areaFaturada : 0}"
-				style="float: left">
-				<f:convertNumber pattern="#,###.## m²" />
-			</h:outputLabel>
-			<h:outputLabel value="Quebra: " />
-			<h:outputLabel value="#{visaoTVController.areaQuebra / visaoTVController.areaFaturada * 100}" style="float: left">
-				<f:convertNumber pattern="###,##%" />
-			</h:outputLabel>
-		</h:panelGrid>
-	</h:panelGrid>
-
-	<h:panelGrid columns="2">
-		<p:chart id="areaQuebraMensal" type="line" model="#{visaoTVController.modelAreaQuebraMensal}" style="width: 49vw" />
-		<p:chart id="taxaQuebraMensal" type="line" model="#{visaoTVController.modelTaxaQuebraMensal}" style="width: 49vw" />
-	</h:panelGrid>
-
-	<script>
-		var painel = document.getElementById('painel');
-		var y = 20;
-		y += painel.getBoundingClientRect().y;
-		y += painel.offsetHeight;
-		document.getElementById('areaQuebraMensal').style.height = "calc(100vh - "
-				+ y + "px)";
-		document.getElementById('taxaQuebraMensal').style.height = "calc(100vh - "
-				+ y + "px)";
-	</script>
+				<h:panelGrid style="text-align: right; margin: auto; font-family: Arial; font-size: 40px " columns="2">
+					<h:outputLabel value="Quebra: " />
+					<h:outputLabel value="#{visaoTVController.areaQuebra != null ? visaoTVController.areaQuebra : 0}"
+						style="float: left">
+						<f:convertNumber pattern="#,###.## m²" />
+					</h:outputLabel>
+					<h:outputLabel value="Faturada: " />
+					<h:outputLabel value="#{visaoTVController.areaFaturada != null ? visaoTVController.areaFaturada : 0}"
+						style="float: left">
+						<f:convertNumber pattern="#,###.## m²" />
+					</h:outputLabel>
+					<h:outputLabel value="Quebra: " />
+					<h:outputLabel value="#{visaoTVController.areaQuebra / visaoTVController.areaFaturada * 100}" style="float: left">
+						<f:convertNumber pattern="###,##%" />
+					</h:outputLabel>
+				</h:panelGrid>
+			</h:panelGrid>
+		</div>
+		<div class="child2">
+			<h:panelGrid columns="2" style="height: 100%">
+				<p:chart id="areaQuebraMensal" type="line" model="#{visaoTVController.modelAreaQuebraMensal}" style="width: 49vw; height: 100%" />
+				<p:chart id="taxaQuebraMensal" type="line" model="#{visaoTVController.modelTaxaQuebraMensal}" style="width: 49vw; height: 100%" />
+			</h:panelGrid>
+		</div>
+	</div>
 </h:body>
 </html>

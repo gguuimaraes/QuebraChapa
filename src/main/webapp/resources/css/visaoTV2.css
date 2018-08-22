@@ -5,6 +5,10 @@
 	text-align: center;
 }
 
+.painel2 {
+	height: 100%;
+}
+
 .painel td {
 	vertical-align: top;
 	width: 50%;
@@ -41,4 +45,18 @@ div.jqplot-table-legend-swatch-outline {
 
 .jqplot-target {
 	color: black;
+}
+
+.main-container {
+	display: table;
+	height: 100%;
+	width: 100%;
+}
+
+.child1, .child2 {
+	display: table-row;
+}
+
+.child2 {
+	height: 100%;
 }
