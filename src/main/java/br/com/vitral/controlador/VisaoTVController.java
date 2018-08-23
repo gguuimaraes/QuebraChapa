@@ -1,8 +1,10 @@
 package br.com.vitral.controlador;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
@@ -16,8 +18,12 @@ import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.LineChartSeries;
 import org.primefaces.model.chart.PieChartModel;
 
+import br.com.vitral.modelo.AgendaPortaoModel;
+import br.com.vitral.modelo.DiaAgendaPortaoModel;
 import br.com.vitral.modelo.SetorModel;
+import br.com.vitral.persistencia.AgendaPortaoDao;
 import br.com.vitral.persistencia.AreaFaturadaDao;
+import br.com.vitral.persistencia.FuncionarioDao;
 import br.com.vitral.persistencia.QuebraDao;
 import br.com.vitral.util.Uteis;
 
@@ -48,7 +54,7 @@ public class VisaoTVController implements Serializable {
 		desenhaAreaQuebraMensal();
 		desenhaTaxaQuebraMensal();
 	}
-
+	
 	private void iniciaQuebraSetor() {
 		modelQuebraSetor = new PieChartModel();
 		modelQuebraSetor.setTitle("% Quebra por Setor");

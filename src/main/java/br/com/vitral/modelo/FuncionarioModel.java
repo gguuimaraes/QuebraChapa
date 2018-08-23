@@ -44,4 +44,9 @@ public class FuncionarioModel implements Serializable {
 		FuncionarioModel other = (FuncionarioModel) obj;
 		return id == other.id;
 	}
+
+	@Override
+	public String toString() {
+		return "FuncionarioModel [id=" + id + ", nome=" + nome + "]";
+	}
 }

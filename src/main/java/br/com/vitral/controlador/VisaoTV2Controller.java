@@ -54,7 +54,7 @@ public class VisaoTV2Controller implements Serializable {
 	private static final String STR_MESA_GRANDE = "MESA GRANDE";
 	private static final String STR_MESA_PEQUENA = "MESA PEQUENA";
 
-	private static SimpleDateFormat df = new SimpleDateFormat("dd/MM");
+	private SimpleDateFormat df = new SimpleDateFormat("dd/MM");
 
 	@PostConstruct
 	public void init() {
