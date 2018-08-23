@@ -77,7 +77,7 @@ public class VisaoTVController implements Serializable {
 
 	private void iniciaTaxaQuebraMensal() {
 		modelTaxaQuebraMensal = new LineChartModel();
-		modelTaxaQuebraMensal.setTitle("Porcentual de Quebra Mensal");
+		modelTaxaQuebraMensal.setTitle("Percentual de Quebra Mensal");
 		modelTaxaQuebraMensal.setShowPointLabels(true);
 		modelTaxaQuebraMensal.setExtender("ext");
 
@@ -89,7 +89,7 @@ public class VisaoTVController implements Serializable {
 		Axis y = modelTaxaQuebraMensal.getAxis(AxisType.Y);
 		y.setTickFormat("%.2f%");
 		y.setMin(0);
-		y.setLabel("Porcentual");
+		y.setLabel("Percentual");
 	}
 
 	private void desenhaQuebraSetor() {
@@ -99,7 +99,7 @@ public class VisaoTVController implements Serializable {
 		for (Object[] l : lista) {
 			if (cores.toString().length() != 0)
 				cores.append(',');
-			modelQuebraSetor.set(String.format("%s: %.4f", ((SetorModel) l[0]).getNome(), l[1]), (Double) l[1]);
+			modelQuebraSetor.set(String.format("%s: %.4f m²", ((SetorModel) l[0]).getNome(), l[1]), (Double) l[1]);
 			cores.append(((SetorModel) l[0]).getCor());
 		}
 		modelQuebraSetor.setSeriesColors(cores.toString());

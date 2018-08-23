@@ -2,6 +2,22 @@
 	width: 50%;
 }
 
+#painel td td {
+	width: auto;
+}
+
+#painel .jqplot-grid-canvas {
+	display: none;
+}
+
+#painel .jqplot-series-canvas {
+	background: white;
+}
+
+#painel .jqplot-title {
+	margin-top: 20px;
+}
+
 .jqplot-target {
 	color: black;
 }
@@ -24,4 +40,12 @@
 
 .child2 {
 	height: 100%;
+}
+
+.jqplot-point-label, .jqplot-table-legend-label {
+	font-size: initial;
+}
+
+table.jqplot-table-legend, table.jqplot-cursor-legend {
+	border: none;
 }
