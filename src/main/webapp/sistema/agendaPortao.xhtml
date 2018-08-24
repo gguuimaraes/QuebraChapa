@@ -10,10 +10,35 @@
 <ui:composition template="/template/layoutBase.xhtml">
 
 	<ui:define name="content">
-		<p:commandButton icon="fa fa-fw fa-plus"
-			actionListener="#{agendaPortaoController.incluirAgendaPortao}" value="Cadastrar"
-			style="margin-bottom: 10px" />
+		<h:form>
+			<h:panelGrid columns="4">
+				<p:outputLabel value="Ano" for="txtAno" />
+				<p:selectOneMenu id="txtAno" value="#{agendaPortaoController.ano}">
+					<f:selectItems value="#{agendaPortaoController.anos}" />
+					<p:ajax event="change" update="form" />
+				</p:selectOneMenu>
 
+				<p:outputLabel value="Mês" for="txtMes" />
+				<p:selectOneMenu id="txtMes" value="#{agendaPortaoController.mes}">
+					<f:selectItem itemValue="0" itemLabel="Janeiro" />
+					<f:selectItem itemValue="1" itemLabel="Fevereiro" />
+					<f:selectItem itemValue="2" itemLabel="Março" />
+					<f:selectItem itemValue="3" itemLabel="Abril" />
+					<f:selectItem itemValue="4" itemLabel="Maio" />
+					<f:selectItem itemValue="5" itemLabel="Junho" />
+					<f:selectItem itemValue="6" itemLabel="Julho" />
+					<f:selectItem itemValue="7" itemLabel="Agosto" />
+					<f:selectItem itemValue="8" itemLabel="Setembro" />
+					<f:selectItem itemValue="9" itemLabel="Outubro" />
+					<f:selectItem itemValue="10" itemLabel="Novembro" />
+					<f:selectItem itemValue="11" itemLabel="Dezembro" />
+					<p:ajax event="change" update="form" />
+				</p:selectOneMenu>
+
+			</h:panelGrid>
+
+			<p:outputLabel id="form" value="Nenhuma agenda para #{agendaPortaoController.mes + 1}/#{agendaPortaoController.ano}." rendered="#{agendaPortaoController.agenda eq null}" />
+		</h:form>
 	</ui:define>
 
 </ui:composition>

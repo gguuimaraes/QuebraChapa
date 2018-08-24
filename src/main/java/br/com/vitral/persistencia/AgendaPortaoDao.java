@@ -4,12 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import br.com.vitral.entidade.AgendaPortao;
+import br.com.vitral.entidade.AgendaPortaoId;
 import br.com.vitral.entidade.DiaAgendaPortao;
 import br.com.vitral.entidade.Funcionario;
 import br.com.vitral.modelo.AgendaPortaoModel;
@@ -25,21 +27,20 @@ public class AgendaPortaoDao implements Serializable {
 
 	@Inject
 	AgendaPortao agendaPortao;
-	
+
 	@Inject
 	FuncionarioDao fuDao;
 
 	public void salvar(AgendaPortaoModel agendaPortaoModel) {
 		em = Uteis.getEntityManager();
-		if (agendaPortaoModel.getId() == null) {
+		if (consultar(agendaPortaoModel) == null) {
 			agendaPortao = new AgendaPortao();
-			agendaPortao.setMes(agendaPortaoModel.getMes());
-			agendaPortao.setAno(agendaPortaoModel.getAno());
+			agendaPortao.setId(new AgendaPortaoId(agendaPortaoModel.getMes(), agendaPortaoModel.getAno()));
 			List<DiaAgendaPortao> dias = new ArrayList<>();
 			for (DiaAgendaPortaoModel dModel : agendaPortaoModel.getDias()) {
 				DiaAgendaPortao d = new DiaAgendaPortao();
 				d.setData(dModel.getData());
-				Funcionario a = fuDao.consultar(dModel.getAbertura().getId());		
+				Funcionario a = fuDao.consultar(dModel.getAbertura().getId());
 				d.setAbertura(a);
 				Funcionario f = fuDao.consultar(dModel.getFechamento().getId());
 				d.setFechamento(f);
@@ -49,14 +50,13 @@ public class AgendaPortaoDao implements Serializable {
 			agendaPortao.setDias(dias);
 			em.persist(agendaPortao);
 		} else {
-			agendaPortao = em.find(AgendaPortao.class, agendaPortaoModel.getId());
-			agendaPortao.setMes(agendaPortaoModel.getMes());
-			agendaPortao.setAno(agendaPortaoModel.getAno());
+			agendaPortao = em.find(AgendaPortao.class,
+					new AgendaPortaoId(agendaPortaoModel.getMes(), agendaPortaoModel.getAno()));
 			List<DiaAgendaPortao> dias = new ArrayList<>();
 			for (DiaAgendaPortaoModel dModel : agendaPortaoModel.getDias()) {
 				DiaAgendaPortao d = new DiaAgendaPortao();
 				d.setData(dModel.getData());
-				Funcionario a = fuDao.consultar(dModel.getAbertura().getId());		
+				Funcionario a = fuDao.consultar(dModel.getAbertura().getId());
 				d.setAbertura(a);
 				Funcionario f = fuDao.consultar(dModel.getFechamento().getId());
 				d.setFechamento(f);
@@ -79,9 +79,8 @@ public class AgendaPortaoDao implements Serializable {
 		if (lista != null) {
 			for (AgendaPortao a : lista) {
 				agendaPortaoModel = new AgendaPortaoModel();
-				agendaPortaoModel.setId(a.getId());
-				agendaPortaoModel.setMes(a.getMes());
-				agendaPortaoModel.setAno(a.getAno());
+				agendaPortaoModel.setMes(a.getId().getMes());
+				agendaPortaoModel.setAno(a.getId().getAno());
 				List<DiaAgendaPortaoModel> diasModel = new ArrayList<>();
 				DiaAgendaPortaoModel dModel = null;
 				for (DiaAgendaPortao d : a.getDias()) {
@@ -100,18 +99,28 @@ public class AgendaPortaoDao implements Serializable {
 					diasModel.add(dModel);
 				}
 				agendaPortaoModel.setDias(diasModel);
+				agendasPortaoModel.add(agendaPortaoModel);
 			}
 		}
 		return agendasPortaoModel;
 	}
 
-	public void remover(int id) {
+	public void remover(int mes, int ano) {
 		em = Uteis.getEntityManager();
-		em.remove(em.find(AgendaPortao.class, id));
+		em.remove(em.find(AgendaPortao.class, new AgendaPortaoId(mes, ano)));
 	}
 
-	public AgendaPortao consultar(AgendaPortaoModel agendaPortaoModel) {
-		return Uteis.getEntityManager().find(AgendaPortao.class, agendaPortaoModel.getId());
+	private AgendaPortao consultar(AgendaPortaoModel agendaPortaoModel) {
+		return consultar(agendaPortaoModel.getMes(), agendaPortaoModel.getAno());
+	}
+
+	public AgendaPortao consultar(int mes, int ano) {
+		return Uteis.getEntityManager().find(AgendaPortao.class, new AgendaPortaoId(mes, ano));
+	}
+
+	public List<Integer> listarAnosDistintos() {
+		return (List<Integer>) Uteis.getEntityManager().createNamedQuery("AgendaPortao.findAnosDistintos")
+				.getResultList();
 	}
 
 }

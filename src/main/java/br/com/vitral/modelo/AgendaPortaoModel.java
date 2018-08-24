@@ -8,32 +8,23 @@ public class AgendaPortaoModel implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Integer id;
-	private int mes;
-	private int ano;
+	private Integer mes;
+	private Integer ano;
 	private List<DiaAgendaPortaoModel> dias = new ArrayList<>();
 
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public int getMes() {
+	public Integer getMes() {
 		return mes;
 	}
 
-	public void setMes(int mes) {
+	public void setMes(Integer mes) {
 		this.mes = mes;
 	}
 
-	public int getAno() {
+	public Integer getAno() {
 		return ano;
 	}
 
-	public void setAno(int ano) {
+	public void setAno(Integer ano) {
 		this.ano = ano;
 	}
 
@@ -46,17 +37,11 @@ public class AgendaPortaoModel implements Serializable {
 	}
 
 	@Override
-	public String toString() {
-		return "AgendaPortaoModel [id=" + id + ", mes=" + mes + ", ano=" + ano + ", dias=" + dias + "]";
-	}
-
-	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ano;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + mes;
+		result = prime * result + ((ano == null) ? 0 : ano.hashCode());
+		result = prime * result + ((mes == null) ? 0 : mes.hashCode());
 		return result;
 	}
 
@@ -69,13 +54,19 @@ public class AgendaPortaoModel implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		AgendaPortaoModel other = (AgendaPortaoModel) obj;
-		if (ano != other.ano)
-			return false;
-		if (id == null) {
-			if (other.id != null)
+		if (ano == null) {
+			if (other.ano != null)
 				return false;
-		} else if (!id.equals(other.id))
+		} else if (!ano.equals(other.ano))
 			return false;
-		return mes == other.mes;
+		if (mes == null) {
+			if (other.mes != null)
+				return false;
+		} else if (!mes.equals(other.mes))
+			return false;
+		return true;
 	}
+
+	
+
 }

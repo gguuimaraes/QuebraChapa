@@ -1,12 +1,21 @@
 package br.com.vitral.controlador;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Set;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
+import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.jboss.weld.util.collections.ArraySet;
+
+import br.com.vitral.entidade.AgendaPortao;
+import br.com.vitral.entidade.DiaAgendaPortao;
 import br.com.vitral.modelo.AgendaPortaoModel;
 import br.com.vitral.modelo.DiaAgendaPortaoModel;
 import br.com.vitral.modelo.FuncionarioModel;
@@ -19,31 +28,83 @@ public class AgendaPortaoController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	AgendaPortaoModel agenda = null;
+
 	@Inject
-	AgendaPortaoDao dao;
+	AgendaPortaoDao agendaDao;
 
 	@Inject
 	FuncionarioDao fDao;
 
-	public void incluirAgendaPortao() {
-		AgendaPortaoModel agenda = new AgendaPortaoModel();
-		agenda.setAno(2018);
-		agenda.setMes(Calendar.AUGUST);
-		DiaAgendaPortaoModel dia = null;
-		Calendar c = Calendar.getInstance();
-		c.set(Calendar.DATE, 1);
-		FuncionarioModel fu1 = fDao.listar().get(0);
-		FuncionarioModel fu2 = fDao.listar().get(1);
-		for (int i = 1; i <= 20; i++) {
-			c.add(Calendar.DATE, i);
-			dia = new DiaAgendaPortaoModel();
-			dia.setData(c.getTime());
-			dia.setAbertura(fu1);
-			dia.setFechamento(fu2);
-			dia.setFeriado(false);
-			agenda.getDias().add(dia);
-		}
-		dao.salvar(agenda);
+	@Produces
+	private Set<Integer> anos;
+
+	int ano;
+	int mes;
+
+	@PostConstruct
+	public void init() {
+		anos = new ArraySet<>();
+		anos.addAll(agendaDao.listarAnosDistintos());
+		ano = Calendar.getInstance().get(Calendar.YEAR);
+		anos.add(ano);
+		anos.add(ano + 1);
+		mes = Calendar.getInstance().get(Calendar.MONTH);
+		selecionarAgenda();
 	}
 
+	private void selecionarAgenda() {
+		AgendaPortao agendaPortao = agendaDao.consultar(mes, ano);
+		if (agendaPortao == null) {
+			agenda = null;
+			return;
+		}
+		agenda = new AgendaPortaoModel();
+		agenda.setMes(agendaPortao.getId().getMes());
+		agenda.setAno(agendaPortao.getId().getAno());
+		List<DiaAgendaPortaoModel> diasModel = new ArrayList<>();
+		DiaAgendaPortaoModel dModel = null;
+		for (DiaAgendaPortao d : agendaPortao.getDias()) {
+			dModel = new DiaAgendaPortaoModel();
+			dModel.setId(d.getId());
+			dModel.setData(d.getData());
+			FuncionarioModel fA = new FuncionarioModel();
+			fA.setId(d.getAbertura().getId());
+			fA.setNome(d.getAbertura().getNome());
+			dModel.setAbertura(fA);
+			FuncionarioModel fF = new FuncionarioModel();
+			fF.setId(d.getFechamento().getId());
+			fF.setNome(d.getFechamento().getNome());
+			dModel.setAbertura(fF);
+			dModel.setFeriado(d.isFeriado());
+			diasModel.add(dModel);
+		}
+		agenda.setDias(diasModel);
+	}
+
+	public int getAno() {
+		return ano;
+	}
+
+	public void setAno(int ano) {
+		this.ano = ano;
+		selecionarAgenda();
+	}
+
+	public int getMes() {
+		return mes;
+	}
+
+	public void setMes(int mes) {
+		this.mes = mes;
+		selecionarAgenda();
+	}
+
+	public Set<Integer> getAnos() {
+		return anos;
+	}
+
+	public AgendaPortaoModel getAgenda() {
+		return agenda;
+	}
 }

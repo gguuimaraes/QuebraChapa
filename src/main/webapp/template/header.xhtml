@@ -14,6 +14,10 @@
 		<p:menuitem value="Peso" icon="fa fa-fw fa-file" url="peso.xhtml" />
 		<p:menuitem value="Usuario" icon="fa fa-fw fa-user" url="usuario.xhtml"
 			rendered="#{loginController.usuarioAutenticado.tipo == loginController.tipos[0]}" />
+		<p:submenu label="Agenda">
+			<p:menuitem value="Portão" url="agendaPortao.xhtml" />
+			<p:menuitem value="Calçada" url="agendaCalcada.xhtml" />
+		</p:submenu>
 		<p:submenu label="Relatório">
 			<p:menuitem value="Quebras" url="relatorioQuebra.xhtml" />
 			<p:menuitem value="Visão TV" url="relatorioVisaoTV.xhtml" />
