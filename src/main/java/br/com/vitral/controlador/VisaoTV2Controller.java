@@ -223,7 +223,7 @@ public class VisaoTV2Controller implements Serializable {
 		expedicaoVPE.setLabel(STR_EXPEDICAO_VPE);
 		entrega.setLabel(STR_ENTREGA);
 		ponteRolante.setLabel(STR_PONTE_ROLANTE);
-		for (int i = 30; i >= 0; i--) {
+		for (int i = 15; i >= 0; i--) {
 			Calendar c = Calendar.getInstance();
 			c.add(Calendar.DATE, i * -1);
 			Double pEx = pesoDao.consultarPesoTotal(setorExpedicao, c.getTime());
@@ -249,7 +249,7 @@ public class VisaoTV2Controller implements Serializable {
 		ChartSeries mesaGrande = new ChartSeries();
 		mesaPequena.setLabel(STR_MESA_PEQUENA);
 		mesaGrande.setLabel(STR_MESA_GRANDE);
-		for (int i = 30; i >= 0; i--) {
+		for (int i = 15; i >= 0; i--) {
 			Calendar c = Calendar.getInstance();
 			c.add(Calendar.DATE, i * -1);
 			Double aMP = areaCortadaDao.consultarAreaTotal(setorMesaPequena, c.getTime());

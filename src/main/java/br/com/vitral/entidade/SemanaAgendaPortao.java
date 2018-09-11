@@ -13,21 +13,25 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-@Table(name = "diaagendaportao")
+@Table(name = "semanaagendaportao")
 @Entity
 
-public class DiaAgendaPortao implements Serializable {
+public class SemanaAgendaPortao implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Integer id;
+	private Long id;
 
-	@Column(name = "data", unique = true)
+	@Column(name = "primeirodia")
 	@Temporal(TemporalType.DATE)
-	private Date data;
+	private Date primeiroDia;
+
+	@Column(name = "ultimodia")
+	@Temporal(TemporalType.DATE)
+	private Date ultimoDia;
 
 	@OneToOne
 	private Funcionario abertura;
@@ -35,23 +39,28 @@ public class DiaAgendaPortao implements Serializable {
 	@OneToOne
 	private Funcionario fechamento;
 
-	@Column(name = "feriado")
-	private boolean feriado;
-
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public Date getData() {
-		return data;
+	public Date getPrimeiroDia() {
+		return primeiroDia;
 	}
 
-	public void setData(Date data) {
-		this.data = data;
+	public void setPrimeiroDia(Date primeiroDia) {
+		this.primeiroDia = primeiroDia;
+	}
+
+	public Date getUltimoDia() {
+		return ultimoDia;
+	}
+
+	public void setUltimoDia(Date ultimoDia) {
+		this.ultimoDia = ultimoDia;
 	}
 
 	public Funcionario getAbertura() {
@@ -70,11 +79,4 @@ public class DiaAgendaPortao implements Serializable {
 		this.fechamento = fechamento;
 	}
 
-	public boolean isFeriado() {
-		return feriado;
-	}
-
-	public void setFeriado(boolean feriado) {
-		this.feriado = feriado;
-	}
 }

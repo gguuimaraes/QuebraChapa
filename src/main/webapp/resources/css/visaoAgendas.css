@@ -1,0 +1,16 @@
+.agenda-portao {
+	text-align: center;
+	margin: 20px;
+	font-size: 20px;
+	margin: auto;
+	font-family: Arial;
+}
+
+.agenda-portao .header {
+	background: black;
+	color: white;
+}
+
+.agenda-portao .header.header-periodo {
+	width: 50%;
+}

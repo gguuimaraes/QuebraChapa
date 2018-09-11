@@ -4,19 +4,17 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import br.com.vitral.entidade.AgendaPortao;
-import br.com.vitral.entidade.AgendaPortaoId;
-import br.com.vitral.entidade.DiaAgendaPortao;
 import br.com.vitral.entidade.Funcionario;
+import br.com.vitral.entidade.SemanaAgendaPortao;
 import br.com.vitral.modelo.AgendaPortaoModel;
-import br.com.vitral.modelo.DiaAgendaPortaoModel;
 import br.com.vitral.modelo.FuncionarioModel;
+import br.com.vitral.modelo.SemanaAgendaPortaoModel;
 import br.com.vitral.util.Uteis;
 
 public class AgendaPortaoDao implements Serializable {
@@ -35,35 +33,37 @@ public class AgendaPortaoDao implements Serializable {
 		em = Uteis.getEntityManager();
 		if (consultar(agendaPortaoModel) == null) {
 			agendaPortao = new AgendaPortao();
-			agendaPortao.setId(new AgendaPortaoId(agendaPortaoModel.getMes(), agendaPortaoModel.getAno()));
-			List<DiaAgendaPortao> dias = new ArrayList<>();
-			for (DiaAgendaPortaoModel dModel : agendaPortaoModel.getDias()) {
-				DiaAgendaPortao d = new DiaAgendaPortao();
-				d.setData(dModel.getData());
-				Funcionario a = fuDao.consultar(dModel.getAbertura().getId());
-				d.setAbertura(a);
-				Funcionario f = fuDao.consultar(dModel.getFechamento().getId());
-				d.setFechamento(f);
-				d.setFeriado(dModel.isFeriado());
-				dias.add(d);
+			agendaPortao.setAno(agendaPortaoModel.getAno());
+			List<SemanaAgendaPortao> semanas = new ArrayList<>();
+			for (SemanaAgendaPortaoModel semanaModel : agendaPortaoModel.getSemanas()) {
+				SemanaAgendaPortao semana = new SemanaAgendaPortao();
+				semana.setPrimeiroDia(semanaModel.getPrimeiroDia());
+				semana.setUltimoDia(semanaModel.getUltimoDia());
+				if (semanaModel.getAbertura() != null) {
+					Funcionario a = fuDao.consultar(semanaModel.getAbertura().getId());
+					semana.setAbertura(a);
+				}
+				if (semanaModel.getFechamento() != null) {
+					Funcionario f = fuDao.consultar(semanaModel.getFechamento().getId());
+					semana.setFechamento(f);
+				}
+				semanas.add(semana);
 			}
-			agendaPortao.setDias(dias);
+			agendaPortao.setSemanas(semanas);
 			em.persist(agendaPortao);
 		} else {
-			agendaPortao = em.find(AgendaPortao.class,
-					new AgendaPortaoId(agendaPortaoModel.getMes(), agendaPortaoModel.getAno()));
-			List<DiaAgendaPortao> dias = new ArrayList<>();
-			for (DiaAgendaPortaoModel dModel : agendaPortaoModel.getDias()) {
-				DiaAgendaPortao d = new DiaAgendaPortao();
-				d.setData(dModel.getData());
-				Funcionario a = fuDao.consultar(dModel.getAbertura().getId());
-				d.setAbertura(a);
-				Funcionario f = fuDao.consultar(dModel.getFechamento().getId());
-				d.setFechamento(f);
-				d.setFeriado(dModel.isFeriado());
-				dias.add(d);
+			agendaPortao = consultar(agendaPortaoModel.getAno());
+			for (int i = 0; i < agendaPortaoModel.getSemanas().size(); i++) {
+				SemanaAgendaPortaoModel semanaModel = agendaPortaoModel.getSemanas().get(i);
+				if (semanaModel.getAbertura() != null) {
+					Funcionario a = fuDao.consultar(semanaModel.getAbertura().getId());
+					agendaPortao.getSemanas().get(i).setAbertura(a);
+				}
+				if (semanaModel.getFechamento() != null) {
+					Funcionario f = fuDao.consultar(semanaModel.getFechamento().getId());
+					agendaPortao.getSemanas().get(i).setFechamento(f);
+				}
 			}
-			agendaPortao.setDias(dias);
 			em.merge(agendaPortao);
 		}
 	}
@@ -77,45 +77,81 @@ public class AgendaPortaoDao implements Serializable {
 		List<AgendaPortaoModel> agendasPortaoModel = new ArrayList<>();
 		AgendaPortaoModel agendaPortaoModel = null;
 		if (lista != null) {
-			for (AgendaPortao a : lista) {
+			for (AgendaPortao agenda : lista) {
 				agendaPortaoModel = new AgendaPortaoModel();
-				agendaPortaoModel.setMes(a.getId().getMes());
-				agendaPortaoModel.setAno(a.getId().getAno());
-				List<DiaAgendaPortaoModel> diasModel = new ArrayList<>();
-				DiaAgendaPortaoModel dModel = null;
-				for (DiaAgendaPortao d : a.getDias()) {
-					dModel = new DiaAgendaPortaoModel();
-					dModel.setId(d.getId());
-					dModel.setData(d.getData());
-					FuncionarioModel fA = new FuncionarioModel();
-					fA.setId(d.getAbertura().getId());
-					fA.setNome(d.getAbertura().getNome());
-					dModel.setAbertura(fA);
-					FuncionarioModel fF = new FuncionarioModel();
-					fF.setId(d.getFechamento().getId());
-					fF.setNome(d.getFechamento().getNome());
-					dModel.setAbertura(fF);
-					dModel.setFeriado(d.isFeriado());
-					diasModel.add(dModel);
+				agendaPortaoModel.setAno(agenda.getAno());
+				List<SemanaAgendaPortaoModel> semanasModel = new ArrayList<>();
+				SemanaAgendaPortaoModel semanaModel = null;
+				for (SemanaAgendaPortao semana : agenda.getSemanas()) {
+					semanaModel = new SemanaAgendaPortaoModel();
+					semanaModel.setId(semana.getId());
+					semanaModel.setPrimeiroDia(semana.getPrimeiroDia());
+					semanaModel.setUltimoDia(semana.getUltimoDia());
+					if (semana.getAbertura() != null) {
+						FuncionarioModel fA = new FuncionarioModel();
+						fA.setId(semana.getAbertura().getId());
+						fA.setNome(semana.getAbertura().getNome());
+						semanaModel.setAbertura(fA);
+					}
+					if (semana.getFechamento() != null) {
+						FuncionarioModel fF = new FuncionarioModel();
+						fF.setId(semana.getFechamento().getId());
+						fF.setNome(semana.getFechamento().getNome());
+						semanaModel.setFechamento(fF);
+					}
+					semanasModel.add(semanaModel);
 				}
-				agendaPortaoModel.setDias(diasModel);
+				agendaPortaoModel.setSemanas(semanasModel);
 				agendasPortaoModel.add(agendaPortaoModel);
 			}
 		}
 		return agendasPortaoModel;
+
 	}
 
-	public void remover(int mes, int ano) {
+	public void remover(int ano) {
 		em = Uteis.getEntityManager();
-		em.remove(em.find(AgendaPortao.class, new AgendaPortaoId(mes, ano)));
+		em.remove(em.find(AgendaPortao.class, ano));
 	}
 
 	private AgendaPortao consultar(AgendaPortaoModel agendaPortaoModel) {
-		return consultar(agendaPortaoModel.getMes(), agendaPortaoModel.getAno());
+		return consultar(agendaPortaoModel.getAno());
 	}
 
-	public AgendaPortao consultar(int mes, int ano) {
-		return Uteis.getEntityManager().find(AgendaPortao.class, new AgendaPortaoId(mes, ano));
+	public AgendaPortao consultar(int ano) {
+		return Uteis.getEntityManager().find(AgendaPortao.class, ano);
+	}
+
+	public AgendaPortaoModel consultarModel(int ano) {
+		AgendaPortao a = consultar(ano);
+		AgendaPortaoModel model = null;
+		if (a != null) {
+			model = new AgendaPortaoModel();
+			model.setAno(a.getAno());
+			List<SemanaAgendaPortaoModel> semanasModel = new ArrayList<>();
+			SemanaAgendaPortaoModel semanaModel = null;
+			for (SemanaAgendaPortao semana : a.getSemanas()) {
+				semanaModel = new SemanaAgendaPortaoModel();
+				semanaModel.setId(semana.getId());
+				semanaModel.setPrimeiroDia(semana.getPrimeiroDia());
+				semanaModel.setUltimoDia(semana.getUltimoDia());
+				if (semana.getAbertura() != null) {
+					FuncionarioModel fA = new FuncionarioModel();
+					fA.setId(semana.getAbertura().getId());
+					fA.setNome(semana.getAbertura().getNome());
+					semanaModel.setAbertura(fA);
+				}
+				if (semana.getFechamento() != null) {
+					FuncionarioModel fF = new FuncionarioModel();
+					fF.setId(semana.getFechamento().getId());
+					fF.setNome(semana.getFechamento().getNome());
+					semanaModel.setFechamento(fF);
+				}
+				semanasModel.add(semanaModel);
+			}
+			model.setSemanas(semanasModel);
+		}
+		return model;
 	}
 
 	public List<Integer> listarAnosDistintos() {

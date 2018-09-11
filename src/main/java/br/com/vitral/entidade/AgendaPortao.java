@@ -4,42 +4,52 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.EmbeddedId;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 @Table(name = "agendaportao")
 @Entity
 
-@NamedQueries({ @NamedQuery(name = "AgendaPortao.findAll", query = "SELECT a FROM AgendaPortao a ORDER BY a.id DESC"),
-		@NamedQuery(name = "AgendaPortao.findAnosDistintos", query = "SELECT DISTINCT(a.id.ano) FROM AgendaPortao a ORDER BY a.id.ano DESC") })
+@NamedQueries({ @NamedQuery(name = "AgendaPortao.findAll", query = "SELECT a FROM AgendaPortao a ORDER BY a.ano DESC"),
+		@NamedQuery(name = "AgendaPortao.findAnosDistintos", query = "SELECT a.ano FROM AgendaPortao a ORDER BY a.ano DESC") })
 
 public class AgendaPortao implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@EmbeddedId
-	private AgendaPortaoId id;
+	@Id
+	@Column(name = "ano")
+	private Integer ano;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<DiaAgendaPortao> dias;
+	@OrderBy("primeirodia ASC")
+	private List<SemanaAgendaPortao> semanas;
 
-	public AgendaPortaoId getId() {
-		return id;
+	public Integer getAno() {
+		return ano;
 	}
 
-	public void setId(AgendaPortaoId id) {
-		this.id = id;
+	public void setAno(Integer ano) {
+		this.ano = ano;
 	}
 
-	public List<DiaAgendaPortao> getDias() {
-		return dias;
+	public List<SemanaAgendaPortao> getSemanas() {
+		return semanas;
 	}
 
-	public void setDias(List<DiaAgendaPortao> dias) {
-		this.dias = dias;
+	public void setSemanas(List<SemanaAgendaPortao> semanas) {
+		this.semanas = semanas;
 	}
+
+	@Override
+	public String toString() {
+		return "AgendaPortao [ano=" + ano + ", semanas=" + semanas + "]";
+	}
+
 }

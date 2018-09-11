@@ -10,34 +10,87 @@
 <ui:composition template="/template/layoutBase.xhtml">
 
 	<ui:define name="content">
-		<h:form>
-			<h:panelGrid columns="4">
+		<h:form id="form">
+			<p:growl id="msgs" showDetail="true" />
+			<h:panelGrid columns="8">
 				<p:outputLabel value="Ano" for="txtAno" />
 				<p:selectOneMenu id="txtAno" value="#{agendaPortaoController.ano}">
 					<f:selectItems value="#{agendaPortaoController.anos}" />
-					<p:ajax event="change" update="form" />
+					<p:ajax event="change" listener="#{agendaPortaoController.selecionarAgenda}" update="form" />
 				</p:selectOneMenu>
 
-				<p:outputLabel value="Mês" for="txtMes" />
-				<p:selectOneMenu id="txtMes" value="#{agendaPortaoController.mes}">
-					<f:selectItem itemValue="0" itemLabel="Janeiro" />
-					<f:selectItem itemValue="1" itemLabel="Fevereiro" />
-					<f:selectItem itemValue="2" itemLabel="Março" />
-					<f:selectItem itemValue="3" itemLabel="Abril" />
-					<f:selectItem itemValue="4" itemLabel="Maio" />
-					<f:selectItem itemValue="5" itemLabel="Junho" />
-					<f:selectItem itemValue="6" itemLabel="Julho" />
-					<f:selectItem itemValue="7" itemLabel="Agosto" />
-					<f:selectItem itemValue="8" itemLabel="Setembro" />
-					<f:selectItem itemValue="9" itemLabel="Outubro" />
-					<f:selectItem itemValue="10" itemLabel="Novembro" />
-					<f:selectItem itemValue="11" itemLabel="Dezembro" />
-					<p:ajax event="change" update="form" />
-				</p:selectOneMenu>
 
+				<p:commandButton value="Criar" actionListener="#{agendaPortaoController.criar}" update="form"
+					rendered="#{agendaPortaoController.agenda == null}" />
+				<p:commandButton value="Editar" actionListener="#{agendaPortaoController.editar}" update="form"
+					rendered="#{agendaPortaoController.agenda != null and not agendaPortaoController.edicao}" />
+				<p:commandButton value="Excluir" actionListener="#{agendaPortaoController.excluir}" update="form"
+					rendered="#{loginController.usuarioAutenticado.tipo == loginController.tipos[0] and agendaPortaoController.agenda != null and not agendaPortaoController.edicao}" />
+				<p:commandButton value="Salvar" actionListener="#{agendaPortaoController.salvar}" update="form"
+					rendered="#{agendaPortaoController.agenda != null and agendaPortaoController.edicao}" />
+				<p:commandButton value="Cancelar" actionListener="#{agendaPortaoController.cancelar}" update="form" immediate="true"
+					rendered="#{agendaPortaoController.agenda != null and agendaPortaoController.edicao}" />
+				<p:commandButton value="Espelhar" actionListener="#{agendaPortaoController.espelhar}" update="form"
+					rendered="#{agendaPortaoController.agenda != null and agendaPortaoController.edicao}" />
+				
+			</h:panelGrid>
+			<h:panelGrid columns="2" rendered="#{agendaPortaoController.agenda == null}">
+				<p:outputLabel
+					value="Nenhuma agenda para #{agendaPortaoController.ano}." />
 			</h:panelGrid>
 
-			<p:outputLabel id="form" value="Nenhuma agenda para #{agendaPortaoController.mes + 1}/#{agendaPortaoController.ano}." rendered="#{agendaPortaoController.agenda eq null}" />
+			<p:dataTable value="#{agendaPortaoController.agenda.semanas}" var="semana" editable="true"
+				rendered="#{agendaPortaoController.agenda != null}" rowIndexVar="numeroSemana">
+
+				<p:column headerText="Semana" style="width:6%; text-align: center">
+					<h:outputText value="#{numeroSemana + 1}ª" />
+				</p:column>
+
+				<p:column headerText="Primeiro Dia" style="width:10%; text-align: center">
+					<h:outputText value="#{semana.primeiroDia}">
+						<f:convertDateTime pattern="d MMMM" />
+					</h:outputText>
+				</p:column>
+
+				<p:column headerText="Ultimo Dia" style="width:10%; text-align: center">
+					<h:outputText value="#{semana.ultimoDia}">
+						<f:convertDateTime pattern="d MMMM" />
+					</h:outputText>
+				</p:column>
+
+				<p:column headerText="Abertura" style="text-align: center">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{semana.abertura.nome}" />
+						</f:facet>
+						<f:facet name="input" required="true" requiredMessage="O Funcionário é de preenchimento obrigatório">
+							<p:selectOneMenu value="#{semana.abertura}" converter="funcionarioConverter">
+								<f:selectItem itemValue="" itemLabel="Selecione um" />
+								<f:selectItems value="#{funcionarioController.funcionarios}" var="funcionario" itemLabel="#{funcionario.nome}" />
+							</p:selectOneMenu>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Fechamento" style="text-align: center">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{semana.fechamento.nome}" />
+						</f:facet>
+						<f:facet name="input" required="true" requiredMessage="O Funcionário é de preenchimento obrigatório">
+							<p:selectOneMenu value="#{semana.fechamento}" converter="funcionarioConverter">
+								<f:selectItem itemValue="" itemLabel="Selecione um" />
+								<f:selectItems value="#{funcionarioController.funcionarios}" var="funcionario" itemLabel="#{funcionario.nome}" />
+							</p:selectOneMenu>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column styleClass="colicone coleditar" rendered="#{agendaPortaoController.edicao}">
+					<p:rowEditor editTitle="Editar" cancelTitle="Cancelar" saveTitle="Salvar" />
+				</p:column>
+			</p:dataTable>
+
 		</h:form>
 	</ui:define>
 

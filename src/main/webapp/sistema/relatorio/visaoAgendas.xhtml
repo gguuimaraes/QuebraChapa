@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<h:outputStylesheet library="css" name="visaoAgendas.css" />
+</h:head>
+<h:body>
+	<h1>
+		<marquee>AGENDA PORTÃO</marquee>
+	</h1>
+
+	<h:dataTable styleClass="agenda-portao" value="#{relatorioAgendaPortaoController.semanas}" var="semana" cellspacing="0">
+		<h:column headerClass="header header-periodo">
+			<f:facet name="header">Periodo</f:facet>
+			<h:outputText value="#{semana.primeiroDia}">
+				<f:convertDateTime pattern="dd" />
+			</h:outputText>
+			<h:outputText value=" de " />
+			<h:outputText value="#{semana.primeiroDia}">
+				<f:convertDateTime pattern="MMMM" />
+			</h:outputText>
+			<h:outputText value=" a " />
+			<h:outputText value="#{semana.ultimoDia}">
+				<f:convertDateTime pattern="dd" />
+			</h:outputText>
+			<h:outputText value=" de " />
+			<h:outputText value="#{semana.ultimoDia}">
+				<f:convertDateTime pattern="MMMM" />
+			</h:outputText>
+		</h:column>
+		<h:column headerClass="header">
+			<f:facet name="header">Abertura</f:facet>
+			<h:outputText value="#{semana.abertura.nome.substring(0, semana.abertura.nome.indexOf(' '))}" />
+		</h:column>
+		<h:column headerClass="header">
+			<f:facet name="header">Fechamento</f:facet>
+			<h:outputText value="#{semana.fechamento.nome.substring(0, semana.fechamento.nome.indexOf(' '))}" />
+		</h:column>
+	</h:dataTable>
+</h:body>
+</html>

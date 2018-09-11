@@ -19,7 +19,7 @@ import org.primefaces.model.chart.LineChartSeries;
 import org.primefaces.model.chart.PieChartModel;
 
 import br.com.vitral.modelo.AgendaPortaoModel;
-import br.com.vitral.modelo.DiaAgendaPortaoModel;
+import br.com.vitral.modelo.SemanaAgendaPortaoModel;
 import br.com.vitral.modelo.SetorModel;
 import br.com.vitral.persistencia.AgendaPortaoDao;
 import br.com.vitral.persistencia.AreaFaturadaDao;

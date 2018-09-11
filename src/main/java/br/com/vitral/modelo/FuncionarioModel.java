@@ -47,6 +47,7 @@ public class FuncionarioModel implements Serializable {
 
 	@Override
 	public String toString() {
-		return "FuncionarioModel [id=" + id + ", nome=" + nome + "]";
+		return nome;
 	}
+
 }

@@ -8,17 +8,8 @@ public class AgendaPortaoModel implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Integer mes;
 	private Integer ano;
-	private List<DiaAgendaPortaoModel> dias = new ArrayList<>();
-
-	public Integer getMes() {
-		return mes;
-	}
-
-	public void setMes(Integer mes) {
-		this.mes = mes;
-	}
+	private List<SemanaAgendaPortaoModel> semanas = new ArrayList<>();
 
 	public Integer getAno() {
 		return ano;
@@ -28,12 +19,12 @@ public class AgendaPortaoModel implements Serializable {
 		this.ano = ano;
 	}
 
-	public List<DiaAgendaPortaoModel> getDias() {
-		return dias;
+	public List<SemanaAgendaPortaoModel> getSemanas() {
+		return semanas;
 	}
 
-	public void setDias(List<DiaAgendaPortaoModel> dias) {
-		this.dias = dias;
+	public void setSemanas(List<SemanaAgendaPortaoModel> semanas) {
+		this.semanas = semanas;
 	}
 
 	@Override
@@ -41,7 +32,7 @@ public class AgendaPortaoModel implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((ano == null) ? 0 : ano.hashCode());
-		result = prime * result + ((mes == null) ? 0 : mes.hashCode());
+		result = prime * result + ((semanas == null) ? 0 : semanas.hashCode());
 		return result;
 	}
 
@@ -59,14 +50,17 @@ public class AgendaPortaoModel implements Serializable {
 				return false;
 		} else if (!ano.equals(other.ano))
 			return false;
-		if (mes == null) {
-			if (other.mes != null)
+		if (semanas == null) {
+			if (other.semanas != null)
 				return false;
-		} else if (!mes.equals(other.mes))
+		} else if (!semanas.equals(other.semanas))
 			return false;
 		return true;
 	}
 
-	
+	@Override
+	public String toString() {
+		return "AgendaPortaoModel [ano=" + ano + ", semanas=" + semanas + "]";
+	}
 
 }
