@@ -4,12 +4,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AgendaPortaoModel implements Serializable {
+public class AgendaCalcadaModel implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private Integer ano;
-	private List<SemanaAgendaPortaoModel> semanas = new ArrayList<>();
+	private List<DiaAgendaCalcadaModel> dias = new ArrayList<>();
 
 	public Integer getAno() {
 		return ano;
@@ -19,12 +19,17 @@ public class AgendaPortaoModel implements Serializable {
 		this.ano = ano;
 	}
 
-	public List<SemanaAgendaPortaoModel> getSemanas() {
-		return semanas;
+	public List<DiaAgendaCalcadaModel> getDias() {
+		return dias;
 	}
 
-	public void setSemanas(List<SemanaAgendaPortaoModel> semanas) {
-		this.semanas = semanas;
+	public void setDias(List<DiaAgendaCalcadaModel> dias) {
+		this.dias = dias;
+	}
+
+	@Override
+	public String toString() {
+		return "AgendaCalcadaModel [ano=" + ano + ", dias=" + dias + "]";
 	}
 
 	@Override
@@ -43,18 +48,13 @@ public class AgendaPortaoModel implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		AgendaPortaoModel other = (AgendaPortaoModel) obj;
+		AgendaCalcadaModel other = (AgendaCalcadaModel) obj;
 		if (ano == null) {
 			if (other.ano != null)
 				return false;
 		} else if (!ano.equals(other.ano))
 			return false;
 		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "AgendaPortaoModel [ano=" + ano + ", semanas=" + semanas + "]";
 	}
 
 }

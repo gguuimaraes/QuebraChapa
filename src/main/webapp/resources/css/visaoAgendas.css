@@ -1,16 +1,37 @@
-.agenda-portao {
+.agenda-portao, .agenda-calcada {
 	text-align: center;
-	margin: 20px;
-	font-size: 20px;
+	font-size: 32px;
 	margin: auto;
 	font-family: Arial;
+	border-style: groove;
+	width: 80%;
+	margin-bottom: 10px;
 }
 
-.agenda-portao .header {
-	background: black;
+.agenda-portao .header, .agenda-calcada .header {
+	background: #2700ff;
 	color: white;
 }
 
 .agenda-portao .header.header-periodo {
 	width: 50%;
+}
+
+.titulo {
+	font-family: Arial;
+	margin-bottom: 10px;
+}
+
+.titulo .coluna-borda {
+	width: 1px;
+}
+
+.titulo .coluna-meio {
+	width: auto;
+}
+
+.titulo .coluna-meio marquee {
+	width: 100%;
+	font-size: 40px;
+	font-weight: bold;
 }

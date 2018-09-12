@@ -61,8 +61,6 @@ public class SemanaAgendaPortaoModel implements Serializable {
 		this.fechamento = fechamento;
 	}
 
-	
-
 	@Override
 	public String toString() {
 		return "SemanaAgendaPortaoModel [primeiroDia=" + primeiroDia + ", ultimoDia=" + ultimoDia + ", abertura="
@@ -74,8 +72,6 @@ public class SemanaAgendaPortaoModel implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((primeiroDia == null) ? 0 : primeiroDia.hashCode());
-		result = prime * result + ((ultimoDia == null) ? 0 : ultimoDia.hashCode());
 		return result;
 	}
 
@@ -92,16 +88,6 @@ public class SemanaAgendaPortaoModel implements Serializable {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
-			return false;
-		if (primeiroDia == null) {
-			if (other.primeiroDia != null)
-				return false;
-		} else if (!primeiroDia.equals(other.primeiroDia))
-			return false;
-		if (ultimoDia == null) {
-			if (other.ultimoDia != null)
-				return false;
-		} else if (!ultimoDia.equals(other.ultimoDia))
 			return false;
 		return true;
 	}

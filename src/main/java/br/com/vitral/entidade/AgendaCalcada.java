@@ -13,13 +13,14 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
-@Table(name = "agendaportao")
+@Table(name = "agendacalcada")
 @Entity
 
-@NamedQueries({ @NamedQuery(name = "AgendaPortao.findAll", query = "SELECT a FROM AgendaPortao a ORDER BY a.ano DESC"),
-		@NamedQuery(name = "AgendaPortao.findAnosDistintos", query = "SELECT a.ano FROM AgendaPortao a ORDER BY a.ano DESC") })
+@NamedQueries({
+		@NamedQuery(name = "AgendaCalcada.findAll", query = "SELECT a FROM AgendaCalcada a ORDER BY a.ano DESC"),
+		@NamedQuery(name = "AgendaCalcada.findAnosDistintos", query = "SELECT a.ano FROM AgendaCalcada a ORDER BY a.ano DESC") })
 
-public class AgendaPortao implements Serializable {
+public class AgendaCalcada implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -28,8 +29,8 @@ public class AgendaPortao implements Serializable {
 	private Integer ano;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@OrderBy("primeirodia ASC")
-	private List<SemanaAgendaPortao> semanas;
+	@OrderBy("data ASC")
+	private List<DiaAgendaCalcada> dias;
 
 	public Integer getAno() {
 		return ano;
@@ -39,17 +40,17 @@ public class AgendaPortao implements Serializable {
 		this.ano = ano;
 	}
 
-	public List<SemanaAgendaPortao> getSemanas() {
-		return semanas;
+	public List<DiaAgendaCalcada> getDias() {
+		return dias;
 	}
 
-	public void setSemanas(List<SemanaAgendaPortao> semanas) {
-		this.semanas = semanas;
+	public void setDias(List<DiaAgendaCalcada> dias) {
+		this.dias = dias;
 	}
 
 	@Override
 	public String toString() {
-		return "AgendaPortao [ano=" + ano + ", semanas=" + semanas + "]";
+		return "AgendaCalcada [ano=" + ano + ", dias=" + dias + "]";
 	}
 
 	@Override
@@ -68,7 +69,7 @@ public class AgendaPortao implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		AgendaPortao other = (AgendaPortao) obj;
+		AgendaCalcada other = (AgendaCalcada) obj;
 		if (ano == null) {
 			if (other.ano != null)
 				return false;

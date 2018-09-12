@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+
+<ui:composition template="/template/layoutBase.xhtml">
+
+	<ui:define name="content">
+		<h:form id="form">
+			<p:growl id="msgs" showDetail="true" />
+			<h:panelGrid columns="8">
+				<p:outputLabel value="Ano" for="txtAno" />
+				<p:selectOneMenu id="txtAno" value="#{agendaCalcadaController.ano}">
+					<f:selectItems value="#{agendaCalcadaController.anos}" />
+					<p:ajax event="change" listener="#{agendaCalcadaController.selecionarAno}" update="form" />
+				</p:selectOneMenu>
+
+
+				<p:commandButton value="Criar" actionListener="#{agendaCalcadaController.criar}" update="form"
+					rendered="#{agendaCalcadaController.agenda == null}" />
+				<p:commandButton value="Editar" actionListener="#{agendaCalcadaController.editar}" update="form"
+					rendered="#{agendaCalcadaController.agenda != null and not agendaCalcadaController.edicao}" />
+				<p:commandButton value="Excluir" actionListener="#{agendaCalcadaController.excluir}" update="form"
+					rendered="#{loginController.usuarioAutenticado.tipo == loginController.tipos[0] and agendaCalcadaController.agenda != null and not agendaCalcadaController.edicao}" />
+				<p:commandButton value="Salvar" actionListener="#{agendaCalcadaController.salvar}" update="form"
+					rendered="#{agendaCalcadaController.agenda != null and agendaCalcadaController.edicao}" />
+				<p:commandButton value="Cancelar" actionListener="#{agendaCalcadaController.cancelar}" update="form"
+					immediate="true" rendered="#{agendaCalcadaController.agenda != null and agendaCalcadaController.edicao}" />
+				<p:commandButton value="Espelhar" actionListener="#{agendaCalcadaController.espelhar}" update="form"
+					rendered="#{agendaCalcadaController.agenda != null and agendaCalcadaController.edicao}" />
+
+			</h:panelGrid>
+			<h:panelGrid columns="2" rendered="#{agendaCalcadaController.agenda == null}">
+				<p:outputLabel value="Nenhuma agenda para #{agendaCalcadaController.ano}." />
+			</h:panelGrid>
+
+			<p:dataTable id="dias" value="#{agendaCalcadaController.dias}" var="dia" editable="true"
+				rendered="#{agendaCalcadaController.agenda != null}" rowIndexVar="numeroDia" paginator="true"
+				paginatorTemplate="{Meses}" paginatorPosition="top">
+				<f:facet name="{Meses}">
+					<p:selectOneButton value="#{agendaCalcadaController.mes}">
+						<f:selectItem itemLabel="Janeiro" itemValue="0" />
+						<f:selectItem itemLabel="Fevereiro" itemValue="1" />
+						<f:selectItem itemLabel="Marco" itemValue="2" />
+						<f:selectItem itemLabel="Abril" itemValue="3" />
+						<f:selectItem itemLabel="Maio" itemValue="4" />
+						<f:selectItem itemLabel="Junho" itemValue="5" />
+						<f:selectItem itemLabel="Julho" itemValue="6" />
+						<f:selectItem itemLabel="Agosto" itemValue="7" />
+						<f:selectItem itemLabel="Setembro" itemValue="8" />
+						<f:selectItem itemLabel="Outubro" itemValue="9" />
+						<f:selectItem itemLabel="Novembro" itemValue="10" />
+						<f:selectItem itemLabel="Dezembro" itemValue="11" />
+						<p:ajax event="change" process="@this" update="dias" />
+					</p:selectOneButton>
+				</f:facet>
+
+				<p:column headerText="Dia do Mês" style="width:8%; text-align: center">
+					<h:outputText value="#{dia.data}">
+						<f:convertDateTime pattern="d" />
+					</h:outputText>
+				</p:column>
+
+				<p:column headerText="Dia da Semana" style="width:8%; text-align: center">
+					<h:outputText value="#{dia.data}">
+						<f:convertDateTime pattern="EEEE" />
+					</h:outputText>
+				</p:column>
+
+				<p:column headerText="Funcionário" style="text-align: center">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{dia.funcionario.nome}" />
+						</f:facet>
+						<f:facet name="input" required="true" requiredMessage="O Funcionário é de preenchimento obrigatório">
+							<p:selectOneMenu value="#{dia.funcionario}" converter="funcionarioConverter">
+								<f:selectItem itemValue="" itemLabel="Selecione um" />
+								<f:selectItems value="#{funcionarioController.funcionarios}" var="funcionario" itemLabel="#{funcionario.nome}" />
+							</p:selectOneMenu>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Feriado" style="width:8%; text-align: center">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{dia.feriado ? 'Sim' : 'Não'}" />
+						</f:facet>
+						<f:facet name="input" required="true" requiredMessage="O Funcionário é de preenchimento obrigatório">
+							<p:selectBooleanCheckbox value="#{dia.feriado}" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column styleClass="colicone coleditar" rendered="#{agendaCalcadaController.edicao}">
+					<p:rowEditor editTitle="Editar" cancelTitle="Cancelar" saveTitle="Salvar" />
+				</p:column>
+			</p:dataTable>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>
+
+
+</html>
