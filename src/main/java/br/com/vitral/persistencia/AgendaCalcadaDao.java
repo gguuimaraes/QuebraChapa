@@ -3,6 +3,7 @@ package br.com.vitral.persistencia;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -10,11 +11,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import br.com.vitral.entidade.AgendaCalcada;
-import br.com.vitral.entidade.Funcionario;
 import br.com.vitral.entidade.DiaAgendaCalcada;
+import br.com.vitral.entidade.Funcionario;
 import br.com.vitral.modelo.AgendaCalcadaModel;
-import br.com.vitral.modelo.FuncionarioModel;
 import br.com.vitral.modelo.DiaAgendaCalcadaModel;
+import br.com.vitral.modelo.FuncionarioModel;
 import br.com.vitral.util.Uteis;
 
 public class AgendaCalcadaDao implements Serializable {
@@ -138,6 +139,28 @@ public class AgendaCalcadaDao implements Serializable {
 	public List<Integer> listarAnosDistintos() {
 		return (List<Integer>) Uteis.getEntityManager().createNamedQuery("AgendaCalcada.findAnosDistintos")
 				.getResultList();
+	}
+
+	public DiaAgendaCalcadaModel consultarDiaPelaData(Date data) {
+		DiaAgendaCalcadaModel diaModel = null;
+		DiaAgendaCalcada dia = null;
+		try {
+			dia = (DiaAgendaCalcada) Uteis.getEntityManager().createNamedQuery("AgendaCalcada.findDiaPelaData")
+					.setParameter("data", data).getSingleResult();
+			diaModel = new DiaAgendaCalcadaModel();
+			diaModel.setId(dia.getId());
+			diaModel.setData(dia.getData());
+			if (dia.getFuncionario() != null) {
+				FuncionarioModel f = new FuncionarioModel();
+				f.setId(dia.getFuncionario().getId());
+				f.setNome(dia.getFuncionario().getNome());
+				diaModel.setFuncionario(f);
+			}
+			diaModel.setFeriado(dia.isFeriado());
+		} catch (Exception e) {
+
+		}
+		return diaModel;
 	}
 
 }

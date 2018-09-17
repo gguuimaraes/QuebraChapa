@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+
+<ui:composition template="/template/layoutBase.xhtml">
+
+	<ui:define name="content">
+		<p:commandButton icon="fa fa-fw fa-plus" actionListener="#{acidenteController.cadastrar}" value="Cadastrar"
+			ajax="true" update="dialogCadastro" style="margin-bottom: 10px" />
+
+		<p:dialog header="Cadastro Acidente" id="dialogCadastro" widgetVar="dialogCadastro" modal="true">
+			<ui:include src="/sistema/cadastro/cadastroAcidente.xhtml" />
+		</p:dialog>
+
+		<h:form id="form">
+			<p:growl id="msgs" showDetail="true" />
+			<p:dataTable id="acidentes" var="acidente" value="#{acidenteController.acidentes}" editable="true"
+				emptyMessage="Nenhum registro.">
+
+				<p:ajax event="rowEdit" listener="#{acidenteController.onRowEdit}" update=":form:msgs" />
+				<p:ajax event="rowEditCancel" listener="#{acidenteController.onRowCancel}" update=":form:msgs" />
+
+				<!-- <p:column headerText="Id">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{acidente.id}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{acidente.id}" style="width:100%" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column> -->
+
+				<p:column headerText="Funcionário" style="width:30%; text-align:center">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{acidente.funcionario.nome}" />
+						</f:facet>
+						<f:facet name="input" required="true" requiredMessage="O Funcionário é de preenchimento obrigatório">
+							<p:selectOneMenu value="#{acidente.funcionario}" converter="funcionarioConverter">
+								<f:selectItem itemValue="" itemLabel="Selecione um" />
+								<f:selectItems value="#{funcionarioController.funcionarios}" var="funcionario" itemLabel="#{funcionario.nome}" />
+							</p:selectOneMenu>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Observação">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{acidente.obs}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{acidente.obs}" maxlength="255" required="true"
+								requiredMessage="A Observação é de preenchimento obrigatório" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Data" style="width: 6%">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{acidente.data}">
+								<f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
+							</h:outputText>
+						</f:facet>
+						<f:facet name="input">
+							<p:calendar id="txtData" value="#{acidente.data}" required="true" mask="99/99/9999" pattern="dd/MM/yyyy"
+								requiredMessage="A Data é de preenchimento obrigatório" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column styleClass="colicone coleditar">
+					<p:rowEditor editTitle="Editar" cancelTitle="Cancelar" saveTitle="Salvar" />
+				</p:column>
+
+				<p:column styleClass="colicone colexcluir"
+					rendered="#{loginController.usuarioAutenticado.tipo == loginController.tipos[0]}">
+					<p:commandLink title="Excluir" actionListener="#{acidenteController.excluir(acidente)}" update=":form">
+						<h:outputText class="ui-icon ui-icon-trash" />
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>
+
+
+</html>

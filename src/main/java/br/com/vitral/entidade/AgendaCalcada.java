@@ -18,7 +18,8 @@ import javax.persistence.Table;
 
 @NamedQueries({
 		@NamedQuery(name = "AgendaCalcada.findAll", query = "SELECT a FROM AgendaCalcada a ORDER BY a.ano DESC"),
-		@NamedQuery(name = "AgendaCalcada.findAnosDistintos", query = "SELECT a.ano FROM AgendaCalcada a ORDER BY a.ano DESC") })
+		@NamedQuery(name = "AgendaCalcada.findAnosDistintos", query = "SELECT a.ano FROM AgendaCalcada a ORDER BY a.ano DESC"),
+		@NamedQuery(name = "AgendaCalcada.findDiaPelaData", query = "SELECT d FROM DiaAgendaCalcada d WHERE d.data = :data")})
 
 public class AgendaCalcada implements Serializable {
 

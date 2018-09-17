@@ -27,9 +27,9 @@ import br.com.vitral.persistencia.FuncionarioDao;
 import br.com.vitral.persistencia.QuebraDao;
 import br.com.vitral.util.Uteis;
 
-@Named(value = "visaoTVController")
+@Named(value = "visaoQuebrasController")
 @SessionScoped
-public class VisaoTVController implements Serializable {
+public class VisaoQuebrasController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

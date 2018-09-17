@@ -25,9 +25,9 @@ import br.com.vitral.persistencia.AreaCortadaDao;
 import br.com.vitral.persistencia.PesoDao;
 import br.com.vitral.persistencia.SetorDao;
 
-@Named(value = "visaoTV2")
+@Named(value = "visaoPesoAreaController")
 @SessionScoped
-public class VisaoTV2Controller implements Serializable {
+public class VisaoPesoAreaController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

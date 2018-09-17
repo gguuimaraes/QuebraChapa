@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -12,8 +13,6 @@ import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
-
-import org.jboss.weld.util.collections.ArraySet;
 
 import br.com.vitral.modelo.AgendaPortaoModel;
 import br.com.vitral.modelo.SemanaAgendaPortaoModel;
@@ -44,7 +43,7 @@ public class AgendaPortaoController implements Serializable {
 
 	@PostConstruct
 	public void init() {
-		anos = new ArraySet<>();
+		anos = new HashSet<>();
 		anos.addAll(agendaDao.listarAnosDistintos());
 		ano = Calendar.getInstance().get(Calendar.YEAR);
 		anos.add(ano);

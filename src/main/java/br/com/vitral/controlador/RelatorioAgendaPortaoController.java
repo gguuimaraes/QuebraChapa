@@ -1,7 +1,6 @@
 package br.com.vitral.controlador;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -60,42 +59,20 @@ public class RelatorioAgendaPortaoController implements Serializable {
 	public List<DiaAgendaCalcadaModel> getDias() {
 		List<DiaAgendaCalcadaModel> dias = new ArrayList<>();
 		Calendar c = Calendar.getInstance();
-		Calendar hoje = Calendar.getInstance();
-		hoje.set(Calendar.HOUR_OF_DAY, 0);
-		hoje.set(Calendar.MINUTE, 0);
-		hoje.set(Calendar.SECOND, 0);
-		hoje.set(Calendar.MILLISECOND, 0);
-		AgendaCalcadaModel agenda = agendaCalcadaDao.consultarModel(c.get(Calendar.YEAR));
-		if (agenda != null) {
-			DiaAgendaCalcadaModel dia = null;
-			for (DiaAgendaCalcadaModel d : agenda.getDias()) {
-				c.setTime(d.getData());
-				if (c.compareTo(hoje) == 0) {
-					dia = d;
-					break;
-				}
-			}
-			while (dia != null && dias.size() <= 4) {
-				if (!dia.isFeriado())
-					dias.add(dia);
-				dia = obterProximoDia(agenda, dia);
-			}
+		c.set(Calendar.HOUR_OF_DAY, 0);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
+		c.add(Calendar.DAY_OF_YEAR, c.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY ? 2
+				: c.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY ? 1 : 0);
+		DiaAgendaCalcadaModel dia = agendaCalcadaDao.consultarDiaPelaData(c.getTime());
+		while (dia != null && dias.size() <= 4) {
+			if (!dia.isFeriado())
+				dias.add(dia);
+			c.add(Calendar.DAY_OF_YEAR, c.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY ? 3 : 1);
+			dia = agendaCalcadaDao.consultarDiaPelaData(c.getTime());
 		}
 		return dias;
-	}
-
-	private DiaAgendaCalcadaModel obterProximoDia(AgendaCalcadaModel agenda, DiaAgendaCalcadaModel dia) {
-		DiaAgendaCalcadaModel proximoDia = null;
-		int indexDiaAtual = agenda.getDias().indexOf(dia);
-		if (indexDiaAtual + 1 < agenda.getDias().size()) {
-			proximoDia = agenda.getDias().get(indexDiaAtual + 1);
-		} else {
-			agenda = agendaCalcadaDao.consultarModel(agenda.getAno() + 1);
-			if (agenda != null) {
-				proximoDia = agenda.getDias().get(0);
-			}
-		}
-		return proximoDia;
 	}
 
 }

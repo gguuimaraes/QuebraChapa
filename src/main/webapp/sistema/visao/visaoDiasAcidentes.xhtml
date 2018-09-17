@@ -1,0 +1,21 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<h:outputStylesheet library="css" name="visaoDiasAcidentes.css" />
+</h:head>
+
+<h:body>
+	<h:panelGrid id="textos" columns="1">
+		<h:outputLabel value="CIPA" style="font-size: 8vw" />
+		<h:outputLabel value="Estamos trabalhando há #{visaoDiasAcidentesController.diasSemAcidentes} dias" />
+		<h:outputLabel value="sem acidentes de trabalho." />
+		<h:outputLabel value="Nosso recorde é de #{visaoDiasAcidentesController.recorde} dias." />
+	</h:panelGrid>
+	<h:panelGrid id="imagens" columns="2">
+		<p:graphicImage url="/resources/imagens/cipa.jpg" />
+		<p:graphicImage url="/resources/imagens/logo.jpg" />
+	</h:panelGrid>
+</h:body>
+</html>

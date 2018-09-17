@@ -19,7 +19,6 @@
 					<p:ajax event="change" listener="#{agendaPortaoController.selecionarAgenda}" update="form" />
 				</p:selectOneMenu>
 
-
 				<p:commandButton value="Criar" actionListener="#{agendaPortaoController.criar}" update="form"
 					rendered="#{agendaPortaoController.agenda == null}" />
 				<p:commandButton value="Editar" actionListener="#{agendaPortaoController.editar}" update="form"
