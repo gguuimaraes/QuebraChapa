@@ -20,17 +20,17 @@
 
 				<h:panelGrid style="text-align: right; margin: auto; font-family: Arial; font-size: 30px " columns="2">
 					<h:outputLabel value="Quebra: " />
-					<h:outputLabel value="#{visaoQuebrasController.areaQuebra != null ? visaoTVController.areaQuebra : 0}"
+					<h:outputLabel value="#{visaoQuebrasController.areaQuebra != null ? visaoQuebrasController.areaQuebra : 0}"
 						style="float: left">
 						<f:convertNumber pattern="#,###.## m²" />
 					</h:outputLabel>
 					<h:outputLabel value="Faturada: " />
-					<h:outputLabel value="#{visaoQuebrasController.areaFaturada != null ? visaoTVController.areaFaturada : 0}"
+					<h:outputLabel value="#{visaoQuebrasController.areaFaturada != null ? visaoQuebrasController.areaFaturada : 0}"
 						style="float: left">
 						<f:convertNumber pattern="#,###.## m²" />
 					</h:outputLabel>
 					<h:outputLabel value="Percentual: " />
-					<h:outputLabel value="#{visaoQuebrasController.areaQuebra / visaoTVController.areaFaturada * 100}" style="float: left">
+					<h:outputLabel value="#{visaoQuebrasController.areaQuebra / visaoQuebrasController.areaFaturada * 100}" style="float: left">
 						<f:convertNumber pattern="0,00%" />
 					</h:outputLabel>
 				</h:panelGrid> 

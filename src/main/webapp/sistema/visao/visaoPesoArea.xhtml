@@ -157,8 +157,14 @@
 								</f:facet>
 							</h:column>
 						</h:dataTable>
+					
 					</h:panelGrid>
+					<h:outputText style="font-size: 30px; float: right" value="Total Faturado: " />
+					<h:outputText style="font-size: 30px; float: left; margin-left: 10px" value="#{visaoPesoAreaController.pesoTotal}">
+						<f:convertNumber pattern="#,##0.00 kg" />
+					</h:outputText>
 				</h:panelGrid>
+				
 			</h:panelGrid>
 		</div>
 		<div class="child2">

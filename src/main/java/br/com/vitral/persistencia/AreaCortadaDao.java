@@ -112,4 +112,26 @@ public class AreaCortadaDao implements Serializable {
 		return areaTotal;
 	}
 
+	public AreaCortadaModel consultarModel(int id) {
+		return converterUnidade(consultar(id));
+	}
+
+	private AreaCortadaModel converterUnidade(AreaCortada areaCortada) {
+		if (areaCortada == null)
+			return null;
+		AreaCortadaModel areaCortadaModel = new AreaCortadaModel();
+		areaCortadaModel.setId(areaCortada.getId());
+		areaCortadaModel.setData(areaCortada.getData());
+		FuncionarioModel funcionarioModel = new FuncionarioModel();
+		funcionarioModel.setId(areaCortada.getFuncionario().getId());
+		funcionarioModel.setNome(areaCortada.getFuncionario().getNome());
+		areaCortadaModel.setFuncionario(funcionarioModel);
+		SetorModel setorModel = new SetorModel();
+		setorModel.setId(areaCortada.getSetor().getId());
+		setorModel.setNome(areaCortada.getSetor().getNome());
+		areaCortadaModel.setSetor(setorModel);
+		areaCortadaModel.setArea(areaCortada.getArea());
+		return areaCortadaModel;
+	}
+
 }

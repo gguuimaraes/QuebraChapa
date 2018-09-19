@@ -13,6 +13,7 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.event.RowEditEvent;
 
 import br.com.vitral.modelo.FuncionarioModel;
+import br.com.vitral.modelo.FuncionarioModel;
 import br.com.vitral.persistencia.FuncionarioDao;
 import br.com.vitral.util.Uteis;
 
@@ -72,7 +73,9 @@ public class FuncionarioController implements Serializable {
 		Uteis.messageInformation("Funcionário alterado com sucesso");
 	}
 
-	public void onRowCancel() {
+	public void onRowCancel(RowEditEvent event) {
+		FuncionarioModel areaCortadaModel = (FuncionarioModel) event.getObject();
+		funcionarios.set(funcionarios.indexOf(areaCortadaModel), funcionarioDao.consultarModel(areaCortadaModel.getId()));
 		Uteis.messageInformation("Operação cancelada");
 	}
 }

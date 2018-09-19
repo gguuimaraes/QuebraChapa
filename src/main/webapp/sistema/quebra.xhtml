@@ -10,7 +10,7 @@
 <ui:composition template="/template/layoutBase.xhtml">
 
 	<ui:define name="content">
-		<p:commandButton icon="fa fa-fw fa-plus" actionListener="#{quebraController.cadastrar}" value="Cadastrar [F3]" ajax="true"
+		<p:commandButton icon="fa fa-fw fa-plus" actionListener="#{quebraController.cadastrar}" value="Cadastrar" ajax="true"
 			update="dialogCadastro" style="margin-bottom: 10px" />
 
 		<p:dialog header="Cadastro Quebra" id="dialogCadastro" widgetVar="dialogCadastro" modal="true">
@@ -19,7 +19,7 @@
 
 		<h:form id="form">
 
-			<p:hotkey bind="f3" actionListener="#{quebraController.cadastrar}" update="dialogCadastro" ajax="true" />
+			<!-- <p:hotkey bind="f3" actionListener="#{quebraController.cadastrar}" update="dialogCadastro" ajax="true" /> -->
 			<p:growl id="msgs" showDetail="true" />
 			<p:dataTable id="quebras" widgetVar="quebras" var="quebra" value="#{quebraController.quebras}"
 				filteredValue="#{quebraController.quebrasFiltradas}" editable="true" emptyMessage="Nenhum registro."

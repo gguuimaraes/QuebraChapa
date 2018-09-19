@@ -13,6 +13,7 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.event.RowEditEvent;
 
 import br.com.vitral.modelo.AreaFaturadaModel;
+import br.com.vitral.modelo.AreaFaturadaModel;
 import br.com.vitral.persistencia.AreaFaturadaDao;
 import br.com.vitral.util.Uteis;
 
@@ -71,7 +72,9 @@ public class AreaFaturadaController implements Serializable {
 		Uteis.messageInformation("Área Faturada alterada com sucesso");
 	}
 
-	public void onRowCancel() {
+	public void onRowCancel(RowEditEvent event) {
+		AreaFaturadaModel areaCortadaModel = (AreaFaturadaModel) event.getObject();
+		areasFaturadas.set(areasFaturadas.indexOf(areaCortadaModel), areaFaturadaDao.consultarModel(areaCortadaModel.getId()));
 		Uteis.messageInformation("Operação cancelada");
 	}
 }

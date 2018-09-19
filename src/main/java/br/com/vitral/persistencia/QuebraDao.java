@@ -10,9 +10,11 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import br.com.vitral.entidade.Peso;
 import br.com.vitral.entidade.Quebra;
 import br.com.vitral.entidade.Setor;
 import br.com.vitral.modelo.FuncionarioModel;
+import br.com.vitral.modelo.PesoModel;
 import br.com.vitral.modelo.QuebraModel;
 import br.com.vitral.modelo.SetorModel;
 import br.com.vitral.modelo.TipoVidroModel;
@@ -26,13 +28,13 @@ public class QuebraDao implements Serializable {
 
 	@Inject
 	Quebra quebra;
-	
+
 	@Inject
 	TipoVidroDao tipoVidroDao;
-	
+
 	@Inject
 	SetorDao setorDao;
-	
+
 	@Inject
 	FuncionarioDao funcionarioDao;
 
@@ -67,40 +69,10 @@ public class QuebraDao implements Serializable {
 	}
 
 	public List<QuebraModel> listar() {
-		List<QuebraModel> quebrasModel = new ArrayList<>();
-		em = Uteis.getEntityManager();
-		Query query = em.createNamedQuery("Quebra.findAll");
-		@SuppressWarnings("unchecked")
-		Collection<Quebra> quebras = (Collection<Quebra>) query.getResultList();
-		QuebraModel quebraModel = null;
-		for (Quebra q : quebras) {
-			quebraModel = new QuebraModel();
-			quebraModel.setId(q.getId());
-			quebraModel.setData(q.getData());
-			TipoVidroModel tipoVidroModel = new TipoVidroModel();
-			tipoVidroModel.setId(q.getTipoVidro().getId());
-			tipoVidroModel.setNome(q.getTipoVidro().getNome());
-			quebraModel.setTipoVidro(tipoVidroModel);
-			quebraModel.setAreaTotal(q.getAreaTotal());
-			quebraModel.setAreaAproveitada(q.getAreaAproveitada());
-			SetorModel setorModel = new SetorModel();
-			setorModel.setId(q.getSetor().getId());
-			setorModel.setNome(q.getSetor().getNome());
-			quebraModel.setSetor(setorModel);
-			if (q.getFuncionario() != null) {
-				FuncionarioModel funcionarioModel = new FuncionarioModel();
-				funcionarioModel.setId(q.getFuncionario().getId());
-				funcionarioModel.setNome(q.getFuncionario().getNome());
-				quebraModel.setFuncionario(funcionarioModel);
-			}
-			quebraModel.setMotivo(q.getMotivo());
-			quebrasModel.add(quebraModel);
-		}
-		return quebrasModel;
+		return  converterLista((Collection<Quebra>) Uteis.getEntityManager().createNamedQuery("Quebra.findAll").getResultList());
 	}
 
 	public List<QuebraModel> listarPorPeriodo(Date dataInicio, Date dataFim, Object... parametros) {
-		List<QuebraModel> quebrasModel = new ArrayList<>();
 		em = Uteis.getEntityManager();
 		StringBuilder sb = new StringBuilder(
 				"SELECT q FROM Quebra q WHERE q.data >= :dataInicio AND q.data <= :dataFim ");
@@ -112,7 +84,8 @@ public class QuebraDao implements Serializable {
 				sb.append("q.tipoVidro.id = :tipoVidroId ");
 			} else if (p instanceof FuncionarioModel && ((FuncionarioModel) p).getId() != 0) {
 				sb.append("q.funcionario.id = :funcionarioId ");
-			} else sb.append("q.funcionario.id IS NULL ");
+			} else
+				sb.append("q.funcionario.id IS NULL ");
 
 		}
 		sb.append("ORDER BY q.data DESC");
@@ -128,33 +101,8 @@ public class QuebraDao implements Serializable {
 				query.setParameter("funcionarioId", ((FuncionarioModel) p).getId());
 			}
 		}
-		@SuppressWarnings("unchecked")
-		Collection<Quebra> quebras = (Collection<Quebra>) query.getResultList();
-		QuebraModel quebraModel = null;
-		for (Quebra q : quebras) {
-			quebraModel = new QuebraModel();
-			quebraModel.setId(q.getId());
-			quebraModel.setData(q.getData());
-			TipoVidroModel tipoVidroModel = new TipoVidroModel();
-			tipoVidroModel.setId(q.getTipoVidro().getId());
-			tipoVidroModel.setNome(q.getTipoVidro().getNome());
-			quebraModel.setTipoVidro(tipoVidroModel);
-			quebraModel.setAreaTotal(q.getAreaTotal());
-			quebraModel.setAreaAproveitada(q.getAreaAproveitada());
-			SetorModel setorModel = new SetorModel();
-			setorModel.setId(q.getSetor().getId());
-			setorModel.setNome(q.getSetor().getNome());
-			quebraModel.setSetor(setorModel);
-			if (q.getFuncionario() != null) {
-				FuncionarioModel funcionarioModel = new FuncionarioModel();
-				funcionarioModel.setId(q.getFuncionario().getId());
-				funcionarioModel.setNome(q.getFuncionario().getNome());
-				quebraModel.setFuncionario(funcionarioModel);
-			}
-			quebraModel.setMotivo(q.getMotivo());
-			quebrasModel.add(quebraModel);
-		}
-		return quebrasModel;
+
+		return converterLista((Collection<Quebra>) query.getResultList());
 	}
 
 	public void remover(int id) {
@@ -186,5 +134,70 @@ public class QuebraDao implements Serializable {
 			l[0] = sModel;
 		}
 		return lista;
+	}
+
+	public Quebra consultar(int id) {
+		return Uteis.getEntityManager().find(Quebra.class, id);
+	}
+
+	public QuebraModel consultarModel(int id) {
+		return converterUnidade(consultar(id));
+	}
+
+	private QuebraModel converterUnidade(Quebra quebra) {
+		if (quebra == null)
+			return null;
+		QuebraModel quebraModel = new QuebraModel();
+		quebraModel.setId(quebra.getId());
+		quebraModel.setData(quebra.getData());
+		TipoVidroModel tipoVidroModel = new TipoVidroModel();
+		tipoVidroModel.setId(quebra.getTipoVidro().getId());
+		tipoVidroModel.setNome(quebra.getTipoVidro().getNome());
+		quebraModel.setTipoVidro(tipoVidroModel);
+		quebraModel.setAreaTotal(quebra.getAreaTotal());
+		quebraModel.setAreaAproveitada(quebra.getAreaAproveitada());
+		SetorModel setorModel = new SetorModel();
+		setorModel.setId(quebra.getSetor().getId());
+		setorModel.setNome(quebra.getSetor().getNome());
+		quebraModel.setSetor(setorModel);
+		if (quebra.getFuncionario() != null) {
+			FuncionarioModel funcionarioModel = new FuncionarioModel();
+			funcionarioModel.setId(quebra.getFuncionario().getId());
+			funcionarioModel.setNome(quebra.getFuncionario().getNome());
+			quebraModel.setFuncionario(funcionarioModel);
+		}
+		quebraModel.setMotivo(quebra.getMotivo());
+		return quebraModel;
+	}
+
+	private List<QuebraModel> converterLista(Collection<Quebra> lista) {
+		List<QuebraModel> quebrasModel = new ArrayList<>();
+		QuebraModel quebraModel = null;
+		if (lista != null) {
+			for (Quebra quebra : lista) {
+				quebraModel = new QuebraModel();
+				quebraModel.setId(quebra.getId());
+				quebraModel.setData(quebra.getData());
+				TipoVidroModel tipoVidroModel = new TipoVidroModel();
+				tipoVidroModel.setId(quebra.getTipoVidro().getId());
+				tipoVidroModel.setNome(quebra.getTipoVidro().getNome());
+				quebraModel.setTipoVidro(tipoVidroModel);
+				quebraModel.setAreaTotal(quebra.getAreaTotal());
+				quebraModel.setAreaAproveitada(quebra.getAreaAproveitada());
+				SetorModel setorModel = new SetorModel();
+				setorModel.setId(quebra.getSetor().getId());
+				setorModel.setNome(quebra.getSetor().getNome());
+				quebraModel.setSetor(setorModel);
+				if (quebra.getFuncionario() != null) {
+					FuncionarioModel funcionarioModel = new FuncionarioModel();
+					funcionarioModel.setId(quebra.getFuncionario().getId());
+					funcionarioModel.setNome(quebra.getFuncionario().getNome());
+					quebraModel.setFuncionario(funcionarioModel);
+				}
+				quebraModel.setMotivo(quebra.getMotivo());
+				quebrasModel.add(quebraModel);
+			}
+		}
+		return quebrasModel;
 	}
 }

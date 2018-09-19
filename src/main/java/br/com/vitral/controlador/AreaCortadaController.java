@@ -71,7 +71,9 @@ public class AreaCortadaController implements Serializable {
 		Uteis.messageInformation("Área Cortada alterada com sucesso");
 	}
 
-	public void onRowCancel() {
+	public void onRowCancel(RowEditEvent event) {
+		AreaCortadaModel areaCortadaModel = (AreaCortadaModel) event.getObject();
+		areasCortadas.set(areasCortadas.indexOf(areaCortadaModel), areaCortadaDao.consultarModel(areaCortadaModel.getId()));
 		Uteis.messageInformation("Operação cancelada");
 	}
 }

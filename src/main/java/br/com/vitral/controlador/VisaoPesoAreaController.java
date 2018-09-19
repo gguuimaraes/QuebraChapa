@@ -137,6 +137,10 @@ public class VisaoPesoAreaController implements Serializable {
 		}
 	}
 
+	public Double getPesoTotal() {
+		return pesoDao.consultarPesoTotal(new Date());
+	}
+
 	public BarChartModel getModelPesoMensal() {
 		desenhaPesoMensal();
 		return modelPesoMensal;
@@ -180,7 +184,7 @@ public class VisaoPesoAreaController implements Serializable {
 		modelPesoMensal.setLegendPosition("s");
 		modelPesoMensal.setLegendPlacement(LegendPlacement.OUTSIDEGRID);
 		modelPesoMensal.setLegendCols(4);
-		modelPesoMensal.setDatatipFormat("%s - %s");		
+		modelPesoMensal.setDatatipFormat("%s - %s");
 		modelPesoMensal.setExtender("ext");
 		Axis yAxis = modelPesoMensal.getAxis(AxisType.Y);
 		yAxis.setLabel("Peso (kg)");
@@ -194,6 +198,7 @@ public class VisaoPesoAreaController implements Serializable {
 		cores.append(',');
 		cores.append(setorPonteRolante.getCor());
 		modelPesoMensal.setSeriesColors(cores.toString());
+
 	}
 
 	private void iniciaAreaCortadaMensal() {
@@ -242,6 +247,7 @@ public class VisaoPesoAreaController implements Serializable {
 		modelPesoMensal.addSeries(expedicaoVPE);
 		modelPesoMensal.addSeries(entrega);
 		modelPesoMensal.addSeries(ponteRolante);
+		modelPesoMensal.setBarWidth(8);
 	}
 
 	private void desenhaAreaCortadaMensal() {

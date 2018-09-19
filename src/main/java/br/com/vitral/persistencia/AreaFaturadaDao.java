@@ -72,4 +72,18 @@ public class AreaFaturadaDao implements Serializable {
 		return (Float) query.getSingleResult();
 	}
 
+	public AreaFaturadaModel consultarModel(int id) {
+		return converterUnidade(consultar(id));
+	}
+
+	public AreaFaturadaModel converterUnidade(AreaFaturada areaFaturada) {
+		if (areaFaturada == null)
+			return null;
+		AreaFaturadaModel areaFaturadaModel = new AreaFaturadaModel();
+		areaFaturadaModel.setId(areaFaturada.getId());
+		areaFaturadaModel.setData(areaFaturada.getData());
+		areaFaturadaModel.setArea(areaFaturada.getArea());
+		return areaFaturadaModel;
+	}
+
 }

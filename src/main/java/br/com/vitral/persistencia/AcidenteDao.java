@@ -19,7 +19,7 @@ import br.com.vitral.util.Uteis;
 public class AcidenteDao implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Inject
 	Acidente acidente;
 
@@ -51,17 +51,8 @@ public class AcidenteDao implements Serializable {
 		Query query = em.createNamedQuery("Acidente.findAll");
 		@SuppressWarnings("unchecked")
 		Collection<Acidente> acidentes = (Collection<Acidente>) query.getResultList();
-		AcidenteModel acidenteModel = null;
 		for (Acidente a : acidentes) {
-			acidenteModel = new AcidenteModel();
-			acidenteModel.setId(a.getId());
-			FuncionarioModel funcionarioModel = new FuncionarioModel();
-			funcionarioModel.setId(a.getFuncionario().getId());
-			funcionarioModel.setNome(a.getFuncionario().getNome());
-			acidenteModel.setFuncionario(funcionarioModel);
-			acidenteModel.setObs(a.getObs());
-			acidenteModel.setData(a.getData());
-			acidentesModel.add(acidenteModel);
+			acidentesModel.add(converterUnidade(a));
 		}
 		return acidentesModel;
 	}
@@ -101,5 +92,27 @@ public class AcidenteDao implements Serializable {
 		}
 
 		return maiorDiferenca;
+	}
+
+	public Acidente consultar(int id) {
+		return Uteis.getEntityManager().find(Acidente.class, id);
+	}
+
+	public AcidenteModel consultarModel(int id) {
+		return converterUnidade(consultar(id));
+	}
+
+	private AcidenteModel converterUnidade(Acidente acidente) {
+		if (acidente == null)
+			return null;
+		AcidenteModel acidenteModel = new AcidenteModel();
+		acidenteModel.setId(acidente.getId());
+		FuncionarioModel funcionarioModel = new FuncionarioModel();
+		funcionarioModel.setId(acidente.getFuncionario().getId());
+		funcionarioModel.setNome(acidente.getFuncionario().getNome());
+		acidenteModel.setFuncionario(funcionarioModel);
+		acidenteModel.setObs(acidente.getObs());
+		acidenteModel.setData(acidente.getData());
+		return acidenteModel;
 	}
 }

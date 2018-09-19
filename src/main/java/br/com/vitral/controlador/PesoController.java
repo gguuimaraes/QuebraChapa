@@ -13,6 +13,7 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.event.RowEditEvent;
 
 import br.com.vitral.modelo.PesoModel;
+import br.com.vitral.modelo.PesoModel;
 import br.com.vitral.persistencia.PesoDao;
 import br.com.vitral.util.Uteis;
 
@@ -71,7 +72,9 @@ public class PesoController implements Serializable {
 		Uteis.messageInformation("Peso alterado com sucesso");
 	}
 
-	public void onRowCancel() {
+	public void onRowCancel(RowEditEvent event) {
+		PesoModel pesoModel = (PesoModel) event.getObject();
+		pesos.set(pesos.indexOf(pesoModel), pesoDao.consultarModel(pesoModel.getId()));
 		Uteis.messageInformation("Operação cancelada");
 	}
 }

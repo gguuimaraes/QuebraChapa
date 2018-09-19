@@ -13,6 +13,7 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.event.RowEditEvent;
 
 import br.com.vitral.modelo.TipoVidroModel;
+import br.com.vitral.modelo.TipoVidroModel;
 import br.com.vitral.persistencia.TipoVidroDao;
 import br.com.vitral.util.Uteis;
 
@@ -71,7 +72,9 @@ public class TipoVidroController implements Serializable {
 		Uteis.messageInformation("Tipo Vidro alterado com sucesso");
 	}
 
-	public void onRowCancel() {
+	public void onRowCancel(RowEditEvent event) {
+		TipoVidroModel tipoVidroModel = (TipoVidroModel) event.getObject();
+		tiposVidro.set(tiposVidro.indexOf(tipoVidroModel), tipoVidroDao.consultarModel(tipoVidroModel.getId()));
 		Uteis.messageInformation("Operação cancelada");
 	}
 }

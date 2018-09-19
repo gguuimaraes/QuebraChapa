@@ -76,7 +76,9 @@ public class UsuarioController implements Serializable {
 		Uteis.messageInformation("Usuário alterado com sucesso");
 	}
 
-	public void onRowCancel() {
+	public void onRowCancel(RowEditEvent event) {
+		UsuarioModel usuarioModel = (UsuarioModel) event.getObject();
+		usuarios.set(usuarios.indexOf(usuarioModel), usuarioDao.consultarModel(usuarioModel.getId()));
 		Uteis.messageInformation("Operação cancelada");
 	}
 }

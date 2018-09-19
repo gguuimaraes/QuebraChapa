@@ -23,6 +23,7 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.event.RowEditEvent;
 
 import br.com.vitral.modelo.QuebraModel;
+import br.com.vitral.modelo.QuebraModel;
 import br.com.vitral.persistencia.QuebraDao;
 import br.com.vitral.util.Uteis;
 
@@ -86,15 +87,6 @@ public class QuebraController implements Serializable {
 
 	public void setQuebrasFiltradas(List<QuebraModel> quebrasFiltradas) {
 		this.quebrasFiltradas = quebrasFiltradas;
-	}
-
-	public void onRowEdit(RowEditEvent event) {
-		quebraDao.salvar((QuebraModel) event.getObject());
-		Uteis.messageInformation("Quebra alterada com sucesso");
-	}
-
-	public void onRowCancel() {
-		Uteis.messageInformation("Operação cancelada");
 	}
 
 	public boolean filtrarFuncionario(Object value, Object filter, Locale locale) {
@@ -173,6 +165,17 @@ public class QuebraController implements Serializable {
 		footer.getCell(3).setCellFormula("SUM(D2:D" + linhas + ")");
 		for (int j = 0; j < footer.getPhysicalNumberOfCells(); j++)
 			footer.getCell(j).setCellStyle(footerStyle);
+	}
+
+	public void onRowEdit(RowEditEvent event) {
+		quebraDao.salvar((QuebraModel) event.getObject());
+		Uteis.messageInformation("Quebra alterada com sucesso");
+	}
+
+	public void onRowCancel(RowEditEvent event) {
+		QuebraModel quebraModel = (QuebraModel) event.getObject();
+		quebras.set(quebras.indexOf(quebraModel), quebraDao.consultarModel(quebraModel.getId()));
+		Uteis.messageInformation("Operação cancelada");
 	}
 
 }

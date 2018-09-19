@@ -72,4 +72,24 @@ public class UsuarioDao implements Serializable {
 		em = Uteis.getEntityManager();
 		em.remove(em.find(Usuario.class, id));
 	}
+
+	public Usuario consultar(int id) {
+		return Uteis.getEntityManager().find(Usuario.class, id);
+	}
+
+	public UsuarioModel consultarModel(int id) {
+		return converterUnidade(consultar(id));
+	}
+
+	private UsuarioModel converterUnidade(Usuario usuario) {
+		if (usuario == null)
+			return null;
+		UsuarioModel usuarioModel = new UsuarioModel();
+		usuarioModel.setId(usuario.getId());
+		usuarioModel.setNome(usuario.getNome());
+		usuarioModel.setSenha(usuario.getSenha());
+		usuarioModel.setTipo(usuario.getTipo());
+		return usuarioModel;
+	}
+
 }

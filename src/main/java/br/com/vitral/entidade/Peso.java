@@ -21,7 +21,8 @@ import javax.persistence.TemporalType;
 @NamedQueries({ @NamedQuery(name = "Peso.findAll", query = "SELECT p FROM Peso p ORDER BY p.data DESC"),
 		@NamedQuery(name = "Peso.findPesosDoDia", query = "SELECT p FROM Peso p WHERE p.data = :data ORDER BY p.peso DESC"),
 		@NamedQuery(name = "Peso.findPesoTotalSetorDia", query = "SELECT SUM(p.peso) FROM Peso p WHERE p.setor.id = :setorId AND p.data = :data"),
-		@NamedQuery(name = "Peso.findPesosPorSetorDia", query = "SELECT p FROM Peso p WHERE p.setor.id = :setorId AND p.data = :data ORDER BY p.peso DESC")})
+		@NamedQuery(name = "Peso.findPesosPorSetorDia", query = "SELECT p FROM Peso p WHERE p.setor.id = :setorId AND p.data = :data ORDER BY p.peso DESC"),
+		@NamedQuery(name = "Peso.findPesoTotalDia", query= "SELECT SUM(p.peso) FROM Peso p WHERE p.data = :data")})
 
 public class Peso implements Serializable {
 

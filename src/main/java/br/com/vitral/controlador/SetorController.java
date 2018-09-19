@@ -13,6 +13,7 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.event.RowEditEvent;
 
 import br.com.vitral.modelo.SetorModel;
+import br.com.vitral.modelo.SetorModel;
 import br.com.vitral.persistencia.SetorDao;
 import br.com.vitral.util.Uteis;
 
@@ -71,7 +72,9 @@ public class SetorController implements Serializable {
 		Uteis.messageInformation("Setor alterado com sucesso");
 	}
 
-	public void onRowCancel( ) {
+	public void onRowCancel(RowEditEvent event) {
+		SetorModel setorModel = (SetorModel) event.getObject();
+		setores.set(setores.indexOf(setorModel), setorDao.consultarModel(setorModel.getId()));
 		Uteis.messageInformation("Operação cancelada");
 	}
 }

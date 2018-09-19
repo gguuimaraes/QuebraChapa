@@ -13,6 +13,7 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.event.RowEditEvent;
 
 import br.com.vitral.modelo.AcidenteModel;
+import br.com.vitral.modelo.AcidenteModel;
 import br.com.vitral.persistencia.AcidenteDao;
 import br.com.vitral.util.Uteis;
 
@@ -58,20 +59,22 @@ public class AcidenteController implements Serializable {
 		return acidentes;
 	}
 
-	public void onRowEdit(RowEditEvent event) {
-		acidenteDao.salvar((AcidenteModel) event.getObject());
-		Uteis.messageInformation("Acidente alterado com sucesso");
-	}
-
-	public void onRowCancel() {
-		Uteis.messageInformation("Operação cancelada");
-	}
-
 	public AcidenteModel getAcidenteModel() {
 		return this.acidenteModel;
 	}
 
 	public void setAcidenteModel(AcidenteModel acidenteModel) {
 		this.acidenteModel = acidenteModel;
+	}
+
+	public void onRowEdit(RowEditEvent event) {
+		acidenteDao.salvar((AcidenteModel) event.getObject());
+		Uteis.messageInformation("Acidente alterado com sucesso");
+	}
+
+	public void onRowCancel(RowEditEvent event) {
+		AcidenteModel acidenteModel = (AcidenteModel) event.getObject();
+		acidentes.set(acidentes.indexOf(acidenteModel), acidenteDao.consultarModel(acidenteModel.getId()));
+		Uteis.messageInformation("Operação cancelada");
 	}
 }

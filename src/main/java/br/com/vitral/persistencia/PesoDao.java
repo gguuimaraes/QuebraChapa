@@ -97,8 +97,12 @@ public class PesoDao implements Serializable {
 		em.remove(em.find(Peso.class, id));
 	}
 
+	public Peso consultar(int id) {
+		return Uteis.getEntityManager().find(Peso.class, id);
+	}
+
 	public Peso consultar(PesoModel pesoModel) {
-		return Uteis.getEntityManager().find(Peso.class, pesoModel.getId());
+		return consultar(pesoModel.getId());
 	}
 
 	public Double consultarPesoTotal(Setor setor, Date dia) {
@@ -106,6 +110,37 @@ public class PesoDao implements Serializable {
 		em = Uteis.getEntityManager();
 		Query query = em.createNamedQuery("Peso.findPesoTotalSetorDia");
 		query.setParameter("setorId", setor.getId());
+		query.setParameter("data", dia);
+		pesoTotal = (Double) query.getSingleResult();
+		return pesoTotal;
+	}
+
+	public PesoModel consultarModel(int id) {
+		return converterUnidade(consultar(id));
+	}
+
+	private PesoModel converterUnidade(Peso peso) {
+		if (peso == null)
+			return null;
+		PesoModel pesoModel = new PesoModel();
+		pesoModel.setId(peso.getId());
+		pesoModel.setData(peso.getData());
+		FuncionarioModel funcionarioModel = new FuncionarioModel();
+		funcionarioModel.setId(peso.getFuncionario().getId());
+		funcionarioModel.setNome(peso.getFuncionario().getNome());
+		pesoModel.setFuncionario(funcionarioModel);
+		SetorModel setorModel = new SetorModel();
+		setorModel.setId(peso.getSetor().getId());
+		setorModel.setNome(peso.getSetor().getNome());
+		pesoModel.setSetor(setorModel);
+		pesoModel.setPeso(peso.getPeso());
+		return pesoModel;
+	}
+	
+	public Double consultarPesoTotal(Date dia) {
+		Double pesoTotal = null;
+		em = Uteis.getEntityManager();
+		Query query = em.createNamedQuery("Peso.findPesoTotalDia");
 		query.setParameter("data", dia);
 		pesoTotal = (Double) query.getSingleResult();
 		return pesoTotal;

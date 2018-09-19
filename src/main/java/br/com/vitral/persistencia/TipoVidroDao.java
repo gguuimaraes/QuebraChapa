@@ -59,4 +59,17 @@ public class TipoVidroDao implements Serializable {
 	public TipoVidro consultar(int id) {
 		return Uteis.getEntityManager().find(TipoVidro.class, id);
 	}
+
+	public TipoVidroModel consultarModel(int id) {
+		return converterUnidade(consultar(id));
+	}
+
+	private TipoVidroModel converterUnidade(TipoVidro tipoVidro) {
+		if (tipoVidro == null)
+			return null;
+		TipoVidroModel tipoVidroModel = new TipoVidroModel();
+		tipoVidroModel.setId(tipoVidro.getId());
+		tipoVidroModel.setNome(tipoVidro.getNome());
+		return tipoVidroModel;
+	}
 }

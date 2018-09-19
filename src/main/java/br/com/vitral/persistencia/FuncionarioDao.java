@@ -18,7 +18,7 @@ public class FuncionarioDao implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	transient EntityManager em;
-	
+
 	@Inject
 	Funcionario funcionario;
 
@@ -58,5 +58,18 @@ public class FuncionarioDao implements Serializable {
 
 	public Funcionario consultar(int id) {
 		return Uteis.getEntityManager().find(Funcionario.class, id);
+	}
+
+	public FuncionarioModel consultarModel(int id) {
+		return converterUnidade(consultar(id));
+	}
+
+	private FuncionarioModel converterUnidade(Funcionario funcionario) {
+		if (funcionario == null)
+			return null;
+		FuncionarioModel funcionarioModel = new FuncionarioModel();
+		funcionarioModel.setId(funcionario.getId());
+		funcionarioModel.setNome(funcionario.getNome());
+		return funcionarioModel;
 	}
 }

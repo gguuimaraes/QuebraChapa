@@ -64,12 +64,26 @@ public class SetorDao implements Serializable {
 		return Uteis.getEntityManager().find(Setor.class, id);
 	}
 
+	public SetorModel consultarModel(int id) {
+		return converterUnidade(consultar(id));
+	}
+
 	public Setor consultarPeloNome(String nome) {
 		try {
 			return (Setor) Uteis.getEntityManager().createNamedQuery("Setor.findPeloNome").setParameter("nome", nome)
-			.getSingleResult();
+					.getSingleResult();
 		} catch (NoResultException e) {
 			return null;
 		}
+	}
+
+	private SetorModel converterUnidade(Setor setor) {
+		if (setor == null)
+			return null;
+		SetorModel setorModel = new SetorModel();
+		setorModel.setId(setor.getId());
+		setorModel.setNome(setor.getNome());
+		setorModel.setCor(setor.getCor());
+		return setorModel;
 	}
 }

@@ -20,7 +20,10 @@
 		<h:form id="form">
 			<p:growl id="msgs" showDetail="true" />
 			<p:dataTable id="areasCortadas" var="areaCortada" value="#{areaCortadaController.areasCortadas}" editable="true"
-				emptyMessage="Nenhum registro.">
+				emptyMessage="Nenhum registro." paginator="true"
+				currentPageReportTemplate="Exibindo de {startRecord} a {endRecord} no total de {totalRecords} - Página: {currentPage}/{totalPages}"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageLabel} {RowsPerPageDropdown} {Exporters}"
+				rowsPerPageTemplate="10,15,20,50,100,200" rows="10">
 
 				<p:ajax event="rowEdit" listener="#{areaCortadaController.onRowEdit}" update=":form:msgs" />
 				<p:ajax event="rowEditCancel" listener="#{areaCortadaController.onRowCancel}" update=":form:msgs" />
