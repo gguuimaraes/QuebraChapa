@@ -2,13 +2,13 @@ package br.com.vitral.modelo;
 
 import java.io.Serializable;
 
-public class SetorModel implements Serializable {
+public class AvisoModel implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
-	private String nome;
-	private String cor;
+	private String descricao;
+	private String corpo;
 
 	public Integer getId() {
 		return id;
@@ -18,24 +18,20 @@ public class SetorModel implements Serializable {
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
+	public String getDescricao() {
+		return descricao;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-	
-	public String getCor() {
-		return cor;
-	}
-	
-	public String getCorHex() {
-		return new StringBuilder("#").append(cor).toString();
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 
-	public void setCor(String cor) {
-		this.cor = cor;
+	public String getCorpo() {
+		return corpo;
+	}
+
+	public void setCorpo(String corpo) {
+		this.corpo = corpo;
 	}
 
 	@Override
@@ -54,11 +50,18 @@ public class SetorModel implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		SetorModel other = (SetorModel) obj;
-		if (id == null && other.id != null) {
+		AvisoModel other = (AvisoModel) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
 			return false;
-		}
-		return id == (other.id);
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "AvisoModel [id=" + id + ", descricao=" + descricao + ", corpo=" + corpo + "]";
 	}
 
 }

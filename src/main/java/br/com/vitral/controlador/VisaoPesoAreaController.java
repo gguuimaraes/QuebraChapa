@@ -18,9 +18,9 @@ import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.LegendPlacement;
 
-import br.com.vitral.entidade.Setor;
 import br.com.vitral.modelo.AreaCortadaModel;
 import br.com.vitral.modelo.PesoModel;
+import br.com.vitral.modelo.SetorModel;
 import br.com.vitral.persistencia.AreaCortadaDao;
 import br.com.vitral.persistencia.PesoDao;
 import br.com.vitral.persistencia.SetorDao;
@@ -40,12 +40,12 @@ public class VisaoPesoAreaController implements Serializable {
 	@Inject
 	private AreaCortadaDao areaCortadaDao;
 
-	private Setor setorExpedicao;
-	private Setor setorExpedicaoVPE;
-	private Setor setorEntrega;
-	private Setor setorMesaGrande;
-	private Setor setorMesaPequena;
-	private Setor setorPonteRolante;
+	private SetorModel setorExpedicao;
+	private SetorModel setorExpedicaoVPE;
+	private SetorModel setorEntrega;
+	private SetorModel setorMesaGrande;
+	private SetorModel setorMesaPequena;
+	private SetorModel setorPonteRolante;
 
 	private static final String STR_EXPEDICAO = "EXPEDICAO";
 	private static final String STR_EXPEDICAO_VPE = "EXPEDICAO VPE";
@@ -58,12 +58,12 @@ public class VisaoPesoAreaController implements Serializable {
 
 	@PostConstruct
 	public void init() {
-		setorExpedicao = setorDao.consultarPeloNome(STR_EXPEDICAO);
-		setorExpedicaoVPE = setorDao.consultarPeloNome(STR_EXPEDICAO_VPE);
-		setorEntrega = setorDao.consultarPeloNome(STR_ENTREGA);
-		setorPonteRolante = setorDao.consultarPeloNome(STR_PONTE_ROLANTE);
-		setorMesaGrande = setorDao.consultarPeloNome(STR_MESA_GRANDE);
-		setorMesaPequena = setorDao.consultarPeloNome(STR_MESA_PEQUENA);
+		setorExpedicao = setorDao.consultarModelPeloNome(STR_EXPEDICAO);
+		setorExpedicaoVPE = setorDao.consultarModelPeloNome(STR_EXPEDICAO_VPE);
+		setorEntrega = setorDao.consultarModelPeloNome(STR_ENTREGA);
+		setorPonteRolante = setorDao.consultarModelPeloNome(STR_PONTE_ROLANTE);
+		setorMesaGrande = setorDao.consultarModelPeloNome(STR_MESA_GRANDE);
+		setorMesaPequena = setorDao.consultarModelPeloNome(STR_MESA_PEQUENA);
 
 		iniciaPesoMensal();
 		iniciaAreaCortadaMensal();
@@ -151,27 +151,27 @@ public class VisaoPesoAreaController implements Serializable {
 		return modelAreaCortadaMensal;
 	}
 
-	public Setor getSetorExpedicao() {
+	public SetorModel getSetorExpedicao() {
 		return setorExpedicao;
 	}
 
-	public Setor getSetorExpedicaoVPE() {
+	public SetorModel getSetorExpedicaoVPE() {
 		return setorExpedicaoVPE;
 	}
 
-	public Setor getSetorEntrega() {
+	public SetorModel getSetorEntrega() {
 		return setorEntrega;
 	}
 
-	public Setor getSetorMesaGrande() {
+	public SetorModel getSetorMesaGrande() {
 		return setorMesaGrande;
 	}
 
-	public Setor getSetorMesaPequena() {
+	public SetorModel getSetorMesaPequena() {
 		return setorMesaPequena;
 	}
 
-	public Setor getSetorPonteRolante() {
+	public SetorModel getSetorPonteRolante() {
 		return setorPonteRolante;
 	}
 
@@ -247,7 +247,7 @@ public class VisaoPesoAreaController implements Serializable {
 		modelPesoMensal.addSeries(expedicaoVPE);
 		modelPesoMensal.addSeries(entrega);
 		modelPesoMensal.addSeries(ponteRolante);
-		modelPesoMensal.setBarWidth(8);
+		modelPesoMensal.setBarWidth(2);
 	}
 
 	private void desenhaAreaCortadaMensal() {

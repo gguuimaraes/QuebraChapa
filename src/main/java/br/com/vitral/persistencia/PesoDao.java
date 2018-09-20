@@ -62,7 +62,7 @@ public class PesoDao implements Serializable {
 		return converterLista(query.getResultList());
 	}
 
-	public List<PesoModel> listar(Setor setor, Date dia) {
+	public List<PesoModel> listar(SetorModel setor, Date dia) {
 		Query query = Uteis.getEntityManager().createNamedQuery("Peso.findPesosPorSetorDia");
 		query.setParameter("data", dia);
 		query.setParameter("setorId", setor.getId());
@@ -105,7 +105,7 @@ public class PesoDao implements Serializable {
 		return consultar(pesoModel.getId());
 	}
 
-	public Double consultarPesoTotal(Setor setor, Date dia) {
+	public Double consultarPesoTotal(SetorModel setor, Date dia) {
 		Double pesoTotal = null;
 		em = Uteis.getEntityManager();
 		Query query = em.createNamedQuery("Peso.findPesoTotalSetorDia");

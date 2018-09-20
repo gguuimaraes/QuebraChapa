@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+
+<ui:composition template="/template/layoutBase.xhtml">
+
+	<ui:define name="content">
+		<p:commandButton icon="fa fa-fw fa-plus" actionListener="#{avisoController.cadastrar}" value="Cadastrar" ajax="true"
+			update="dialogCadastro" style="margin-bottom: 10px" />
+
+		<p:dialog header="Cadastro Acidente" id="dialogCadastro" widgetVar="dialogCadastro" modal="true" maximizable="true">
+			<ui:include src="/sistema/cadastro/cadastroAviso.xhtml" />
+		</p:dialog>
+
+		<h:form id="form">
+			<p:growl id="msgs" showDetail="true" />
+			<p:dataTable id="avisos" var="aviso" value="#{avisoController.avisos}" editable="true"
+				emptyMessage="Nenhum registro." paginator="true"
+				currentPageReportTemplate="Exibindo de {startRecord} a {endRecord} no total de {totalRecords} - Página: {currentPage}/{totalPages}"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageLabel} {RowsPerPageDropdown} {Exporters}"
+				rowsPerPageTemplate="10,15,20,50,100,200" rows="10">
+
+				<p:ajax event="rowEdit" listener="#{avisoController.onRowEdit}" update=":form:msgs" />
+				<p:ajax event="rowEditCancel" listener="#{avisoController.onRowCancel}" update=":form:msgs" />
+
+				<p:column headerText="Descrição">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{aviso.descricao}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{aviso.descricao}" maxlength="30" required="true"
+								requiredMessage="A Descrição é de preenchimento obrigatório" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Corpo" style="width: 10%; text-align: center">
+					<p:commandButton icon="fa fa-fw fa-pencil" actionListener="#{avisoController.modificar(aviso)}" value="Modificar"
+						ajax="true" update="dialogCadastro" />
+				</p:column>
+
+				<p:column headerText="Acesso" style="width: 10%; text-align: center">
+					<p:link target="_blank" outcome="/veraviso.xhtml" value="Visualizar Aviso #{aviso.id}">
+						<f:param name="aviso" value="#{aviso.id}" />
+					</p:link>
+				</p:column>
+
+				<p:column styleClass="colicone coleditar">
+					<p:rowEditor editTitle="Editar" cancelTitle="Cancelar" saveTitle="Salvar" />
+				</p:column>
+
+				<p:column styleClass="colicone colexcluir"
+					rendered="#{loginController.usuarioAutenticado.tipo == loginController.tipos[0]}">
+					<p:commandLink title="Excluir" actionListener="#{avisoController.excluir(aviso)}" update=":form">
+						<h:outputText class="ui-icon ui-icon-trash" />
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>
+
+
+</html>

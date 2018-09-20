@@ -62,7 +62,7 @@ public class AreaCortadaDao implements Serializable {
 		return converterLista(query.getResultList());
 	}
 
-	public List<AreaCortadaModel> listar(Setor setor, Date dia) {
+	public List<AreaCortadaModel> listar(SetorModel setor, Date dia) {
 		Query query = Uteis.getEntityManager().createNamedQuery("AreaCortada.findAreasPorSetorDia");
 		query.setParameter("data", dia);
 		query.setParameter("setorId", setor.getId());
@@ -102,7 +102,7 @@ public class AreaCortadaDao implements Serializable {
 		return areasModel;
 	}
 
-	public Double consultarAreaTotal(Setor setor, Date dia) {
+	public Double consultarAreaTotal(SetorModel setor, Date dia) {
 		Double areaTotal = null;
 		em = Uteis.getEntityManager();
 		Query query = em.createNamedQuery("AreaCortada.findAreaTotalSetorDia");

@@ -76,6 +76,10 @@ public class SetorDao implements Serializable {
 			return null;
 		}
 	}
+	
+	public SetorModel consultarModelPeloNome(String nome) {
+		return converterUnidade(consultarPeloNome(nome));
+	}
 
 	private SetorModel converterUnidade(Setor setor) {
 		if (setor == null)
