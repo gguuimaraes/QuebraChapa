@@ -40,7 +40,7 @@ public class AvisoController implements Serializable {
 		avisoModel = new AvisoModel();
 		PrimeFaces.current().executeScript("PF('dialogCadastro').show();");
 	}
-	
+
 	public void modificar(AvisoModel avisoModel) {
 		this.avisoModel = avisoModel;
 		PrimeFaces.current().executeScript("PF('dialogCadastro').show();");
@@ -52,6 +52,12 @@ public class AvisoController implements Serializable {
 		this.avisoModel = new AvisoModel();
 		PrimeFaces.current().executeScript("PF('dialogCadastro').hide();");
 		Uteis.messageInformation("Aviso cadastrado com sucesso");
+	}
+
+	public void cancelar() {
+		init();
+		this.avisoModel = new AvisoModel();
+		PrimeFaces.current().executeScript("PF('dialogCadastro').hide();");
 	}
 
 	public void excluir(AvisoModel avisoModel) {

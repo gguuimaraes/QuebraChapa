@@ -5,18 +5,22 @@
 		<p:messages showDetail="false" closable="true" severity="error">
 			<p:autoUpdate />
 		</p:messages>
+
 		<h:panelGrid columns="1" cellpadding="10" style="width: 100%; height: 100%">
-			<p:outputLabel value="Descrição" for="txtDescricao" />
-			<p:inputText id="txtDescricao" value="#{avisoController.avisoModel.descricao}" required="true"
-				requiredMessage="A Descrição é de preenchimento obrigatório" />
+			<h:panelGrid columns="2">
+				<p:outputLabel value="Descrição" for="txtDescricao" />
+				<p:inputText id="txtDescricao" value="#{avisoController.avisoModel.descricao}" required="true"
+					requiredMessage="A Descrição é de preenchimento obrigatório" />
+			</h:panelGrid>
+			<p:textEditor value="#{avisoController.avisoModel.corpo}" required="true"
+				requiredMessage="O Corpo é de preenchimento obrigatório" style="width: 100%; height: 100%" />
 
-			<p:outputLabel value="Corpo" for="txtCorpo" />
-			<p:textEditor id="txtCorpo" value="#{avisoController.avisoModel.corpo}" required="true"
-				requiredMessage="O Corpo é de preenchimento obrigatório" />
-
-
-			<p:commandButton value="Salvar" id="btnSalvar" icon="ui-icon-gear" actionListener="#{avisoController.salvar}"
-				update="form" />
+			<h:panelGrid columns="2">
+				<p:commandButton value="Salvar" id="btnSalvar" icon="fa fa-fw fa-save" actionListener="#{avisoController.salvar}"
+					update="form" />
+				<p:commandButton value="Cancelar" id="btnCancelar" icon="fa fa-fw fa-remove"
+					actionListener="#{avisoController.cancelar}" update="form" immediate="true" />
+			</h:panelGrid>
 		</h:panelGrid>
 	</h:form>
 

@@ -3,11 +3,15 @@
 <f:metadata>
 	<f:event type="preRenderView" listener="#{verAvisoController.onPageLoad}" />
 </f:metadata>
+<h:head>
+	<h:outputStylesheet library="css" name="veraviso.css" />
+</h:head>
 <h:body>
-	<div style="margin: auto; text-align: center">
-		<h:outputText value="#{verAvisoController.avisoModel.corpo}" escape="false" />
+	<div style="margin: auto; border: none !important" class="ql-container ql-snow">
+		<div class="ql-editor">
+			<h:outputText value="#{verAvisoController.avisoModel.corpo}" escape="false" />
+		</div>
 	</div>
-
 </h:body>
 
 </html>

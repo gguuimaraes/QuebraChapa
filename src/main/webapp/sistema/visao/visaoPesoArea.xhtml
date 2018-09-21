@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
 <h:head>
-	<h:outputStylesheet library="css" name="visaoPesoArea.css" />
+	<h:outputStylesheet library="css" name="visaopesoarea.css" />
 </h:head>
 <h:body style="height: calc(100vh - 10px); margin: 0">
 	<script>
@@ -59,7 +59,7 @@
 					</h:column>
 				</h:dataTable>
 				</h:panelGrid>
-				<h:panelGroup>
+				
 					<h:panelGrid columns="2" styleClass="painel" cellpadding="0" cellspacing="0">
 						<h:panelGrid columns="1" styleClass="painel" cellpadding="0" cellspacing="0">
 							<h:dataTable styleClass="tabela2" value="#{visaoPesoAreaController.getPesos('PONTE ROLANTE')}" var="peso" cellspacing="4">
@@ -157,18 +157,18 @@
 										</h:outputText>
 									</f:facet>
 								</h:column>
-							</h:dataTable>
-						
+							</h:dataTable>			
 						</h:panelGrid>
-					</h:panelGrid>
-					<div style="display: table; margin: auto; margin-right: 10px; border-style: groove; font-family: Arial; font-size: 20px; text-align: center">
-						<div style="display: table-cell; color: white; background: #000000; font-weight: bold">TOTAL FATURADO</div>
-	
-						<h:outputText style="display: table-cell" value="#{visaoPesoAreaController.pesoTotal}">
+						<!-- <p:spacer />
+						<h:panelGrid columns="1" style="margin: auto; margin-right: 10px; border-style: groove" cellpadding="0" cellspacing="4">
+						<h:outputText style="color: white; background: black" value="TOTAL FATURADO" />
+						<h:outputText value="#{visaoPesoAreaController.pesoTotal}">
 							<f:convertNumber pattern="#,##0.00 kg" />
 						</h:outputText>
-					</div>
-				</h:panelGroup>
+					</h:panelGrid> -->
+					</h:panelGrid>
+					
+			
 			</h:panelGrid>
 		</div>
 		<div class="child2">
