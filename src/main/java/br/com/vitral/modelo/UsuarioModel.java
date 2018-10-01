@@ -6,8 +6,10 @@ import br.com.vitral.entidade.Usuario.TipoUsuario;
 
 public class UsuarioModel implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2073567802498857228L;
 	private Integer id;
 	private String nome;
 	private String senha;
@@ -46,6 +48,11 @@ public class UsuarioModel implements Serializable {
 	}
 
 	@Override
+	public String toString() {
+		return "UsuarioModel [id=" + id + ", nome=" + nome + ", senha=" + senha + ", tipo=" + tipo + "]";
+	}
+
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -62,10 +69,12 @@ public class UsuarioModel implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		UsuarioModel other = (UsuarioModel) obj;
-		if (id == null && other.id != null) {
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
 			return false;
-		}
-		return id == other.id;
+		return true;
 	}
 
 }

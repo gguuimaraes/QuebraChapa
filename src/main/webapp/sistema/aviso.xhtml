@@ -13,7 +13,7 @@
 		<p:commandButton icon="fa fa-fw fa-plus" actionListener="#{avisoController.cadastrar}" value="Cadastrar" ajax="true"
 			update="dialogCadastro" style="margin-bottom: 10px" />
 
-		<p:dialog header="Cadastro Acidente" id="dialogCadastro" widgetVar="dialogCadastro" modal="true" maximizable="true">
+		<p:dialog header="Cadastro Acidente" id="dialogCadastro" widgetVar="dialogCadastro" modal="true" maximizable="true" onShow="PF('dialogCadastro').toggleMaximize()">
 			<ui:include src="/sistema/cadastro/cadastroAviso.xhtml" />
 		</p:dialog>
 

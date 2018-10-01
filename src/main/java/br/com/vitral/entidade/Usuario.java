@@ -16,13 +16,17 @@ import javax.persistence.Table;
 
 @NamedQueries({
 	 
-	@NamedQuery(name = "Usuario.findUser", query = "SELECT u FROM Usuario u WHERE u.nome = :nome AND u.senha = :senha"),
+	@NamedQuery(name = "Usuario.findPeloNome", query = "SELECT u FROM Usuario u WHERE u.nome = :nome"),
 	@NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")
  
 })
 public class Usuario implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7445803395637715256L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +37,7 @@ public class Usuario implements Serializable {
 	private String nome;
 
 	@Column(name = "senha")
-	private String senha;
+	private byte[] senha;
 
 	@Column(name = "tipo")
 	private TipoUsuario tipo;
@@ -54,11 +58,11 @@ public class Usuario implements Serializable {
 		this.nome = nome;
 	}
 
-	public String getSenha() {
+	public byte[] getSenha() {
 		return senha;
 	}
 
-	public void setSenha(String senha) {
+	public void setSenha(byte[] senha) {
 		this.senha = senha;
 	}
 

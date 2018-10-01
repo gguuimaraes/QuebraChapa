@@ -2,6 +2,7 @@ package br.com.vitral.controlador;
 
 import java.io.Serializable;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -19,7 +20,10 @@ import br.com.vitral.util.Uteis;
 @SessionScoped
 public class LoginController implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2912288554342525190L;
 
 	@Inject
 	private UsuarioModel usuarioModel;

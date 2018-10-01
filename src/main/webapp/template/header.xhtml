@@ -30,9 +30,10 @@
 			<p:menuitem value="Dias Acidentes" url="visaoDiasAcidentes.xhtml" />
 		</p:submenu>
 
-		<f:facet name="options">
-			<p:commandButton value="Logout" icon="fa fa-fw fa-sign-out" action="#{loginController.logout}" />
-		</f:facet>
+		<p:submenu icon="fa fa-fw fa-gear" style="float: right">
+			<p:menuitem value="Alterar senha" url="alterarSenha.xhtml" />
+			<p:menuitem value="Sair" action="#{loginController.logout}" />
+		</p:submenu>
 	</p:menubar>
 
 </h:form>
