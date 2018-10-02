@@ -5,7 +5,7 @@
 	xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
 <h:head>
 	<h:outputStylesheet library="css" name="default.css" />
-	<link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/resources/imagens/favicon.ico"/>
+	<link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/resources/imagens/favicon.ico" />
 	<title>Quebra Chapa</title>
 </h:head>
 
@@ -13,17 +13,18 @@
 	<h:form style="margin:auto">
 		<p:growl id="msg" showDetail="true" sticky="true" />
 		<p:panel header="Quebra Chapa">
-			<h:panelGrid cellpadding="10">
+			<h:panelGrid cellpadding="4">
 				<p:graphicImage url="/resources/imagens/logo.jpg" width="250px" />
 			</h:panelGrid>
-			<h:panelGrid columns="2" cellpadding="10" style="width: 100%">
+			<h:panelGrid columns="2" cellpadding="4" style="width: 100%">
 				<p:outputLabel value="Nome" />
 				<p:inputText id="txtNome" value="#{loginController.usuarioModel.nome}" style="width: calc(100% - 10px)" />
 				<p:outputLabel value="Senha" />
 				<p:password id="txtSenha" value="#{loginController.usuarioModel.senha}" style="width: calc(100% - 10px)" />
 			</h:panelGrid>
-			<h:panelGrid cellpadding="10">
-				<p:commandButton value="Acessar" id="btnAcessar" icon="fa fa-fw fa-sign-in" action="#{loginController.login}" update="msg" />
+			<h:panelGrid cellpadding="4">
+				<p:commandButton value="Acessar" id="btnAcessar" icon="fa fa-fw fa-sign-in" action="#{loginController.login}"
+					update="msg" />
 			</h:panelGrid>
 		</p:panel>
 	</h:form>

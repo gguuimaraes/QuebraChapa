@@ -9,16 +9,18 @@
 </h:head>
 
 <h:body>
-	<div id="header">
-		<ui:include src="header.xhtml" />
-	</div>
+	<div class="table container">
+		<div class="table-row header">
+			<ui:include src="header.xhtml" />
+		</div>
 
-	<div id="content" style="margin: 10px 10px">
-		<ui:insert name="content" />
+		<div class="table-row body">
+			<div class="body-content-wrapper">
+				<div class="body-content">
+					<ui:insert name="content" />
+				</div>
+			</div>
+		</div>
 	</div>
-
-	<!-- <div id="footer">
-		<ui:include src="footer.xhtml" />
-	</div> -->
 </h:body>
 </html>

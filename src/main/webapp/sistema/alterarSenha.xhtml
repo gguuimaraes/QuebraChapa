@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
+<h:head>
+</h:head>
+
+<ui:composition template="/template/layoutBase.xhtml">
+
+	<ui:define name="content">
+		<div style="display: flex; height: 100%">
+			<h:form id="form" style="margin: auto">
+				<p:growl id="msgs" showDetail="true" globalOnly="true" />
+				<p:panel header="Alterar senha">
+					<p:messages showDetail="false" closable="true" severity="error">
+						<p:autoUpdate />
+					</p:messages>
+					<h:panelGrid columns="2" cellpadding="4">
+						<p:outputLabel value="Senha antiga" for="txtSenhaAntiga" />
+						<p:password id="txtSenhaAntiga" value="#{alterarSenhaController.senhaAntiga}" required="true"
+							requiredMessage="A Senha Antiga é de preenchimento obrigatório" />
+						<p:outputLabel value="Nova" for="txtSenhaNova" />
+						<p:password id="txtSenhaNova" value="#{alterarSenhaController.nova}" required="true"
+							requiredMessage="A Senha Nova é de preenchimento obrigatório" feedback="true" promptLabel="Insira uma senha"
+							weakLabel="Fraca" goodLabel="Boa" strongLabel="Ótima" match="txtConfirmar" 
+							validatorMessage="A Senha Nova e de Confirmação devem ser iguais" />
+						<p:outputLabel value="Confirmar" for="txtConfirmar" />
+						<p:password id="txtConfirmar" required="true"
+							requiredMessage="A Senha de Confirmação é de preenchimento obrigatório" />
+					</h:panelGrid>
+					<h:panelGrid columns="1" cellpadding="4">
+						<p:commandButton value="Alterar" action="#{alterarSenhaController.alterar}" update="form" />
+					</h:panelGrid>
+				</p:panel>
+				<p:poll widgetVar="poll" interval="2" autoStart="false" immediate="true" listener="#{alterarSenhaController.redirecionar}" />
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>
+</html>
