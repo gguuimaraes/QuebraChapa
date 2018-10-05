@@ -96,7 +96,7 @@ public class VisaoQuebrasController implements Serializable {
 	private void desenhaQuebraSetor() {
 		modelQuebraSetor.clear();
 		StringBuilder cores = new StringBuilder();
-		Collection<Object[]> lista = quebraDao.quebraPorSetor(Uteis.getDataInicio(), Uteis.getDataFim());
+		Collection<Object[]> lista = quebraDao.quebraPorSetor(Uteis.getDataInicioPeriodo(), Uteis.getDataFimPeriodo());
 		for (Object[] l : lista) {
 			if (cores.toString().length() != 0)
 				cores.append(',');
@@ -112,8 +112,8 @@ public class VisaoQuebrasController implements Serializable {
 		for (int i = 0; i < 12; i++) {
 			Calendar c = Calendar.getInstance();
 			c.add(Calendar.MONTH, i * -1);
-			Double areaQuebra = quebraDao.areaPorPeriodo(Uteis.getDataInicio(c.getTime()),
-					Uteis.getDataFim(c.getTime()));
+			Double areaQuebra = quebraDao.areaPorPeriodo(Uteis.getDataInicioPeriodo(c.getTime()),
+					Uteis.getDataFimPeriodo(c.getTime()));
 			c.set(Calendar.DATE, 1);
 			if (areaQuebra == null && i != 0)
 				break;
@@ -128,10 +128,10 @@ public class VisaoQuebrasController implements Serializable {
 		for (int i = 0; i < 12; i++) {
 			Calendar c = Calendar.getInstance();
 			c.add(Calendar.MONTH, i * -1);
-			Double areaQuebra = quebraDao.areaPorPeriodo(Uteis.getDataInicio(c.getTime()),
-					Uteis.getDataFim(c.getTime()));
-			Float areaFaturada = areaFaturadaDao.maiorAreaPorPeriodo(Uteis.getDataInicio(c.getTime()),
-					Uteis.getDataFim(c.getTime()));
+			Double areaQuebra = quebraDao.areaPorPeriodo(Uteis.getDataInicioPeriodo(c.getTime()),
+					Uteis.getDataFimPeriodo(c.getTime()));
+			Float areaFaturada = areaFaturadaDao.maiorAreaPorPeriodo(Uteis.getDataInicioPeriodo(c.getTime()),
+					Uteis.getDataFimPeriodo(c.getTime()));
 			c.set(Calendar.DATE, 1);
 			if (areaQuebra == null && areaFaturada == null && i != 0)
 				break;
@@ -157,11 +157,11 @@ public class VisaoQuebrasController implements Serializable {
 	}
 
 	public Float getAreaFaturada() {
-		return areaFaturadaDao.maiorAreaPorPeriodo(Uteis.getDataInicio(), Uteis.getDataFim());
+		return areaFaturadaDao.maiorAreaPorPeriodo(Uteis.getDataInicioPeriodo(), Uteis.getDataFimPeriodo());
 	}
 
 	public Double getAreaQuebra() {
-		return quebraDao.areaPorPeriodo(Uteis.getDataInicio(), Uteis.getDataFim());
+		return quebraDao.areaPorPeriodo(Uteis.getDataInicioPeriodo(), Uteis.getDataFimPeriodo());
 	}
 
 }

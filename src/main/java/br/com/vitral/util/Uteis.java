@@ -10,7 +10,7 @@ import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 
 public class Uteis {
-	
+
 	private Uteis() {
 	}
 
@@ -39,7 +39,7 @@ public class Uteis {
 		facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", mensagem));
 	}
 
-	public static Date getDataInicio(Date data) {
+	public static Date getDataInicioPeriodo(Date data) {
 		Calendar inicio = Calendar.getInstance();
 		inicio.setTime(data);
 		inicio.set(Calendar.MILLISECOND, 0);
@@ -53,9 +53,9 @@ public class Uteis {
 		return inicio.getTime();
 	}
 
-	public static Date getDataFim(Date data) {
+	public static Date getDataFimPeriodo(Date data) {
 		Calendar fim = Calendar.getInstance();
-		fim.setTime(getDataInicio(data));
+		fim.setTime(getDataInicioPeriodo(data));
 		fim.set(Calendar.MILLISECOND, 999);
 		fim.set(Calendar.SECOND, 59);
 		fim.set(Calendar.MINUTE, 59);
@@ -65,11 +65,33 @@ public class Uteis {
 		return fim.getTime();
 	}
 
-	public static Date getDataInicio() {
-		return getDataInicio(new Date());
+	public static Date getDataInicioPeriodo() {
+		return getDataInicioPeriodo(new Date());
 	}
 
-	public static Date getDataFim() {
-		return getDataFim(new Date());
+	public static Date getDataFimPeriodo() {
+		return getDataFimPeriodo(new Date());
+	}
+
+	public static Date getDataInicioMes(Date data) {
+		Calendar inicio = Calendar.getInstance();
+		inicio.setTime(data);
+		inicio.set(Calendar.DAY_OF_MONTH, 1);
+		return inicio.getTime();
+	}
+
+	public static Date getDataFimMes(Date data) {
+		Calendar fim = Calendar.getInstance();
+		fim.setTime(data);
+		fim.set(Calendar.DAY_OF_MONTH, fim.getActualMaximum(Calendar.DAY_OF_MONTH));
+		return fim.getTime();
+	}
+	
+	public static Date getDataInicioMes() {
+		return getDataInicioMes(new Date());
+	}
+
+	public static Date getDataFimMes() {
+		return getDataFimMes(new Date());
 	}
 }

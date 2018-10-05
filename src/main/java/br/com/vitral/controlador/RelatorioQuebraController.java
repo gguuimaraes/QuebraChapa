@@ -39,9 +39,9 @@ public class RelatorioQuebraController implements Serializable {
 	@Produces
 	private List<QuebraModel> quebras;
 
-	private Date dataInicio = Uteis.getDataInicio();
+	private Date dataInicio = Uteis.getDataInicioPeriodo();
 
-	private Date dataFim = Uteis.getDataFim();
+	private Date dataFim = Uteis.getDataFimPeriodo();
 
 	private FuncionarioModel funcionario;
 

@@ -4,13 +4,16 @@
 	xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
 <h:head>
 	<h:outputStylesheet library="css" name="visaopesoarea.css" />
+	
 </h:head>
 <h:body style="height: calc(100vh - 10px); margin: 0">
 	<script>
+		$.jqplot.sprintf.thousandsSeparator = '.';
+		$.jqplot.sprintf.decimalMark = ',';
 		function ext() {
 			this.cfg.axes.xaxis.tickOptions.textColor = '#000';
 			this.cfg.axes.yaxis.tickOptions.textColor = '#000';
-		}
+		};
 	</script>
 	<div class="main-container">
 		<div class="child1">
@@ -173,8 +176,10 @@
 		</div>
 		<div class="child2">
 			<h:panelGrid styleClass="painel2" columns="2">
-				<p:chart id="pesoMensal" type="bar" model="#{visaoPesoAreaController.modelPesoMensal}" style="width: 49vw; height: 100%" />
-				<p:chart id="areaMensal" type="bar" model="#{visaoPesoAreaController.modelAreaMensal}" style="width: 49vw; height: 100%" />
+				<!-- <p:chart id="pesoDiario" type="bar" model="#{visaoPesoAreaController.modelPesoDiario}" style="width: 49vw; height: 100%" />
+				<p:chart id="areaDiaria" type="bar" model="#{visaoPesoAreaController.modelAreaDiario}" style="width: 49vw; height: 100%" /> -->
+				<p:chart id="pesoMensal" type="line" model="#{visaoPesoAreaController.modelPesoMensal}" style="width: 49vw; height: 100%" />
+				<p:chart id="areaMensal" type="line" model="#{visaoPesoAreaController.modelAreaCortadaMensal}" style="width: 49vw; height: 100%" />
 			</h:panelGrid>
 		</div>
 	</div>

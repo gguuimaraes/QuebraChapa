@@ -111,6 +111,16 @@ public class AreaCortadaDao implements Serializable {
 		areaTotal = (Double) query.getSingleResult();
 		return areaTotal;
 	}
+	
+	public Double consultarAreaTotal(Date dataInicio, Date dataFim) {
+		Double areaTotal = null;
+		em = Uteis.getEntityManager();
+		Query query = em.createNamedQuery("AreaCortada.findAreaTotalPeriodo");
+		query.setParameter("dataInicio", dataInicio);
+		query.setParameter("dataFim", dataFim);
+		areaTotal = (Double) query.getSingleResult();
+		return areaTotal;
+	}
 
 	public AreaCortadaModel consultarModel(int id) {
 		return converterUnidade(consultar(id));

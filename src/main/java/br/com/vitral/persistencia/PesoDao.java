@@ -145,5 +145,15 @@ public class PesoDao implements Serializable {
 		pesoTotal = (Double) query.getSingleResult();
 		return pesoTotal;
 	}
+	
+	public Double consultarPesoTotal(Date dataInicio, Date dataFim) {
+		Double pesoTotal = null;
+		em = Uteis.getEntityManager();
+		Query query = em.createNamedQuery("Peso.findPesoTotalPeriodo");
+		query.setParameter("dataInicio", dataInicio);
+		query.setParameter("dataFim", dataFim);
+		pesoTotal = (Double) query.getSingleResult();
+		return pesoTotal;
+	}
 
 }

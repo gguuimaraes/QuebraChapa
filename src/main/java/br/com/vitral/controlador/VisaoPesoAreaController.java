@@ -14,9 +14,9 @@ import javax.inject.Named;
 
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
-import org.primefaces.model.chart.BarChartModel;
-import org.primefaces.model.chart.ChartSeries;
-import org.primefaces.model.chart.LegendPlacement;
+import org.primefaces.model.chart.CategoryAxis;
+import org.primefaces.model.chart.LineChartModel;
+import org.primefaces.model.chart.LineChartSeries;
 
 import br.com.vitral.modelo.AreaCortadaModel;
 import br.com.vitral.modelo.PesoModel;
@@ -24,6 +24,7 @@ import br.com.vitral.modelo.SetorModel;
 import br.com.vitral.persistencia.AreaCortadaDao;
 import br.com.vitral.persistencia.PesoDao;
 import br.com.vitral.persistencia.SetorDao;
+import br.com.vitral.util.Uteis;
 
 @Named(value = "visaoPesoAreaController")
 @SessionScoped
@@ -54,7 +55,7 @@ public class VisaoPesoAreaController implements Serializable {
 	private static final String STR_MESA_GRANDE = "MESA GRANDE";
 	private static final String STR_MESA_PEQUENA = "MESA PEQUENA";
 
-	private SimpleDateFormat df = new SimpleDateFormat("dd/MM");
+	private SimpleDateFormat sdf = new SimpleDateFormat("MMM/yyyy");
 
 	@PostConstruct
 	public void init() {
@@ -141,12 +142,12 @@ public class VisaoPesoAreaController implements Serializable {
 		return pesoDao.consultarPesoTotal(new Date());
 	}
 
-	public BarChartModel getModelPesoMensal() {
+	public LineChartModel getModelPesoMensal() {
 		desenhaPesoMensal();
 		return modelPesoMensal;
 	}
 
-	public BarChartModel getModelAreaMensal() {
+	public LineChartModel getModelAreaCortadaMensal() {
 		desenhaAreaCortadaMensal();
 		return modelAreaCortadaMensal;
 	}
@@ -175,98 +176,69 @@ public class VisaoPesoAreaController implements Serializable {
 		return setorPonteRolante;
 	}
 
-	private BarChartModel modelPesoMensal;
-	private BarChartModel modelAreaCortadaMensal;
+	private LineChartModel modelPesoMensal;
+	private LineChartModel modelAreaCortadaMensal;
 
 	private void iniciaPesoMensal() {
-		modelPesoMensal = new BarChartModel();
+		modelPesoMensal = new LineChartModel();
 		modelPesoMensal.setTitle("Peso Mensal");
-		modelPesoMensal.setLegendPosition("s");
-		modelPesoMensal.setLegendPlacement(LegendPlacement.OUTSIDEGRID);
-		modelPesoMensal.setLegendCols(4);
-		modelPesoMensal.setDatatipFormat("%s - %s");
+		modelPesoMensal.setShowPointLabels(true);
+		modelPesoMensal.setSeriesColors("800080");
 		modelPesoMensal.setExtender("ext");
-		Axis yAxis = modelPesoMensal.getAxis(AxisType.Y);
-		yAxis.setLabel("Peso (kg)");
-		yAxis.setMin(0);
-		StringBuilder cores = new StringBuilder();
-		cores.append(setorExpedicao.getCor());
-		cores.append(',');
-		cores.append(setorExpedicaoVPE.getCor());
-		cores.append(',');
-		cores.append(setorEntrega.getCor());
-		cores.append(',');
-		cores.append(setorPonteRolante.getCor());
-		modelPesoMensal.setSeriesColors(cores.toString());
-
+		modelPesoMensal.setShadow(false);
+		CategoryAxis x = new CategoryAxis();
+		x.setTickAngle(-15);
+		modelPesoMensal.getAxes().put(AxisType.X, x);
+		Axis y = modelPesoMensal.getAxis(AxisType.Y);
+		y.setTickFormat("%'.2f");
+		y.setMin(0);
+		y.setLabel("Peso (kg)");
 	}
 
 	private void iniciaAreaCortadaMensal() {
-		modelAreaCortadaMensal = new BarChartModel();
+		modelAreaCortadaMensal = new LineChartModel();
 		modelAreaCortadaMensal.setTitle("Área Cortada Mensal");
-		modelAreaCortadaMensal.setLegendPosition("s");
-		modelAreaCortadaMensal.setLegendPlacement(LegendPlacement.OUTSIDEGRID);
-		modelAreaCortadaMensal.setLegendCols(2);
-		modelAreaCortadaMensal.setDatatipFormat("%s - %s");
+		modelAreaCortadaMensal.setShowPointLabels(true);
+		modelAreaCortadaMensal.setSeriesColors("809300");
 		modelAreaCortadaMensal.setExtender("ext");
-		Axis yAxis = modelAreaCortadaMensal.getAxis(AxisType.Y);
-		yAxis.setLabel("Área (m²)");
-		yAxis.setMin(0);
-		StringBuilder cores = new StringBuilder();
-		cores.append(setorMesaPequena.getCor());
-		cores.append(',');
-		cores.append(setorMesaGrande.getCor());
-		modelAreaCortadaMensal.setSeriesColors(cores.toString());
+		modelAreaCortadaMensal.setShadow(false);
+		CategoryAxis x = new CategoryAxis();
+		x.setTickAngle(-15);
+		modelAreaCortadaMensal.getAxes().put(AxisType.X, x);
+		Axis y = modelAreaCortadaMensal.getAxis(AxisType.Y);
+		y.setTickFormat("%'.2f");
+		y.setMin(0);
+		y.setLabel("Área (m²)");
+
 	}
 
 	private void desenhaPesoMensal() {
-		ChartSeries expedicao = new ChartSeries();
-		ChartSeries expedicaoVPE = new ChartSeries();
-		ChartSeries entrega = new ChartSeries();
-		ChartSeries ponteRolante = new ChartSeries();
-		expedicao.setLabel(STR_EXPEDICAO);
-		expedicaoVPE.setLabel(STR_EXPEDICAO_VPE);
-		entrega.setLabel(STR_ENTREGA);
-		ponteRolante.setLabel(STR_PONTE_ROLANTE);
-		for (int i = 15; i >= 0; i--) {
-			Calendar c = Calendar.getInstance();
-			c.add(Calendar.DATE, i * -1);
-			Double pEx = pesoDao.consultarPesoTotal(setorExpedicao, c.getTime());
-			Double pExVPE = pesoDao.consultarPesoTotal(setorExpedicaoVPE, c.getTime());
-			Double pEn = pesoDao.consultarPesoTotal(setorEntrega, c.getTime());
-			Double pPR = pesoDao.consultarPesoTotal(setorPonteRolante, c.getTime());
-			if (pEx != null || pExVPE != null || pEn != null || pPR != null) {
-				expedicao.set(df.format(c.getTime()), pEx == null ? 0f : pEx);
-				expedicaoVPE.set(df.format(c.getTime()), pExVPE == null ? 0f : pExVPE);
-				entrega.set(df.format(c.getTime()), pEn == null ? 0f : pEn);
-				ponteRolante.set(df.format(c.getTime()), pPR == null ? 0f : pPR);
-			}
-		}
 		modelPesoMensal.clear();
-		modelPesoMensal.addSeries(expedicao);
-		modelPesoMensal.addSeries(expedicaoVPE);
-		modelPesoMensal.addSeries(entrega);
-		modelPesoMensal.addSeries(ponteRolante);
-		modelPesoMensal.setBarWidth(2);
+		LineChartSeries series = new LineChartSeries();
+		for (int i = 11; i >= 0; i--) {
+			Calendar c = Calendar.getInstance();
+			c.add(Calendar.MONTH, i * -1);
+			Double peso = pesoDao.consultarPesoTotal(Uteis.getDataInicioMes(c.getTime()),
+					Uteis.getDataFimMes(c.getTime()));
+			c.set(Calendar.DATE, 1);
+			if (peso != null)
+				series.set(sdf.format(c.getTime()), peso);
+		}
+		modelPesoMensal.addSeries(series);
 	}
 
 	private void desenhaAreaCortadaMensal() {
-		ChartSeries mesaPequena = new ChartSeries();
-		ChartSeries mesaGrande = new ChartSeries();
-		mesaPequena.setLabel(STR_MESA_PEQUENA);
-		mesaGrande.setLabel(STR_MESA_GRANDE);
-		for (int i = 15; i >= 0; i--) {
-			Calendar c = Calendar.getInstance();
-			c.add(Calendar.DATE, i * -1);
-			Double aMP = areaCortadaDao.consultarAreaTotal(setorMesaPequena, c.getTime());
-			Double aMG = areaCortadaDao.consultarAreaTotal(setorMesaGrande, c.getTime());
-			if (aMP != null || aMG != null) {
-				mesaPequena.set(df.format(c.getTime()), aMP == null ? 0f : aMP);
-				mesaGrande.set(df.format(c.getTime()), aMG == null ? 0f : aMG);
-			}
-		}
 		modelAreaCortadaMensal.clear();
-		modelAreaCortadaMensal.addSeries(mesaPequena);
-		modelAreaCortadaMensal.addSeries(mesaGrande);
+		LineChartSeries series = new LineChartSeries();
+		for (int i = 11; i >= 0; i--) {
+			Calendar c = Calendar.getInstance();
+			c.add(Calendar.MONTH, i * -1);
+			Double area = areaCortadaDao.consultarAreaTotal(Uteis.getDataInicioMes(c.getTime()),
+					Uteis.getDataFimMes(c.getTime()));
+			c.set(Calendar.DATE, 1);
+			if (area != null)
+				series.set(sdf.format(c.getTime()), area);
+		}
+		modelAreaCortadaMensal.addSeries(series);
 	}
 }

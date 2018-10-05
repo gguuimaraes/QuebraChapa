@@ -22,17 +22,18 @@ import javax.persistence.TemporalType;
 		@NamedQuery(name = "Peso.findPesosDoDia", query = "SELECT p FROM Peso p WHERE p.data = :data ORDER BY p.peso DESC"),
 		@NamedQuery(name = "Peso.findPesoTotalSetorDia", query = "SELECT SUM(p.peso) FROM Peso p WHERE p.setor.id = :setorId AND p.data = :data"),
 		@NamedQuery(name = "Peso.findPesosPorSetorDia", query = "SELECT p FROM Peso p WHERE p.setor.id = :setorId AND p.data = :data ORDER BY p.peso DESC"),
-		@NamedQuery(name = "Peso.findPesoTotalDia", query= "SELECT SUM(p.peso) FROM Peso p WHERE p.data = :data")})
+		@NamedQuery(name = "Peso.findPesoTotalDia", query = "SELECT SUM(p.peso) FROM Peso p WHERE p.data = :data"),
+		@NamedQuery(name = "Peso.findPesoTotalPeriodo", query = "SELECT SUM(p.peso) FROM Peso p WHERE p.data >= :dataInicio AND p.data <= :dataFim") })
 
 public class Peso implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
-	
+
 	@OneToOne
 	private Funcionario funcionario;
 
@@ -49,7 +50,7 @@ public class Peso implements Serializable {
 	public int getId() {
 		return id;
 	}
-	
+
 	public void setId(int id) {
 		this.id = id;
 	}
